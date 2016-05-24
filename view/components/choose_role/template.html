@@ -1,0 +1,11 @@
+<div>
+    <div class="item_role" data-value="important" v-for="role in roles">
+		<div class="ui checkbox" v-if="role.role_code != 'root'" >
+			<input type="checkbox" name="example" v-model="role.checked" style="disabled" disabled="(% role.role_type == 'root' %)">
+			<label>(% role.role_name %)</label>
+		</div>
+		<choose-role :roles.sync="role.child"></choose-role>
+		<div class="item">
+		</div>
+	</div>
+</div>

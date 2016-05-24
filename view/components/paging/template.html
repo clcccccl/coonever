@@ -1,0 +1,13 @@
+<tr>
+	<th colspan="4" v-if="show_page">
+		<div class="ui right floated pagination menu" style="background-color: #F0F0F0;">
+			<a class="icon item" @click="next('asd')"  v-bind:class="{ 'disabled': current_page == 1}">
+				<i class="left chevron icon"></i>
+			</a>
+			<a class="item" v-for="page in page_list" v-if="page>(first_page - 1) && page<(first_page + show_count)" v-bind:class="{ 'active': page==current_page}" @click="this_page(page)">(%page%)</a>
+			<a class="icon item" @click="next('add')" v-bind:class="{ 'disabled': (current_page + 1) > pag_count}">
+				<i class="right chevron icon"></i>
+			</a>
+		</div>
+	</th>
+</tr>

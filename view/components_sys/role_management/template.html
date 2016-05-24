@@ -1,0 +1,38 @@
+<div class="ui main container" style="min-height: 100%;padding-left: 100px">
+	<div class="ui top attached menu">
+		<div class="ui dropdown icon item">
+			<h3 class="ui header">角色管理</h3>
+		</div>
+	</div>
+	<div class="ui bottom attached segment" style="background-color: #F8F8F8;border:0px;" v-if="roles.length > 0">
+		<role-component :roles.sync="roles"></role-component>
+	</div>
+	<div class="ui modal" id="edit-role-modal">
+		<i class="close icon"></i>
+		<div class="header">角色详情</div>
+		<div class="content">
+			<div class="ui form role">
+				<div class="field">
+					<label>角色名</label>
+					<input name="role_name" placeholder="请输入角色名" type="text" v-model="role.role_name">
+				</div>
+				<div class="field">
+					<label>角色编码</label>
+					<input name="role_code" placeholder="请输入角色编码" type="text" v-model="role.role_code">
+				</div>
+				<div class="field">
+					<label>角色描述</label>
+					<input type="text" placeholder="请输入角色描述" v-model="role.role_explain">
+				</div>
+			</div>
+		</div>
+		<div class="actions">
+			<div class="ui buttons">
+				<button class="ui deny button">返回</button>
+				<div class="or"></div>
+				<button class="ui submit blue right button" @click="save">保存</button>
+			</div>
+		</div>
+	</div>
+	<error-modal :error_options="rm_role_error_options"></error-modal>
+</div>

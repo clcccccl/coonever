@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block css %}
+{% end %}
+{% block body %}
+<body id="all">
+    <left_bar_c v-if="show_left_bar"></left_bar_c>
+    <head_c :show_left_bar.sync="show_left_bar" :head_type.sync="head_type"></head_c>
+    <component
+      :is="view"
+      transition="fade"
+      transition-mode="out-in">
+    </component>
+    <foot_c></foot_c>
+</body>
+{% end %}
+{% block js %}
+<script src="{{ static_url("build/home.js") }}"></script>
+{% end %}

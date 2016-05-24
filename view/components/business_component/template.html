@@ -1,0 +1,19 @@
+<div class="ui list">
+	<div v-for="business in businesses" class="item">
+		<i class="folder open icon" v-bind:class="{ 'open': business.show}" @click="showChild(business)"></i>
+		<div class="content">
+			<div class="header">(% business.business_name %)
+				<i class="edit icon" style="margin-left: 10px" @click="edit_business(business)"></i>
+				<i class="add circle icon" @click="add_business(business)"></i>
+				<div class="ui left pointing dropdown link item">
+					<i class="remove circle icon"></i>
+					<div class="menu">
+						<button class="item" style="background: #FFFAF3" @click="rm_business(business)">确认删除?请谨慎操作！</button>
+					</div>
+				</div>
+			</div>
+			<div class="description">(% business.business_explain %)</div>
+			<business_component :businesses.sync="business.child" v-if="business.show && business.child && business.child.length > 0"></business_component>
+		</div>
+	</div>
+</div>

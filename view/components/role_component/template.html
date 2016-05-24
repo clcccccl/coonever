@@ -1,0 +1,19 @@
+<div class="ui list">
+	<div v-for="role in roles" class="item">
+		<i class="folder open icon" v-bind:class="{ 'open': role.show}" @click="showChild(role)"></i>
+		<div class="content">
+			<div class="header">(% role.role_name %)
+				<i class="edit icon" style="margin-left: 10px" @click="edit_role(role)"></i>
+				<i class="add circle icon" @click="add_role(role)"></i>
+				<div class="ui left pointing dropdown link item">
+					<i class="remove circle icon"></i>
+					<div class="menu">
+						<button class="item" style="background: #FFFAF3" @click="rm_role(role)">确认删除?请谨慎操作！</button>
+					</div>
+				</div>
+			</div>
+			<div class="description">(% role.role_explain %)</div>
+			<role_component :roles.sync="role.child" v-if="role.show && role.child && role.child.length > 0"></role_component>
+		</div>
+	</div>
+</div>

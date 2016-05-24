@@ -1,0 +1,54 @@
+<div class="ui main container" style="min-height: 100%;padding-left: 100px">
+	<div class="ui top attached menu">
+		<div class="ui dropdown icon item">
+			<h3 class="ui header">业务管理</h3>
+		</div>
+	</div>
+	<div class="ui bottom attached segment" style="background-color: #F8F8F8;border:0px;" v-if="businesses.length > 0">
+		<business-component :businesses.sync="businesses"></business-component>
+	</div>
+	<div class="ui modal" id="edit-business-modal">
+		<i class="close icon"></i>
+		<div class="header">业务详情</div>
+		<div class="content">
+			<div class="ui form business">
+				<div class="field">
+					<label>业务名</label>
+					<input name="business_name" placeholder="请输入业务名" type="text" v-model="business.business_name">
+				</div>
+				<div class="field">
+					<label>业务编码</label>
+					<input name="business_code" placeholder="请输入业务编码" type="text" v-model="business.business_code">
+				</div>
+				<div class="field">
+					<label>业务描述</label>
+					<input type="text" placeholder="请输入业务描述" v-model="business.business_explain">
+				</div>
+				<div class="field">
+					<label>是否为子节点</label>
+					<div class="ui toggle checkbox">
+						<input type="checkbox" name="public" v-model="business.is_leaf">
+						<label v-if="business.is_leaf">(% is_leaf[1] %)</label>
+						<label v-if="!business.is_leaf">(% is_leaf[0] %)</label>
+					</div>
+				</div>
+				<div class="field" v-if="business.is_leaf">
+					<label>业务模块</label>
+					<input name="component" placeholder="请输入component" type="text" v-model="business.component">
+				</div>
+				<div class="field" v-if="business.is_leaf">
+					<label>菜单图标</label>
+					<input type="text" placeholder="请输入图标" v-model="business.icon">
+				</div>
+			</div>
+		</div>
+		<div class="actions">
+			<div class="ui buttons">
+				<button class="ui deny button">返回</button>
+				<div class="or"></div>
+				<button class="ui submit blue right button" @click="save">保存</button>
+			</div>
+		</div>
+	</div>
+	<error-modal :error_options="rm_business_error_options"></error-modal>
+</div>

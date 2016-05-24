@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block css %}
+{% end %}
+{% block body %}
+<body id="login">
+	<head_c :show_left_bar.sync="show_left_bar" :head_type.sync="head_type" :login_view.sync="login_view"></head_c>
+	<component
+	:is="login_view"
+	transition="fade"
+	transition-mode="out-in">
+    </component>
+    <foot_c></foot_c>
+</body>
+{% end %}
+{% block js %}
+<script src="{{ static_url("build/login.js") }}"></script>
+{% end %}

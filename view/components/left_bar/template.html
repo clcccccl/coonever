@@ -1,0 +1,30 @@
+<div class="ui fixed inverted vertical sticky menu" style="min-height: 100%;padding-top: 80px;max-width: 140px">
+	<div class="ui container">
+		<a class="header item" @click="change_component('welcome')">
+			<i class="home icon"></i>首页
+		</a>
+		<div class="ui simple dropdown item" v-for="bar in bar_data">
+		    (% bar.business_name %)<i class="dropdown icon"></i>
+		    <div class="menu">
+				<a class="item" @click="change_component(child_bar.component)" v-for="child_bar in bar.child"><i class="(% child_bar.icon %) icon"></i>(% child_bar.business_name %)</a>
+			</div>
+		</div>
+<!-- 		<div class="ui simple dropdown item">
+			基础配置<i class="dropdown icon"></i>
+			<div class="menu">
+				<a class="item" @click="change_component('user_management')"><i class="users icon"></i>用户</a>
+				<a class="item" @click="change_component('role_management')"><i class="spy icon"></i>角色</a>
+				<a class="item" @click="change_component('business_management')"><i class="tasks icon"></i>业务</a>
+				<a class="item" @click="change_component('model_management')"><i class="puzzle icon"></i>模块</a>
+			</div>
+		</div>
+		<div class="ui simple dropdown item">
+			权限配置<i class="dropdown icon"></i>
+			<div class="menu">
+				<a class="item" @click="change_component('user_role')"><i class="linkify icon"></i>用户－角色</a>
+				<a class="item" @click="change_component('role_business')"><i class="share alternate icon"></i>角色－业务</a>
+				<a class="item" @click="change_component('business_model')"><i class="maximize icon"></i>业务－模块</a>
+			</div>
+		</div> -->
+	</div> 
+</div>

@@ -1,0 +1,76 @@
+<div class="ui main container" style="min-height: 100%;padding-left: 100px">
+	<div class="ui top attached menu">
+		<div class="ui dropdown icon item">
+			<h3 class="ui header">用户管理<i class="grey add circle icon himg" @click="add_user"></i></h3>
+		</div>
+		<div class="right menu">
+			<div class="ui right aligned category search item">
+				<div class="ui transparent icon input">
+					<input class="prompt" type="text" v-model="search_key" placeholder="Search users...">
+					<i class="search link icon" @click="load(1)"></i>
+				</div>
+				<div class="results"></div>
+			</div>
+		</div>
+	</div>
+	<div class="ui bottom attached segment" style="background-color: #F8F8F8;border:0px;">
+		<div class="content" v-if="edit_add">
+			<div class="ui form" id="user-form">
+				<div class="field">
+					<div class="fields">
+						<div class="field">
+							<input type="text" name="user_name" placeholder="用户名" v-model="user_map.name">
+						</div>
+						<div class="field">
+							<input type="text" name="account" placeholder="帐号" v-model="user_map.account">
+						</div>
+						<div class="field">
+							<input type="password" name="password" placeholder="密码" v-model="user_map.password">
+						</div>
+						<div class="field">
+							<input type="password" name="repassword" placeholder="重复密码" v-model="user_map.repassword">
+						</div>
+						<div class="field">
+							<i class="large brown minus icon hideimg" @click="hide_form"></i>
+							<i class="large green submit checkmark icon hideimg" @click="save_user"></i>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<table class="ui very basic table">
+			<thead>
+				<tr>
+					<th>用户名</th>
+					<th>帐号</th>
+					<th>角色</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr v-for="user in users">
+					<td>(% user.name %)</td>
+					<td>(% user.account %)</td>
+					<td>
+						<div class="ui left pointing dropdown link item" id="(% user.account %)">
+							(% user.role %)<a><i class="configure icon"></i></a>
+							<div class="menu" style='min-width: 300px;'>
+								<div class="header">
+									<i class="tags icon"></i>
+									角色选择
+									<a><i class="large green submit checkmark icon hideimg" @click="change_role(user)"></i></a>
+								</div>
+								<choose-role :roles.sync="role_tree" style="margin-bottom: 20px;"></choose-role>
+							</div>
+						</div>
+					</td>
+					<td>
+						<a><i class="large olive edit icon" @click="edit_user(user)"></i></a>
+						<a><i class="large brown remove circle icon"></i></a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<paging :pag_count.sync="pag_count"></paging>	
+	</div>
+</div>

@@ -1,0 +1,14 @@
+<div class="ui main text container" style="min-height: 100%;padding-top: 180px;" id="login-form">
+	<h1 class="ui header">用户登录</h1>
+	<div class="ui form">
+		<div class="field">
+			<label>帐号</label>
+			<input type="text" name="account" placeholder="帐号" v-model="user.account">
+		</div>
+		<div class="field">
+			<label>密码</label>
+			<input type="password" name="password" placeholder="密码" v-model="user.password">
+		</div>
+		<button class="ui button" @click="login">登录</button>
+	</div>
+</div>

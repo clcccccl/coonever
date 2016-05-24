@@ -1,0 +1,22 @@
+<div class="ui fixed inverted menu grid four column" style="padding: 0px" id="v-head">
+	<div class="column">
+		<div class="ui dividing" v-on:click="changer_menu" style="color: #ffffff;padding:10px;padding-right: 20px" v-if="head_type=='ok'">
+			<label><i class="grid layout icon"></i>菜单</label>
+		</div>
+	</div>
+	<div class="column">
+	</div>
+	<div class="column">
+	</div>
+	<div class="column">
+		<div class="ui dividing" style="color: #ffffff;float:right;padding:10px;padding-right: 20px" v-if="head_type=='login'" v-on:click="change_component('register')">
+		<label><i class="add square icon"></i>注册</label>
+		</div>
+		<div class="ui dividing" style="color: #ffffff;float:right;padding:10px;padding-right: 20px" v-if="head_type=='register'" v-on:click="change_component('login')">
+			<label><i class="ticket icon"></i>登陆</label>
+		</div>
+		<div class="ui dividing" style="color: #ffffff;float:right;padding:10px;padding-right: 20px" v-if="head_type=='ok'" v-on:click="logout">
+			<label><i class="power icon"></i>退出</label>
+		</div>
+	</div>
+</div>

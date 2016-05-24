@@ -1,0 +1,49 @@
+<div class="ui main container" style="min-height: 100%;padding-left: 100px">
+	<div class="ui top attached menu">
+		<div class="ui dropdown icon item">
+			<h3 class="ui header">API管理</h3>
+		</div>
+		<div class="right menu">
+			<div class="ui right aligned category search item">
+				<div class="ui transparent icon input">
+					<input class="prompt" type="text" v-model="search_key" placeholder="Search api...">
+					<i class="search link icon" @click="load(1)"></i>
+				</div>
+				<div class="results"></div>
+			</div>
+		</div>
+	</div>
+	<div class="ui bottom attached segment" style="background-color: #F8F8F8;border:0px;">
+		<table class="ui very basic table">
+			<thead>
+				<tr>
+					<th>api</th>
+					<th>归属</th>
+					<th>api介绍</th>
+					<th>是否弃用</th>
+					<th>是否限权</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr v-for="api in apis">
+					<td>(% api.api %)</td>
+					<td>(% api.business_text %)</td>
+					<td>(% api.api_explain %)</td>
+					<td>
+					    <div class="ui toggle checkbox">
+						    <input type="checkbox" name="public" v-model="api.disable" @click="change_status(api)">
+						    <label> </label>
+					    </div>
+					</td>
+					<td>
+					    <div class="ui toggle checkbox">
+						    <input type="checkbox" name="public" v-model="api.restrict" @click="change_status(api)">
+						    <label> </label>
+					    </div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<paging :pag_count.sync="pag_count"></paging>	
+	</div>
+</div>

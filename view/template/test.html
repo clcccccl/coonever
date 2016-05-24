@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block css %}
+{% end %}
+{% block body %}
+<body id="test">
+    <component
+      :is="view"
+      transition="fade"
+      transition-mode="out-in">
+    </component>
+</body>
+{% end %}
+{% block js %}
+<script src="{{ static_url("build/test.js") }}"></script>
+{% end %}
