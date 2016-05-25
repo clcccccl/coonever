@@ -1,5 +1,3 @@
-require './style.less'
-
 module.exports =
   Vue.extend
     name: 'business_component'

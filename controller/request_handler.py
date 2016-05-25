@@ -10,7 +10,43 @@ from server_lib.base_request_handler import BaseHandler, BasicPostHandler, PostH
 from server_lib.sys_wraps import handleError
 from model.businessLayer import sys_business, base_business, sys_lib
 
-MODEL_STR = 'model.businessLayer.'
+
+def validationSessionHome(method):
+
+    '''
+    主页请求在线验证
+    '''
+    @functools.wraps(method)
+    def wrapper(self, *args, **kwargs):
+        self.getUserFromCookie()
+        self.getUser()
+        if sys_lib.validation_session(self.user):
+            method(self, *args, **kwargs)
+        else:
+            self.redirect('/login')
+    return wrapper
+
+
+def validationSession(method):
+
+    '''
+    同一post请求在线验证
+    '''
+    @functools.wraps(method)
+    def wrapper(self, *args, **kwargs):
+        # 判断api是否需要在线验证
+        if self.need_validation_session:
+            self.getUserFromCookie()
+            self.getUser()
+            if sys_lib.validation_session(self.user):
+                self.request_argument['user'] = self.user
+                method(self, *args, **kwargs)
+            else:
+                write_data = json.dumps({"response_data": {}, "error": 3, "error_text": '已离线，需从新登陆'})
+                self.write(write_data)
+        else:
+            method(self, *args, **kwargs)
+    return wrapper
 
 
 def validationPermission(method):
@@ -20,39 +56,14 @@ def validationPermission(method):
     '''
     @functools.wraps(method)
     def wrapper(self, *args, **kwargs):
-        user_id = self.get_secure_cookie("user_id")
-        user = sys_lib.get_user_by_id(user_id)
-        if sys_lib.validation_permission(user, self.api):
-            method(self, *args, **kwargs)
-        else:
-            write_data = json.dumps({"response_data": {}, "error": 2, "error_text": '无权限'})
-            self.write(write_data)
-    return wrapper
-
-
-def validationSession(method):
-
-    '''
-    在线验证
-    '''
-    @functools.wraps(method)
-    def wrapper(self, *args, **kwargs):
-        if False:
-            # 不需要在线验证的情况
-            method(self, *args, **kwargs)
-        else:
-            self.getUserFromCookie()
-            self.getUser()
-            if self.user:
-                if method.__name__ == 'post':
-                    self.request_argument['user'] = self.user
+        if self.need_validation_permission:
+            if sys_lib.validation_permission(self.user, self.api):
                 method(self, *args, **kwargs)
             else:
-                if method.__name__ == 'get':
-                    self.redirect('/login')
-                else:
-                    write_data = json.dumps({"response_data": {}, "error": 3, "error_text": '已离线，需从新登陆'})
-                    self.write(write_data)
+                write_data = json.dumps({"response_data": {}, "error": 2, "error_text": '无权限'})
+                self.write(write_data)
+        else:
+            method(self, *args, **kwargs)
     return wrapper
 
 
@@ -84,13 +95,7 @@ class Test(BaseHandler):
 
 
 class Home(BaseHandler):
-    def initialize(self):
-        '''
-        初始化的时候获取application中的db
-        '''
-        pass
-
-    @validationSession
+    @validationSessionHome
     def get(self):
         self.set_header("Content-Type", "text/html")
         self.render('home.html')
@@ -121,7 +126,7 @@ class PostHandler(PostHandler):
         根据请求类型，调用相应业务层函数处理
         返回数据
         请求参数规则
-            request_type:模块类别＋请求类别
+            request_type:请求类别
             request_argument:请求参数
             request_data:请求中带list数据放这里
         返回数据规则
@@ -142,6 +147,8 @@ class PostHandler(PostHandler):
     def getModel(self):
         self.request_model = sys_lib.get_modle_by_api(self.api)
 
+    def test_need_validation(self):
+        self.need_validation_session, self.need_validation_permission = sys_lib.test_need_validation(self.api)
 
 if __name__ == "__main__":
     pass

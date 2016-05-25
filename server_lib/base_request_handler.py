@@ -65,10 +65,13 @@ class PostHandler(BaseHandler):
         self.request_argument = {}
         self.api = None
         self.request_model = None
+        self.need_validation_session = True
+        self.need_validation_permission = True
         self.request_map = {}
         self.request_data = []
         self.getRequestArgument()
         self.getModel()
+        self.test_need_validation()
 
     def getRequestArgument(self):
         '''
@@ -87,6 +90,9 @@ class PostHandler(BaseHandler):
         self.account = self.get_secure_cookie("account")
 
     def getModel(self):
+        pass
+
+    def test_need_validation(self):
         pass
 
 if __name__ == '__main__':

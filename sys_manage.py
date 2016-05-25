@@ -1,16 +1,21 @@
 # -*- coding: utf-8 -*-
 #!/usr/bin/env python
 
+import pdb
+
 from model.businessLayer.sys_business import *
 from model.businessLayer.base_business import *
 from db_base import pg_update
 
-import pdb
-
-here_funs = ['main', 'getFuns', 'get_child_business', 'addApi']
+'''
+系统配置脚本
+'''
 
 
 def __getFuns():
+    '''
+    获取系统中的api接口函数信息
+    '''
     funs_str = []
     funs = globals().copy()
     for fun in funs:
@@ -20,9 +25,13 @@ def __getFuns():
 
 
 def __addApi():
+    '''
+    将其api接口函数信息添加到api表中
+    '''
     funs = __getFuns()
     for fun in funs:
         if pg_update.select("api", where=" api = '%s' " % fun.__name__):
+            # 已存在则跳过
             continue
         data_map = {}
         data_map['api'] = fun.__name__
@@ -36,6 +45,10 @@ def __addApi():
 
 
 def __addBusinessApi(api, business):
+    '''
+    传入api及business
+    添加到business_code表中
+    '''
     sql = '''
       select * from business_api
         where api = '%s' and business_code = '%s'
@@ -48,6 +61,10 @@ def __addBusinessApi(api, business):
 
 
 def __addRoleBusiness(role, business):
+    '''
+    传入role及business
+    添加到role_business表中
+    '''
     sql = '''
       select * from role_business
         where role = '%s' and business_code = '%s'
@@ -60,7 +77,6 @@ def __addRoleBusiness(role, business):
 
 
 def __main():
-    __addApi()
     pass
 
 

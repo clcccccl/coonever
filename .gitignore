@@ -5,4 +5,5 @@ view_back_1
 peewee.db
 node_modules
 view/static/lib/vue-devtools/node_modules
+view/npm-debug.log
 服务器架构

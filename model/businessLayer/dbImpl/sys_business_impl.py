@@ -27,8 +27,9 @@ def get_users(parm):
         select u.name,u.account
           from user_info u
           where %s
-          order by u.create_date
-          limit %s offset %s
+          order by u.id
+          limit %s
+          offset %s
     ''' % (where, limit, offset)
     users = pg_update.selectBySql(sql)
     accounts_str = ''

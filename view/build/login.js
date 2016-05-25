@@ -46,9 +46,9 @@
 
 	var Vue, v_head;
 
-	Vue = __webpack_require__(31);
+	Vue = __webpack_require__(22);
 
-	__webpack_require__(30);
+	__webpack_require__(21);
 
 	v_head = new Vue({
 	  el: "#login",
@@ -60,10 +60,10 @@
 	    };
 	  },
 	  components: {
-	    'login': __webpack_require__(40),
-	    'register': __webpack_require__(42),
-	    'foot_c': __webpack_require__(38),
-	    'head_c': __webpack_require__(32)
+	    'login': __webpack_require__(31),
+	    'register': __webpack_require__(33),
+	    'foot_c': __webpack_require__(29),
+	    'head_c': __webpack_require__(23)
 	  }
 	});
 
@@ -343,7 +343,6 @@
 	function applyToTag(styleElement, obj) {
 		var css = obj.css;
 		var media = obj.media;
-		var sourceMap = obj.sourceMap;
 
 		if(media) {
 			styleElement.setAttribute("media", media)
@@ -361,7 +360,6 @@
 
 	function updateLink(linkElement, obj) {
 		var css = obj.css;
-		var media = obj.media;
 		var sourceMap = obj.sourceMap;
 
 		if(sourceMap) {
@@ -397,16 +395,7 @@
 /* 18 */,
 /* 19 */,
 /* 20 */,
-/* 21 */,
-/* 22 */,
-/* 23 */,
-/* 24 */,
-/* 25 */,
-/* 26 */,
-/* 27 */,
-/* 28 */,
-/* 29 */,
-/* 30 */
+/* 21 */
 /***/ function(module, exports) {
 
 	window.component_load = function(parm) {
@@ -512,7 +501,7 @@
 
 
 /***/ },
-/* 31 */
+/* 22 */
 /***/ function(module, exports) {
 
 	Vue.config.debug = true;
@@ -523,13 +512,13 @@
 
 
 /***/ },
-/* 32 */
+/* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(33);
+	__webpack_require__(24);
 
 	module.exports = Vue.extend({
-	  template: __webpack_require__(35),
+	  template: __webpack_require__(26),
 	  props: ['show_left_bar', 'head_type', 'login_view'],
 	  methods: {
 	    changer_menu: function() {
@@ -547,13 +536,13 @@
 
 
 /***/ },
-/* 33 */
+/* 24 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(34);
+	var content = __webpack_require__(25);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(4)(content, {});
@@ -573,7 +562,7 @@
 	}
 
 /***/ },
-/* 34 */
+/* 25 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(3)();
@@ -587,34 +576,34 @@
 
 
 /***/ },
-/* 35 */
+/* 26 */
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"ui fixed inverted menu grid four column\" style=\"padding: 0px\" id=\"v-head\">\n\t<div class=\"column\">\n\t\t<div class=\"ui dividing\" v-on:click=\"changer_menu\" style=\"color: #ffffff;padding:10px;padding-right: 20px\" v-if=\"head_type=='ok'\">\n\t\t\t<label><i class=\"grid layout icon\"></i>菜单</label>\n\t\t</div>\n\t</div>\n\t<div class=\"column\">\n\t</div>\n\t<div class=\"column\">\n\t</div>\n\t<div class=\"column\">\n\t\t<div class=\"ui dividing\" style=\"color: #ffffff;float:right;padding:10px;padding-right: 20px\" v-if=\"head_type=='login'\" v-on:click=\"change_component('register')\">\n\t\t<label><i class=\"add square icon\"></i>注册</label>\n\t\t</div>\n\t\t<div class=\"ui dividing\" style=\"color: #ffffff;float:right;padding:10px;padding-right: 20px\" v-if=\"head_type=='register'\" v-on:click=\"change_component('login')\">\n\t\t\t<label><i class=\"ticket icon\"></i>登陆</label>\n\t\t</div>\n\t\t<div class=\"ui dividing\" style=\"color: #ffffff;float:right;padding:10px;padding-right: 20px\" v-if=\"head_type=='ok'\" v-on:click=\"logout\">\n\t\t\t<label><i class=\"power icon\"></i>退出</label>\n\t\t</div>\n\t</div>\n</div>\n";
 
 /***/ },
-/* 36 */,
-/* 37 */,
-/* 38 */
+/* 27 */,
+/* 28 */,
+/* 29 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = Vue.extend({
-	  template: __webpack_require__(39)
+	  template: __webpack_require__(30)
 	});
 
 
 /***/ },
-/* 39 */
+/* 30 */
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"ui fixed inverted vertical footer segment\">\n\t<div class=\"ui center aligned container\">\n\t\t<div class=\"ui horizontal inverted small divided link list\">\n\t\t\t<a class=\"item\" href=\"#\">Site Map</a>\n\t\t\t<a class=\"item\" href=\"#\">Contact Us</a>\n\t\t\t<a class=\"item\" href=\"#\">Terms and Conditions</a>\n\t\t\t<a class=\"item\" href=\"#\">Privacy Policy</a>\n\t\t</div>\n\t</div>\n</div>";
 
 /***/ },
-/* 40 */
+/* 31 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = Vue.extend({
-	  template: __webpack_require__(41),
+	  template: __webpack_require__(32),
 	  data: function() {
 	    return {
 	      user: {}
@@ -675,22 +664,22 @@
 
 
 /***/ },
-/* 41 */
+/* 32 */
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"ui main text container\" style=\"min-height: 100%;padding-top: 180px;\" id=\"login-form\">\n\t<h1 class=\"ui header\">用户登录</h1>\n\t<div class=\"ui form\">\n\t\t<div class=\"field\">\n\t\t\t<label>帐号</label>\n\t\t\t<input type=\"text\" name=\"account\" placeholder=\"帐号\" v-model=\"user.account\">\n\t\t</div>\n\t\t<div class=\"field\">\n\t\t\t<label>密码</label>\n\t\t\t<input type=\"password\" name=\"password\" placeholder=\"密码\" v-model=\"user.password\">\n\t\t</div>\n\t\t<button class=\"ui button\" @click=\"login\">登录</button>\n\t</div>\n</div>";
 
 /***/ },
-/* 42 */
+/* 33 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = Vue.extend({
-	  template: __webpack_require__(43)
+	  template: __webpack_require__(34)
 	});
 
 
 /***/ },
-/* 43 */
+/* 34 */
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"ui main text container\" style=\"min-height: 100%;padding-top: 150px;\">\n\t<h1 class=\"ui header\">用户注册</h1>\n\t<form class=\"ui form\">\n\t\t<div class=\"field\">\n\t\t\t<label>帐号</label>\n\t\t\t<input type=\"text\" name=\"first-name\" placeholder=\"帐号\">\n\t\t</div>\n\t\t<div class=\"field\">\n\t\t\t<label>密码</label>\n\t\t\t<input type=\"password\" name=\"last-name\" placeholder=\"密码\">\n\t\t</div>\n\t\t<div class=\"field\">\n\t\t\t<label>再次输入密码</label>\n\t\t\t<input type=\"password\" name=\"last-name\" placeholder=\"密码\">\n\t\t</div>\n\t\t<button class=\"ui button\" type=\"submit\">注册</button>\n\t</form>\n</div>";

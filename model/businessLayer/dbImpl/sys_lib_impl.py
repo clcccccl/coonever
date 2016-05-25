@@ -11,11 +11,11 @@ from db_base import pg_update
 import math
 
 
-def get_modle_by_api(api):
+def get_api_by_api(api):
     sql = '''
-      select path from api where api = '%s'
+      select * from api where api = '%s'
     ''' % api
-    return pg_update.selectBySql(sql)[0]['path']
+    return pg_update.selectBySql(sql)
 
 
 def roles_business_test(roles, api):

@@ -46,11 +46,11 @@
 
 	var Vue;
 
-	__webpack_require__(28);
+	__webpack_require__(19);
 
-	__webpack_require__(30);
+	__webpack_require__(21);
 
-	Vue = __webpack_require__(31);
+	Vue = __webpack_require__(22);
 
 	window.v_head = new Vue({
 	  el: "#all",
@@ -63,9 +63,9 @@
 	    };
 	  },
 	  components: {
-	    'head_c': __webpack_require__(32),
-	    'left_bar_c': __webpack_require__(36),
-	    'foot_c': __webpack_require__(38)
+	    'head_c': __webpack_require__(23),
+	    'left_bar_c': __webpack_require__(27),
+	    'foot_c': __webpack_require__(29)
 	  },
 	  events: {
 	    change_component: function(component_name) {
@@ -393,7 +393,6 @@
 	function applyToTag(styleElement, obj) {
 		var css = obj.css;
 		var media = obj.media;
-		var sourceMap = obj.sourceMap;
 
 		if(media) {
 			styleElement.setAttribute("media", media)
@@ -411,7 +410,6 @@
 
 	function updateLink(linkElement, obj) {
 		var css = obj.css;
-		var media = obj.media;
 		var sourceMap = obj.sourceMap;
 
 		if(sourceMap) {
@@ -445,22 +443,13 @@
 /* 16 */,
 /* 17 */,
 /* 18 */,
-/* 19 */,
-/* 20 */,
-/* 21 */,
-/* 22 */,
-/* 23 */,
-/* 24 */,
-/* 25 */,
-/* 26 */,
-/* 27 */,
-/* 28 */
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(29);
+	var content = __webpack_require__(20);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(4)(content, {});
@@ -480,7 +469,7 @@
 	}
 
 /***/ },
-/* 29 */
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(3)();
@@ -494,7 +483,7 @@
 
 
 /***/ },
-/* 30 */
+/* 21 */
 /***/ function(module, exports) {
 
 	window.component_load = function(parm) {
@@ -600,7 +589,7 @@
 
 
 /***/ },
-/* 31 */
+/* 22 */
 /***/ function(module, exports) {
 
 	Vue.config.debug = true;
@@ -611,13 +600,13 @@
 
 
 /***/ },
-/* 32 */
+/* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(33);
+	__webpack_require__(24);
 
 	module.exports = Vue.extend({
-	  template: __webpack_require__(35),
+	  template: __webpack_require__(26),
 	  props: ['show_left_bar', 'head_type', 'login_view'],
 	  methods: {
 	    changer_menu: function() {
@@ -635,13 +624,13 @@
 
 
 /***/ },
-/* 33 */
+/* 24 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(34);
+	var content = __webpack_require__(25);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(4)(content, {});
@@ -661,7 +650,7 @@
 	}
 
 /***/ },
-/* 34 */
+/* 25 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(3)();
@@ -675,17 +664,17 @@
 
 
 /***/ },
-/* 35 */
+/* 26 */
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"ui fixed inverted menu grid four column\" style=\"padding: 0px\" id=\"v-head\">\n\t<div class=\"column\">\n\t\t<div class=\"ui dividing\" v-on:click=\"changer_menu\" style=\"color: #ffffff;padding:10px;padding-right: 20px\" v-if=\"head_type=='ok'\">\n\t\t\t<label><i class=\"grid layout icon\"></i>菜单</label>\n\t\t</div>\n\t</div>\n\t<div class=\"column\">\n\t</div>\n\t<div class=\"column\">\n\t</div>\n\t<div class=\"column\">\n\t\t<div class=\"ui dividing\" style=\"color: #ffffff;float:right;padding:10px;padding-right: 20px\" v-if=\"head_type=='login'\" v-on:click=\"change_component('register')\">\n\t\t<label><i class=\"add square icon\"></i>注册</label>\n\t\t</div>\n\t\t<div class=\"ui dividing\" style=\"color: #ffffff;float:right;padding:10px;padding-right: 20px\" v-if=\"head_type=='register'\" v-on:click=\"change_component('login')\">\n\t\t\t<label><i class=\"ticket icon\"></i>登陆</label>\n\t\t</div>\n\t\t<div class=\"ui dividing\" style=\"color: #ffffff;float:right;padding:10px;padding-right: 20px\" v-if=\"head_type=='ok'\" v-on:click=\"logout\">\n\t\t\t<label><i class=\"power icon\"></i>退出</label>\n\t\t</div>\n\t</div>\n</div>\n";
 
 /***/ },
-/* 36 */
+/* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = Vue.extend({
-	  template: __webpack_require__(37),
+	  template: __webpack_require__(28),
 	  data: function() {
 	    return {
 	      bar_data: []
@@ -718,22 +707,22 @@
 
 
 /***/ },
-/* 37 */
+/* 28 */
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"ui fixed inverted vertical sticky menu\" style=\"min-height: 100%;padding-top: 80px;max-width: 140px\">\n\t<div class=\"ui container\">\n\t\t<a class=\"header item\" @click=\"change_component('welcome')\">\n\t\t\t<i class=\"home icon\"></i>首页\n\t\t</a>\n\t\t<div class=\"ui simple dropdown item\" v-for=\"bar in bar_data\">\n\t\t    (% bar.business_name %)<i class=\"dropdown icon\"></i>\n\t\t    <div class=\"menu\">\n\t\t\t\t<a class=\"item\" @click=\"change_component(child_bar.component)\" v-for=\"child_bar in bar.child\"><i class=\"(% child_bar.icon %) icon\"></i>(% child_bar.business_name %)</a>\n\t\t\t</div>\n\t\t</div>\n<!-- \t\t<div class=\"ui simple dropdown item\">\n\t\t\t基础配置<i class=\"dropdown icon\"></i>\n\t\t\t<div class=\"menu\">\n\t\t\t\t<a class=\"item\" @click=\"change_component('user_management')\"><i class=\"users icon\"></i>用户</a>\n\t\t\t\t<a class=\"item\" @click=\"change_component('role_management')\"><i class=\"spy icon\"></i>角色</a>\n\t\t\t\t<a class=\"item\" @click=\"change_component('business_management')\"><i class=\"tasks icon\"></i>业务</a>\n\t\t\t\t<a class=\"item\" @click=\"change_component('model_management')\"><i class=\"puzzle icon\"></i>模块</a>\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"ui simple dropdown item\">\n\t\t\t权限配置<i class=\"dropdown icon\"></i>\n\t\t\t<div class=\"menu\">\n\t\t\t\t<a class=\"item\" @click=\"change_component('user_role')\"><i class=\"linkify icon\"></i>用户－角色</a>\n\t\t\t\t<a class=\"item\" @click=\"change_component('role_business')\"><i class=\"share alternate icon\"></i>角色－业务</a>\n\t\t\t\t<a class=\"item\" @click=\"change_component('business_model')\"><i class=\"maximize icon\"></i>业务－模块</a>\n\t\t\t</div>\n\t\t</div> -->\n\t</div> \n</div>";
 
 /***/ },
-/* 38 */
+/* 29 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = Vue.extend({
-	  template: __webpack_require__(39)
+	  template: __webpack_require__(30)
 	});
 
 
 /***/ },
-/* 39 */
+/* 30 */
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"ui fixed inverted vertical footer segment\">\n\t<div class=\"ui center aligned container\">\n\t\t<div class=\"ui horizontal inverted small divided link list\">\n\t\t\t<a class=\"item\" href=\"#\">Site Map</a>\n\t\t\t<a class=\"item\" href=\"#\">Contact Us</a>\n\t\t\t<a class=\"item\" href=\"#\">Terms and Conditions</a>\n\t\t\t<a class=\"item\" href=\"#\">Privacy Policy</a>\n\t\t</div>\n\t</div>\n</div>";
