@@ -1,14 +1,14 @@
 #coonever
 ##技术选择
-tornado,postgresql,webpack,vue.js,semantic-ui
+######tornado,postgresql,webpack,vue.js,semantic-ui
 
 ##目的
 用户角色，业务，模块，权限的可配置化
 
 ##基础数据结构
-1.同一用户拥有多种角色
-2.同一角色拥有多种业务
-3.同一业务拥有多种模块
+######1.同一用户拥有多种角色
+######2.同一角色拥有多种业务
+######3.同一业务拥有多种模块
 
 ##实现原理
 ###1.vue.js component前端模块化
