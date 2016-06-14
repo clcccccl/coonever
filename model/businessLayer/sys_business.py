@@ -12,6 +12,7 @@ import pdb
 
 import tools
 
+from sys_wraps import CooError
 from dbImpl import sys_business_impl
 
 

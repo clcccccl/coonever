@@ -2,6 +2,7 @@
 #!/usr/bin/env python
 
 from dbImpl import sys_lib_impl
+from sys_wraps import CooError
 
 '''
 系统接口
@@ -9,7 +10,11 @@ from dbImpl import sys_lib_impl
 
 
 def get_modle_by_api(api):
-    return sys_lib_impl.get_api_by_api(api)[0]['path']
+    api = sys_lib_impl.get_api_by_api(api)
+    if api:
+        return api[0]['path']
+    else:
+        raise CooError(fun_name='get_modle_by_api', api=api, text='通过api获取模块失败')
 
 
 def user_login(parm):
@@ -31,8 +36,12 @@ def test_need_validation(api):
     '''
     获取api数据，检查是否需要在线验证，是否需要权限验证
     '''
-    api_data = sys_lib_impl.get_api_by_api(api)[0]
-    return True if api_data['session'] == 1 else False, True if api_data['restrict'] == 1 else False
+    api_datas = sys_lib_impl.get_api_by_api(api)
+    if api_datas:
+        api_data = api_datas[0]
+        return api_data, True if api_data['session'] == 1 else False, True if api_data['restrict'] == 1 else False
+    else:
+        raise CooError(fun_name='test_need_validation', api=api, text='通过api测试是否需要验证失败')
 
 
 def validation_session(user):

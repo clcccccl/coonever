@@ -6,6 +6,9 @@ import traceback
 import json
 import sys
 import os
+import datetime
+
+from log import log_hander
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -34,3 +37,27 @@ def getExpInfoAll(just_info=False):
         return str(info[1])
     else:
         return traceback.format_exc()
+
+
+class CooError(Exception):
+    '''
+    系统异常类
+    '''
+    def __init__(self, user_id=0, api=None, text=None, fun_name=None, add_log=True):
+        self.user_id = user_id
+        self.api = api
+        self.fun_name = fun_name
+        self.text = text
+        self.value = "api:" + str(self.api) + " fun_name:" + str(self.fun_name) + " user_id:" + str(self.user_id) + " value:" + str(self.text)
+        if add_log:
+            self.add_log()
+
+    def add_log(self):
+        log_hander.info(self.value)
+
+    def __str__(self):
+        return repr(self.value)
+
+
+if __name__ == '__main__':
+    raise CooError

@@ -7,8 +7,10 @@
 create by chenli at 16/01/07 11:37
 '''
 
-from db_base import pg_update
 import math
+
+from db_base import pg_update
+from sys_wraps import CooError
 
 
 def get_api_by_api(api):
@@ -72,6 +74,9 @@ def get_user_by_id(user_id):
           and r.status=0)
     ''' % user_id
     roles = pg_update.selectBySql(sql)
-    user = pg_update.select("user_info", where=' id = %s ' % user_id, columns='id,account')[0]
-    user['roles'] = roles
-    return user
+    user = pg_update.select("user_info", where=' id = %s ' % user_id, columns='id,account')
+    if user:
+        user[0]['roles'] = roles
+        return user[0]
+    else:
+        raise CooError(user_id=user_id, fun_name='get_user_by_id', text='通过user_id获取用户失败')

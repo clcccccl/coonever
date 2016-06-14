@@ -7,8 +7,10 @@
 create by chenli at 16/01/07 11:37
 '''
 
-from db_base import pg_update
 import math
+
+from db_base import pg_update
+from sys_wraps import CooError
 
 #-------user
 

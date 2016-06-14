@@ -6,8 +6,8 @@ import pdb
 import importlib
 import functools
 
-from server_lib.base_request_handler import BaseHandler, BasicPostHandler, PostHandler
-from server_lib.sys_wraps import handleError
+from base_request_handler import BaseHandler, BasicPostHandler, PostHandler
+from sys_wraps import handleError
 from model.businessLayer import sys_business, base_business, sys_lib
 
 
@@ -30,7 +30,7 @@ def validationSessionHome(method):
 def validationSession(method):
 
     '''
-    同一post请求在线验证
+    统一post请求在线验证
     '''
     @functools.wraps(method)
     def wrapper(self, *args, **kwargs):
@@ -145,10 +145,13 @@ class PostHandler(PostHandler):
         self.user = (sys_lib.get_user_by_id(self.user_id) if self.user_id else {})
 
     def getModel(self):
-        self.request_model = sys_lib.get_modle_by_api(self.api)
+        if self.api_data:
+            self.request_model = self.api_data['path']
+        else:
+            self.request_model = sys_lib.get_modle_by_api(self.api)
 
     def test_need_validation(self):
-        self.need_validation_session, self.need_validation_permission = sys_lib.test_need_validation(self.api)
+        self.api_data, self.need_validation_session, self.need_validation_permission = sys_lib.test_need_validation(self.api)
 
 if __name__ == "__main__":
     pass

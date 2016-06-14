@@ -64,14 +64,15 @@ class PostHandler(BaseHandler):
         self.account = None
         self.request_argument = {}
         self.api = None
+        self.api_data = {}
         self.request_model = None
         self.need_validation_session = True
         self.need_validation_permission = True
         self.request_map = {}
         self.request_data = []
         self.getRequestArgument()
-        self.getModel()
         self.test_need_validation()
+        self.getModel()
 
     def getRequestArgument(self):
         '''
