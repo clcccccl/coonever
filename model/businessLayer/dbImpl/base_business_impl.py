@@ -12,6 +12,13 @@ import math
 from db_base import pg_update
 
 
+def get_user_by_account(account):
+    '''
+    通过帐号获取用户
+    '''
+    return pg_update.select("user_info", where=" account = '%s' " % account)
+
+
 def get_bar_data_by_roles(roles):
     '''
     更加角色获取菜单数据

@@ -13,6 +13,16 @@ from db_base import pg_update
 from sys_wraps import CooError
 
 
+def user_register(user):
+    try:
+        pg_update.insertOne("user_info", user)
+    except Exception, e:
+        if str(e).find('unique') != -1:
+            raise CooError(text='用户已存在:' + user['account'])
+        else:
+            raise CooError(text='未知错误')
+
+
 def get_api_by_api(api):
     sql = '''
       select * from api where api = '%s'

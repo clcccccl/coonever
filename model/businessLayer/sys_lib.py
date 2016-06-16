@@ -25,6 +25,16 @@ def user_login(parm):
     return sys_lib_impl.get_user_by_ap(user)
 
 
+def user_register(parm):
+    '''
+    用户注册
+    '''
+    user = parm.get('request_map')
+    del user['repassword']
+    sys_lib_impl.user_register(user)
+    return sys_lib_impl.get_user_by_ap(user)
+
+
 def get_user_by_id(user_id):
     '''
     通过帐号和id获取用户

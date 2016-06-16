@@ -674,15 +674,131 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = Vue.extend({
-	  template: __webpack_require__(34)
+	  template: __webpack_require__(49),
+	  data: function() {
+	    return {
+	      new_user: {},
+	      can_user: true,
+	      i: 0
+	    };
+	  },
+	  attached: function() {
+	    return this.init_form();
+	  },
+	  methods: {
+	    init_form: function() {
+	      return $('#register-form').form({
+	        inline: true,
+	        on: 'blur',
+	        fields: {
+	          name: {
+	            identifier: 'name',
+	            rules: [
+	              {
+	                type: 'empty',
+	                prompt: '姓名不能为空'
+	              }
+	            ]
+	          },
+	          account: {
+	            identifier: 'account',
+	            rules: [
+	              {
+	                type: 'empty',
+	                prompt: '帐号不能为空'
+	              }
+	            ]
+	          },
+	          password: {
+	            identifier: 'password',
+	            rules: [
+	              {
+	                type: 'empty',
+	                prompt: '请输入密码'
+	              }
+	            ]
+	          },
+	          repassword: {
+	            identifier: 'repassword',
+	            rules: [
+	              {
+	                type: 'match[password]',
+	                prompt: '请再次输入密码'
+	              }
+	            ]
+	          }
+	        }
+	      });
+	    },
+	    test_account: function() {
+	      var parm;
+	      if (this.new_user.account === '') {
+	        return;
+	      }
+	      parm = JSON.stringify({
+	        request_type: "test_account",
+	        request_map: {
+	          account: this.new_user.account
+	        }
+	      });
+	      return post_load({
+	        parm: parm,
+	        del_fun: (function(_this) {
+	          return function(data) {
+	            if (data === 1) {
+	              return _this.can_user = false;
+	            } else {
+	              return _this.can_user = true;
+	            }
+	          };
+	        })(this)
+	      });
+	    },
+	    register: function() {
+	      var parm;
+	      if (!$('#register-form').form('is valid') || !this.can_user) {
+	        return;
+	      }
+	      parm = JSON.stringify({
+	        request_map: this.new_user
+	      });
+	      return $.ajax({
+	        url: '/login',
+	        type: 'PUT',
+	        data: parm,
+	        success: (function(_this) {
+	          return function(data, status, response) {
+	            if (data.response_data.length > 0) {
+	              return window.location.href = "/home";
+	            }
+	          };
+	        })(this)
+	      });
+	    }
+	  }
 	});
 
 
 /***/ },
-/* 34 */
+/* 34 */,
+/* 35 */,
+/* 36 */,
+/* 37 */,
+/* 38 */,
+/* 39 */,
+/* 40 */,
+/* 41 */,
+/* 42 */,
+/* 43 */,
+/* 44 */,
+/* 45 */,
+/* 46 */,
+/* 47 */,
+/* 48 */,
+/* 49 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"ui main text container\" style=\"min-height: 100%;padding-top: 150px;\">\n\t<h1 class=\"ui header\">用户注册</h1>\n\t<form class=\"ui form\">\n\t\t<div class=\"field\">\n\t\t\t<label>帐号</label>\n\t\t\t<input type=\"text\" name=\"first-name\" placeholder=\"帐号\">\n\t\t</div>\n\t\t<div class=\"field\">\n\t\t\t<label>密码</label>\n\t\t\t<input type=\"password\" name=\"last-name\" placeholder=\"密码\">\n\t\t</div>\n\t\t<div class=\"field\">\n\t\t\t<label>再次输入密码</label>\n\t\t\t<input type=\"password\" name=\"last-name\" placeholder=\"密码\">\n\t\t</div>\n\t\t<button class=\"ui button\" type=\"submit\">注册</button>\n\t</form>\n</div>";
+	module.exports = "<div class=\"ui main text container\" style=\"min-height: 100%;padding-top: 150px;\" id=\"register-form\">\n\t<h1 class=\"ui header\">用户注册</h1>\n\t<div class=\"ui form\">\n\t\t<div class=\"field\">\n\t\t\t<label>姓名</label>\n\t\t\t<input type=\"text\" name=\"name\" placeholder=\"姓名\" v-model=\"new_user.name\">\n\t\t</div>\n\t\t<div class=\"field\">\n\t\t\t<label>帐号<span v-if=\"!can_user\" style=\"margin-left: 300px;color: #9f3a38\">该帐号已存在</span></label>\n\t\t\t<input type=\"text\" name=\"account\" placeholder=\"帐号\" v-model=\"new_user.account\" @blur=\"test_account\">\n\t\t</div>\n\t\t<div class=\"field\">\n\t\t\t<label>密码</label>\n\t\t\t<input type=\"password\" name=\"password\" placeholder=\"密码\" v-model=\"new_user.password\">\n\t\t</div>\n\t\t<div class=\"field\">\n\t\t\t<label>重复密码</label>\n\t\t\t<input type=\"password\" name=\"repassword\" placeholder=\"重复密码\" v-model=\"new_user.repassword\">\n\t\t</div>\n\t\t<button class=\"ui positive button\" @click=\"register\">注册</button>\n\t</div>\n</div>";
 
 /***/ }
 /******/ ]);

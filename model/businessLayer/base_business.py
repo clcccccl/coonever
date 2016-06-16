@@ -18,3 +18,12 @@ def get_bar_data(parm):
         if business['is_leaf'] == 0:
             business['child'] = base_business_impl.get_child_businesses(business['business_code'])
     return businesses
+
+
+def test_account(parm):
+    '''
+    验证帐号是否可用
+    '''
+    account = parm.get('request_map')['account']
+    users = base_business_impl.get_user_by_account(account)
+    return len(users)

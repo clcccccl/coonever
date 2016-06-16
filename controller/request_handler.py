@@ -87,6 +87,15 @@ class Login(BaseHandler):
             self.set_secure_cookie("user_id", str(user[0].id), expires_days=1)
         self.write(json.dumps({"response_data": user}))
 
+    @handleError
+    def put(self):
+        self.set_header("Content-Type", "application/json")
+        user = sys_lib.user_register(json.loads(self.request.body))
+        if len(user) > 0:
+            self.set_secure_cookie("account", str(user[0].account))
+            self.set_secure_cookie("user_id", str(user[0].id), expires_days=1)
+        self.write(json.dumps({"response_data": user}))
+
 
 class Test(BaseHandler):
     def get(self):

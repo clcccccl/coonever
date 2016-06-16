@@ -8,7 +8,7 @@ import sys
 import os
 import datetime
 
-from log import log_hander
+# from log import log_hander
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -21,12 +21,12 @@ def handleError(method):
     '''
     @functools.wraps(method)
     def wrapper(self, *args, **kwargs):
-        # try:
-        #     method(self, *args, **kwargs)
-        # except Exception, e:
-        #     print e
-        #     self.write(json.dumps({"response_data": {}, 'error': 1, 'error_text': str(e.__str__())}))
-        method(self, *args, **kwargs)
+        try:
+            method(self, *args, **kwargs)
+        except CooError, e:
+            self.write(json.dumps({"response_data": {}, 'error': 1, 'error_text': e.text}))
+        # except Exception:
+        #     self.write(json.dumps({"response_data": {}, 'error': 1, 'error_text': "服务器错误"}))
     return wrapper
 
 
@@ -42,18 +42,21 @@ def getExpInfoAll(just_info=False):
 class CooError(Exception):
     '''
     系统异常类
+    error_type = 0:系统数据异常
+    error_type = 1:用户数据错误
     '''
-    def __init__(self, user_id=0, api=None, text=None, fun_name=None, add_log=True):
+    def __init__(self, error_type=1, user_id=0, api=None, text=None, fun_name=None, add_log=True):
+        self.error_type = error_type
         self.user_id = user_id
         self.api = api
         self.fun_name = fun_name
         self.text = text
         self.value = "api:" + str(self.api) + " fun_name:" + str(self.fun_name) + " user_id:" + str(self.user_id) + " value:" + str(self.text)
-        if add_log:
-            self.add_log()
+        # if add_log:
+        #     self.add_log()
 
-    def add_log(self):
-        log_hander.info(self.value)
+    # def add_log(self):
+    #     log_hander.info(self.value)
 
     def __str__(self):
         return repr(self.value)
