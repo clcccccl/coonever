@@ -11,8 +11,8 @@ module.exports =
       get_bar_data:->
         parm = JSON.stringify
           request_type: "get_bar_data"
-        post_load
+        cl.post_load
           parm:parm
           url: "post_request"
           del_fun:(data)=>
-            @bar_data = data
+            @bar_data = data.datas

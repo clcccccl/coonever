@@ -140,7 +140,8 @@ class PostHandler(PostHandler):
             request_data:请求中带list数据放这里
         返回数据规则
             response_data:
-                ...内容随意
+                datas:[] list数据
+                data: {} map数据
             error: 0\1\2 0正常，1出错， 2无权限
             error_text: 错误内容
         '''

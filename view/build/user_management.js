@@ -44,14 +44,14 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(41);
+	__webpack_require__(42);
 
 	module.exports = Vue.extend({
-	  template: __webpack_require__(43),
+	  template: __webpack_require__(44),
 	  components: {
 	    'error-modal': __webpack_require__(13),
 	    'paging': __webpack_require__(6),
-	    'choose-role': __webpack_require__(44)
+	    'choose-role': __webpack_require__(45)
 	  },
 	  data: function() {
 	    return {
@@ -87,60 +87,42 @@
 	      return $('.ui.dropdown').dropdown();
 	    },
 	    init_form: function() {
-	      return $('#user-form').form({
-	        on: 'blur',
-	        fields: {
-	          user_name: {
-	            identifier: 'user_name',
-	            rules: [
-	              {
-	                type: 'empty',
-	                prompt: '请输入角色名'
-	              }
-	            ]
-	          },
-	          account: {
-	            identifier: 'account',
-	            rules: [
-	              {
-	                type: 'empty',
-	                prompt: '请输入角色名'
-	              }
-	            ]
-	          },
-	          password: {
-	            identifier: 'password',
-	            rules: [
-	              {
-	                type: 'match[repassword]',
-	                prompt: '请输入角色名'
-	              }
-	            ]
-	          },
-	          repassword: {
-	            identifier: 'repassword',
-	            rules: [
-	              {
-	                type: 'match[password]',
-	                prompt: '请输入角色名'
-	              }
-	            ]
-	          }
-	        }
+	      var field1, field2, field3, field4;
+	      ({
+	        init_form: function() {}
 	      });
+	      field1 = {
+	        name: 'user_name',
+	        type: 'empty',
+	        prompt: '请输入姓名'
+	      };
+	      field2 = {
+	        name: 'account',
+	        type: 'empty',
+	        prompt: '请输入帐号'
+	      };
+	      field3 = {
+	        name: 'password',
+	        type: 'empty',
+	        prompt: '请输入密码'
+	      };
+	      field4 = {
+	        name: 'repassword',
+	        type: 'empty',
+	        prompt: '请重复密码'
+	      };
+	      return cl.initValidationForm('#user-form', [field1, field2, field3, field4]);
 	    },
 	    load_roles: function() {
 	      var parm;
 	      parm = JSON.stringify({
 	        request_type: "get_roles_tree"
 	      });
-	      return $.ajax({
-	        url: '/post_request',
-	        type: 'POST',
-	        data: parm,
-	        success: (function(_this) {
-	          return function(data, status, response) {
-	            return _this.role_tree = data.response_data;
+	      return cl.post_load({
+	        parm: parm,
+	        del_fun: (function(_this) {
+	          return function(data) {
+	            return _this.role_tree = data.datas;
 	          };
 	        })(this)
 	      });
@@ -154,7 +136,7 @@
 	          search_key: this.search_key
 	        }
 	      });
-	      return post_load({
+	      return cl.post_load({
 	        parm: parm,
 	        del_fun: (function(_this) {
 	          return function(data) {
@@ -177,7 +159,7 @@
 	        request_type: "change_user_role",
 	        request_map: request_map
 	      });
-	      return post_load({
+	      return cl.post_load({
 	        parm: parm,
 	        del_fun: (function(_this) {
 	          return function(data) {
@@ -241,7 +223,7 @@
 	          }
 	        });
 	      }
-	      return post_load({
+	      return cl.post_load({
 	        parm: parm,
 	        del_fun: (function(_this) {
 	          return function(data) {
@@ -737,13 +719,14 @@
 /* 38 */,
 /* 39 */,
 /* 40 */,
-/* 41 */
+/* 41 */,
+/* 42 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(42);
+	var content = __webpack_require__(43);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(4)(content, {});
@@ -763,7 +746,7 @@
 	}
 
 /***/ },
-/* 42 */
+/* 43 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(3)();
@@ -777,20 +760,20 @@
 
 
 /***/ },
-/* 43 */
+/* 44 */
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"ui main container\" style=\"min-height: 100%;padding-left: 100px\">\n\t<div class=\"ui top attached menu\">\n\t\t<div class=\"ui dropdown icon item\">\n\t\t\t<h3 class=\"ui header\">用户管理<i class=\"grey add circle icon himg\" @click=\"add_user\"></i></h3>\n\t\t</div>\n\t\t<div class=\"right menu\">\n\t\t\t<div class=\"ui right aligned category search item\">\n\t\t\t\t<div class=\"ui transparent icon input\">\n\t\t\t\t\t<input class=\"prompt\" type=\"text\" v-model=\"search_key\" placeholder=\"Search users...\">\n\t\t\t\t\t<i class=\"search link icon\" @click=\"load(1)\"></i>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"results\"></div>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n\t<div class=\"ui bottom attached segment\" style=\"background-color: #F8F8F8;border:0px;\">\n\t\t<div class=\"content\" v-if=\"edit_add\">\n\t\t\t<div class=\"ui form\" id=\"user-form\">\n\t\t\t\t<div class=\"field\">\n\t\t\t\t\t<div class=\"fields\">\n\t\t\t\t\t\t<div class=\"field\">\n\t\t\t\t\t\t\t<input type=\"text\" name=\"user_name\" placeholder=\"用户名\" v-model=\"user_map.name\">\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"field\">\n\t\t\t\t\t\t\t<input type=\"text\" name=\"account\" placeholder=\"帐号\" v-model=\"user_map.account\">\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"field\">\n\t\t\t\t\t\t\t<input type=\"password\" name=\"password\" placeholder=\"密码\" v-model=\"user_map.password\">\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"field\">\n\t\t\t\t\t\t\t<input type=\"password\" name=\"repassword\" placeholder=\"重复密码\" v-model=\"user_map.repassword\">\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"field\">\n\t\t\t\t\t\t\t<i class=\"large brown minus icon hideimg\" @click=\"hide_form\"></i>\n\t\t\t\t\t\t\t<i class=\"large green submit checkmark icon hideimg\" @click=\"save_user\"></i>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\t\t<table class=\"ui very basic table\">\n\t\t\t<thead>\n\t\t\t\t<tr>\n\t\t\t\t\t<th>用户名</th>\n\t\t\t\t\t<th>帐号</th>\n\t\t\t\t\t<th>角色</th>\n\t\t\t\t\t<th>操作</th>\n\t\t\t\t</tr>\n\t\t\t</thead>\n\t\t\t<tbody>\n\t\t\t\t<tr v-for=\"user in users\">\n\t\t\t\t\t<td>(% user.name %)</td>\n\t\t\t\t\t<td>(% user.account %)</td>\n\t\t\t\t\t<td>\n\t\t\t\t\t\t<div class=\"ui left pointing dropdown link item\" id=\"(% user.account %)\">\n\t\t\t\t\t\t\t(% user.role %)<a><i class=\"configure icon\"></i></a>\n\t\t\t\t\t\t\t<div class=\"menu\" style='min-width: 300px;'>\n\t\t\t\t\t\t\t\t<div class=\"header\">\n\t\t\t\t\t\t\t\t\t<i class=\"tags icon\"></i>\n\t\t\t\t\t\t\t\t\t角色选择\n\t\t\t\t\t\t\t\t\t<a><i class=\"large green submit checkmark icon hideimg\" @click=\"change_role(user)\"></i></a>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t<choose-role :roles.sync=\"role_tree\" style=\"margin-bottom: 20px;\"></choose-role>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</td>\n\t\t\t\t\t<td>\n\t\t\t\t\t\t<a><i class=\"large olive edit icon\" @click=\"edit_user(user)\"></i></a>\n\t\t\t\t\t\t<a><i class=\"large brown remove circle icon\"></i></a>\n\t\t\t\t\t</td>\n\t\t\t\t</tr>\n\t\t\t</tbody>\n\t\t</table>\n\t\t<paging :pag_count.sync=\"pag_count\"></paging>\t\n\t</div>\n</div>";
 
 /***/ },
-/* 44 */
+/* 45 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(45);
+	__webpack_require__(46);
 
 	module.exports = Vue.extend({
 	  name: 'choose-role',
-	  template: __webpack_require__(47),
+	  template: __webpack_require__(48),
 	  props: ['roles'],
 	  methods: {
 	    select_role: function(roles) {
@@ -806,13 +789,13 @@
 
 
 /***/ },
-/* 45 */
+/* 46 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(46);
+	var content = __webpack_require__(47);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(4)(content, {});
@@ -832,7 +815,7 @@
 	}
 
 /***/ },
-/* 46 */
+/* 47 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(3)();
@@ -846,7 +829,7 @@
 
 
 /***/ },
-/* 47 */
+/* 48 */
 /***/ function(module, exports) {
 
 	module.exports = "<div>\n    <div class=\"item_role\" data-value=\"important\" v-for=\"role in roles\">\n\t\t<div class=\"ui checkbox\" v-if=\"role.role_code != 'root'\" >\n\t\t\t<input type=\"checkbox\" name=\"example\" v-model=\"role.checked\" style=\"disabled\" disabled=\"(% role.role_type == 'root' %)\">\n\t\t\t<label>(% role.role_name %)</label>\n\t\t</div>\n\t\t<choose-role :roles.sync=\"role.child\"></choose-role>\n\t\t<div class=\"item\">\n\t\t</div>\n\t</div>\n</div>\n";

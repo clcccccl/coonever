@@ -58,7 +58,7 @@ def get_users(parm):
           where %s
     ''' % where
     count = pg_update.selectBySql(sql_count)[0]['count']
-    page_count = math.ceil(float(count) / limit)
+    page_count = int(math.ceil(float(count) / limit))
     result['datas'] = users
     result['page_count'] = page_count
     return result
@@ -71,7 +71,10 @@ def add_user(data_map):
     try:
         pg_update.insertOne("user_info", data_map)
     except Exception, e:
-        raise Exception("用户已存在", data_map)
+        if str(e).find('unique') != -1:
+            raise CooError(text='用户已存在:' + data_map['account'])
+        else:
+            raise CooError(text='未知错误')
 
 
 def update_user(data_map):
@@ -120,7 +123,10 @@ def add_role(data_map):
     try:
         pg_update.insertOne("role", data_map)
     except Exception, e:
-        raise Exception("角色代码已存在", data_map)
+        if str(e).find('unique') != -1:
+            raise CooError(text='角色代码已存在:' + data_map['role_code'])
+        else:
+            raise CooError(text='未知错误')
 
 
 def update_role(data_map):

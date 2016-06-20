@@ -42,34 +42,22 @@ module.exports =
       @init_form()
     methods:
       init_form:->
-        $('.ui.form.role').form({
-          on: 'blur',
-          fields: {
-            empty: {
-              identifier  : 'role_name',
-              rules: [{
-                type   : 'empty',
-                prompt : '请输入角色名'
-              }]
-            },
-            dropdown: {
-              identifier  : 'role_code',
-              rules: [{
-                type: 'empty',
-                prompt : '请输入角色编码'
-              }]
-            }
-          }
-        })
+        field1=
+          name: 'role_name'
+          type: 'empty',
+          prompt : '请输入角色名'
+        field2=
+          name: 'role_code'
+          type: 'empty',
+          prompt : '请输入角色编码'
+        cl.initValidationForm('.ui.form.role', [field1, field2])
       load:->
         parm = JSON.stringify
           request_type: "get_roles_tree"
-        $.ajax
-          url: '/post_request'
-          type: 'POST'
-          data : parm
-          success: (data, status, response) =>
-            @roles = data.response_data
+        cl.post_load
+          parm:parm
+          del_fun:(data)=>
+            @roles = data.datas
       save:->
         if !$('.ui.form.role').form('is valid')
           return
@@ -82,11 +70,9 @@ module.exports =
         parm = JSON.stringify
           request_type: "save_role"
           request_map:@role
-        $.ajax
-          url: '/post_request'
-          type: 'POST'
-          data : parm
-          success: (data, status, response) =>
+        cl.post_load
+          parm:parm
+          del_fun:(data)=>
             $('#edit-role-modal').modal('hide')
             @load()
 

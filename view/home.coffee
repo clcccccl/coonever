@@ -22,7 +22,7 @@ window.v_head = new Vue
     fun_map =
       type: 'value'
       key: 'view_model'
-    value = href_parm(fun_map)
+    value = cl.href_parm(fun_map)
     if value != ''
       @change_component(value)
     else
@@ -33,10 +33,10 @@ window.v_head = new Vue
         type: 'set_value'
         key: 'view_model'
         value: @view
-      href_parm(fun_map)
+      cl.href_parm(fun_map)
   methods:
     load_new_component:(component_name)->
-      component_load
+      cl.component_load
         component_name: component_name
         success:=>
           @change_component(component_name)

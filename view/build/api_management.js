@@ -93,7 +93,7 @@
 	          search_key: this.search_key
 	        }
 	      });
-	      return post_load({
+	      return cl.post_load({
 	        parm: parm,
 	        del_fun: (function(_this) {
 	          return function(data) {
@@ -112,7 +112,7 @@
 	        request_type: "edit_api",
 	        request_map: this.api
 	      });
-	      return post_load({
+	      return cl.post_load({
 	        parm: parm,
 	        del_fun: (function(_this) {
 	          return function(data) {};

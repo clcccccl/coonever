@@ -31,53 +31,36 @@ module.exports =
       init_dropdown:->
         $('.ui.dropdown').dropdown()
       init_form:->
-        $('#user-form').form({
-          on: 'blur',
-          fields: {
-            user_name: {
-              identifier  : 'user_name',
-              rules: [{
-                type   : 'empty',
-                prompt : '请输入角色名'
-              }]
-            },
-            account: {
-              identifier  : 'account',
-              rules: [{
-                type: 'empty',
-                prompt : '请输入角色名'
-              }]
-            }
-            password: {
-              identifier  : 'password',
-              rules: [{
-                type   : 'match[repassword]',
-                prompt : '请输入角色名'
-              }]
-            }
-            repassword: {
-              identifier  : 'repassword',
-              rules: [{
-                type   : 'match[password]',
-                prompt : '请输入角色名'
-              }]
-            }
-          }
-        })
+        init_form:->
+        field1 =
+          name: 'user_name'
+          type: 'empty',
+          prompt:'请输入姓名'
+        field2 =
+          name: 'account'
+          type: 'empty',
+          prompt:'请输入帐号'
+        field3 =
+          name: 'password'
+          type: 'empty',
+          prompt:'请输入密码'
+        field4 =
+          name: 'repassword'
+          type: 'empty',
+          prompt:'请重复密码'
+        cl.initValidationForm('#user-form', [field1, field2, field3, field4])
       load_roles:->
         parm = JSON.stringify
           request_type: "get_roles_tree"
-        $.ajax
-          url: '/post_request'
-          type: 'POST'
-          data : parm
-          success: (data, status, response) =>
-            @role_tree = data.response_data
+        cl.post_load
+          parm:parm
+          del_fun:(data)=>
+            @role_tree = data.datas
       load:(page)->
         parm = JSON.stringify
           request_type: "get_users"
           request_map: {page:page,search_key:@search_key}
-        post_load
+        cl.post_load
           parm:parm
           del_fun:(data)=>
             @users = data.datas
@@ -92,7 +75,7 @@ module.exports =
         parm = JSON.stringify
           request_type: "change_user_role"
           request_map: request_map
-        post_load
+        cl.post_load
           parm:parm
           del_fun:(data)=>
             @load(1)
@@ -133,7 +116,7 @@ module.exports =
           parm = JSON.stringify
             request_type: "del_user"
             request_map: {account:@user_map.account}
-        post_load
+        cl.post_load
           parm:parm
           del_fun:(data)=>
             @load(1)

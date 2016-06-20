@@ -9,40 +9,23 @@ module.exports =
       @init_form()
     methods:
       init_form:->
-        $('#register-form').form({
-          inline : true,
-          on: 'blur',
-          fields: {
-            name: {
-              identifier  : 'name',
-              rules: [{
-                type   : 'empty',
-                prompt : '姓名不能为空'
-              }]
-            },
-            account: {
-              identifier  : 'account',
-              rules: [{
-                type   : 'empty',
-                prompt : '帐号不能为空'
-              }]
-            },
-            password: {
-              identifier  : 'password',
-              rules: [{
-                type   : 'empty',
-                prompt : '请输入密码'
-              }]
-            }
-            repassword: {
-              identifier  : 'repassword',
-              rules: [{
-                type   : 'match[password]',
-                prompt : '请再次输入密码'
-              }]
-            }
-          }
-        })
+        field1 =
+          name: 'name'
+          type: 'empty',
+          prompt:'姓名不能为空'
+        field2 =
+          name:'account'
+          type:'empty',
+          prompt: '帐号不能为空'
+        field3 =
+          name:'password'
+          type:'empty',
+          prompt: '请输入密码'
+        field4 =
+          name:'repassword'
+          type:'empty',
+          prompt: '请再次输入密码'
+        cl.initValidationForm('#register-form', [field1, field2, field3, field4])
       test_account:->
         if @new_user.account == ''
           return
@@ -50,7 +33,7 @@ module.exports =
           request_type: "test_account"
           request_map:
             account: @new_user.account
-        post_load
+        cl.post_load
           parm:parm
           del_fun:(data)=>
             if data == 1
@@ -58,14 +41,12 @@ module.exports =
             else
               @can_user = true
       register: ->
-      	if !$('#register-form').form('is valid') or !@can_user
+        if !$('#register-form').form('is valid') or !@can_user
           return
         parm = JSON.stringify
           request_map: @new_user
-        $.ajax
-          url: '/login'
-          type: 'PUT'
-          data : parm
-          success: (data, status, response) =>
-            if data.response_data.length > 0
+        cl.post_load
+          parm:parm
+          del_fun:(data)=>
+            if data
               window.location.href="/home"

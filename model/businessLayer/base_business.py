@@ -17,7 +17,7 @@ def get_bar_data(parm):
     for business in businesses:
         if business['is_leaf'] == 0:
             business['child'] = base_business_impl.get_child_businesses(business['business_code'])
-    return businesses
+    return {'datas': businesses}
 
 
 def test_account(parm):

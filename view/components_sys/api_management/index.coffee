@@ -31,7 +31,7 @@ module.exports =
         parm = JSON.stringify
           request_type: "get_apis"
           request_map: {page:page,search_key:@search_key}
-        post_load
+        cl.post_load
           parm:parm
           del_fun:(data)=>
             @apis = data.datas
@@ -42,7 +42,7 @@ module.exports =
         parm = JSON.stringify
           request_type: "edit_api"
           request_map: @api
-        post_load
+        cl.post_load
           parm:parm
           del_fun:(data)=>
             return

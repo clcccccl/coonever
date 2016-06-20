@@ -45,34 +45,22 @@ module.exports =
       @init_form()
     methods:
       init_form:->
-        $('.ui.form.business').form({
-          on: 'blur',
-          fields: {
-            empty: {
-              identifier  : 'business_name',
-              rules: [{
-                type   : 'empty',
-                prompt : '请输入业务名'
-              }]
-            },
-            dropdown: {
-              identifier  : 'business_code',
-              rules: [{
-                type: 'empty',
-                prompt : '请输入业务编码'
-              }]
-            }
-          }
-        })
+        field1=
+          name: 'business_name'
+          type: 'empty',
+          prompt : '请输入业务名'
+        field2=
+          name: 'business_code'
+          type: 'empty',
+          prompt : '请输入业务编码'
+        cl.initValidationForm('.ui.form.business', [field1, field2])
       load:->
         parm = JSON.stringify
           request_type: "get_businesses_tree"
-        $.ajax
-          url: '/post_request'
-          type: 'POST'
-          data : parm
-          success: (data, status, response) =>
-            @businesses = data.response_data
+        cl.post_load
+          parm:parm
+          del_fun:(data)=>
+            @businesses = data.datas
       save:->
         if !$('.ui.form.business').form('is valid')
           return
@@ -88,11 +76,9 @@ module.exports =
         parm = JSON.stringify
           request_type: "save_business"
           request_map:@business
-        $.ajax
-          url: '/post_request'
-          type: 'POST'
-          data : parm
-          success: (data, status, response) =>
+        cl.post_load
+          parm:parm
+          del_fun:(data)=>
             $('#edit-business-modal').modal('hide')
             @load()
 

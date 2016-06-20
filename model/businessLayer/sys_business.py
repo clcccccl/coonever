@@ -85,7 +85,8 @@ def get_roles_tree(parm):
     roles = sys_business_impl.get_roles()
     for role in roles:
         role['show'] = True
-    return tools.listToTree(roles, 'parent_role_code', 'role_code')
+    data = {'datas': tools.listToTree(roles, 'parent_role_code', 'role_code')}
+    return data
 
 
 def get_roles(parm):
@@ -108,7 +109,7 @@ def get_businesses_tree(parm):
     businesses = sys_business_impl.get_businesses()
     for business in businesses:
         business['show'] = True
-    return tools.listToTree(businesses, 'parent_business_code', 'business_code')
+    return {'datas': tools.listToTree(businesses, 'parent_business_code', 'business_code')}
 
 
 def save_business(pam):

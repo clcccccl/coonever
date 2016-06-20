@@ -44,10 +44,10 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(34);
+	__webpack_require__(35);
 
 	module.exports = Vue.extend({
-	  template: __webpack_require__(36),
+	  template: __webpack_require__(37),
 	  data: function() {
 	    return {
 	      roles: [],
@@ -89,7 +89,7 @@
 	    }
 	  },
 	  components: {
-	    'role-component': __webpack_require__(37),
+	    'role-component': __webpack_require__(38),
 	    'error-modal': __webpack_require__(13)
 	  },
 	  attached: function() {
@@ -98,42 +98,29 @@
 	  },
 	  methods: {
 	    init_form: function() {
-	      return $('.ui.form.role').form({
-	        on: 'blur',
-	        fields: {
-	          empty: {
-	            identifier: 'role_name',
-	            rules: [
-	              {
-	                type: 'empty',
-	                prompt: '请输入角色名'
-	              }
-	            ]
-	          },
-	          dropdown: {
-	            identifier: 'role_code',
-	            rules: [
-	              {
-	                type: 'empty',
-	                prompt: '请输入角色编码'
-	              }
-	            ]
-	          }
-	        }
-	      });
+	      var field1, field2;
+	      field1 = {
+	        name: 'role_name',
+	        type: 'empty',
+	        prompt: '请输入角色名'
+	      };
+	      field2 = {
+	        name: 'role_code',
+	        type: 'empty',
+	        prompt: '请输入角色编码'
+	      };
+	      return cl.initValidationForm('.ui.form.role', [field1, field2]);
 	    },
 	    load: function() {
 	      var parm;
 	      parm = JSON.stringify({
 	        request_type: "get_roles_tree"
 	      });
-	      return $.ajax({
-	        url: '/post_request',
-	        type: 'POST',
-	        data: parm,
-	        success: (function(_this) {
-	          return function(data, status, response) {
-	            return _this.roles = data.response_data;
+	      return cl.post_load({
+	        parm: parm,
+	        del_fun: (function(_this) {
+	          return function(data) {
+	            return _this.roles = data.datas;
 	          };
 	        })(this)
 	      });
@@ -155,12 +142,10 @@
 	        request_type: "save_role",
 	        request_map: this.role
 	      });
-	      return $.ajax({
-	        url: '/post_request',
-	        type: 'POST',
-	        data: parm,
-	        success: (function(_this) {
-	          return function(data, status, response) {
+	      return cl.post_load({
+	        parm: parm,
+	        del_fun: (function(_this) {
+	          return function(data) {
 	            $('#edit-role-modal').modal('hide');
 	            return _this.load();
 	          };
@@ -561,13 +546,14 @@
 /* 31 */,
 /* 32 */,
 /* 33 */,
-/* 34 */
+/* 34 */,
+/* 35 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(35);
+	var content = __webpack_require__(36);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(4)(content, {});
@@ -587,7 +573,7 @@
 	}
 
 /***/ },
-/* 35 */
+/* 36 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(3)();
@@ -601,20 +587,20 @@
 
 
 /***/ },
-/* 36 */
+/* 37 */
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"ui main container\" style=\"min-height: 100%;padding-left: 100px\">\n\t<div class=\"ui top attached menu\">\n\t\t<div class=\"ui dropdown icon item\">\n\t\t\t<h3 class=\"ui header\">角色管理</h3>\n\t\t</div>\n\t</div>\n\t<div class=\"ui bottom attached segment\" style=\"background-color: #F8F8F8;border:0px;\" v-if=\"roles.length > 0\">\n\t\t<role-component :roles.sync=\"roles\"></role-component>\n\t</div>\n\t<div class=\"ui modal\" id=\"edit-role-modal\">\n\t\t<i class=\"close icon\"></i>\n\t\t<div class=\"header\">角色详情</div>\n\t\t<div class=\"content\">\n\t\t\t<div class=\"ui form role\">\n\t\t\t\t<div class=\"field\">\n\t\t\t\t\t<label>角色名</label>\n\t\t\t\t\t<input name=\"role_name\" placeholder=\"请输入角色名\" type=\"text\" v-model=\"role.role_name\">\n\t\t\t\t</div>\n\t\t\t\t<div class=\"field\">\n\t\t\t\t\t<label>角色编码</label>\n\t\t\t\t\t<input name=\"role_code\" placeholder=\"请输入角色编码\" type=\"text\" v-model=\"role.role_code\">\n\t\t\t\t</div>\n\t\t\t\t<div class=\"field\">\n\t\t\t\t\t<label>角色描述</label>\n\t\t\t\t\t<input type=\"text\" placeholder=\"请输入角色描述\" v-model=\"role.role_explain\">\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"actions\">\n\t\t\t<div class=\"ui buttons\">\n\t\t\t\t<button class=\"ui deny button\">返回</button>\n\t\t\t\t<div class=\"or\"></div>\n\t\t\t\t<button class=\"ui submit blue right button\" @click=\"save\">保存</button>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n\t<error-modal :error_options=\"rm_role_error_options\"></error-modal>\n</div>";
 
 /***/ },
-/* 37 */
+/* 38 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(38);
+	__webpack_require__(39);
 
 	module.exports = Vue.extend({
 	  name: 'role_component',
-	  template: __webpack_require__(40),
+	  template: __webpack_require__(41),
 	  props: ['roles'],
 	  data: function() {
 	    return {
@@ -656,13 +642,13 @@
 
 
 /***/ },
-/* 38 */
+/* 39 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(39);
+	var content = __webpack_require__(40);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(4)(content, {});
@@ -682,7 +668,7 @@
 	}
 
 /***/ },
-/* 39 */
+/* 40 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(3)();
@@ -696,7 +682,7 @@
 
 
 /***/ },
-/* 40 */
+/* 41 */
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"ui list\">\n\t<div v-for=\"role in roles\" class=\"item\">\n\t\t<i class=\"folder open icon\" v-bind:class=\"{ 'open': role.show}\" @click=\"showChild(role)\"></i>\n\t\t<div class=\"content\">\n\t\t\t<div class=\"header\">(% role.role_name %)\n\t\t\t\t<i class=\"edit icon\" style=\"margin-left: 10px\" @click=\"edit_role(role)\"></i>\n\t\t\t\t<i class=\"add circle icon\" @click=\"add_role(role)\"></i>\n\t\t\t\t<div class=\"ui left pointing dropdown link item\">\n\t\t\t\t\t<i class=\"remove circle icon\"></i>\n\t\t\t\t\t<div class=\"menu\">\n\t\t\t\t\t\t<button class=\"item\" style=\"background: #FFFAF3\" @click=\"rm_role(role)\">确认删除?请谨慎操作！</button>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div class=\"description\">(% role.role_explain %)</div>\n\t\t\t<role_component :roles.sync=\"role.child\" v-if=\"role.show && role.child && role.child.length > 0\"></role_component>\n\t\t</div>\n\t</div>\n</div>";

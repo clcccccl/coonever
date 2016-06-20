@@ -78,7 +78,7 @@
 	      type: 'value',
 	      key: 'view_model'
 	    };
-	    value = href_parm(fun_map);
+	    value = cl.href_parm(fun_map);
 	    if (value !== '') {
 	      return this.change_component(value);
 	    } else {
@@ -93,12 +93,12 @@
 	        key: 'view_model',
 	        value: this.view
 	      };
-	      return href_parm(fun_map);
+	      return cl.href_parm(fun_map);
 	    }
 	  },
 	  methods: {
 	    load_new_component: function(component_name) {
-	      return component_load({
+	      return cl.component_load({
 	        component_name: component_name,
 	        success: (function(_this) {
 	          return function() {
@@ -486,105 +486,153 @@
 /* 21 */
 /***/ function(module, exports) {
 
-	window.component_load = function(parm) {
-	  return $.ajax({
-	    url: "static/build/" + parm.component_name + ".js",
-	    dataType: 'script',
-	    success: function() {
-	      return parm.success();
-	    },
-	    async: true
-	  });
-	};
-
-	window.post_load = function(post_parm) {
-	  return $.ajax({
-	    url: '/post_request',
-	    type: 'POST',
-	    data: post_parm.parm,
-	    success: (function(_this) {
-	      return function(data, status, response) {
-	        return post_parm.del_fun(data.response_data);
+	window.cl = {
+	  initValidationForm: function(form, field_datas) {
+	    var field_data, fields, i, len, parm;
+	    fields = {};
+	    for (i = 0, len = field_datas.length; i < len; i++) {
+	      field_data = field_datas[i];
+	      fields[field_data.name] = {
+	        identifier: field_data.name,
+	        rules: [
+	          {
+	            type: field_data.type,
+	            prompt: field_data.prompt
+	          }
+	        ]
 	      };
-	    })(this)
-	  });
-	};
-
-	window.href_parm = function(fun_map) {
-	  var complete_href, e, error, error1, error2, error3, error4, get_fun_map, href_1, href_2, href_3, i, len, parm_list, parm_map, parm_str;
-	  if (fun_map.type === 'base_href') {
-	    try {
-	      return window.location.href.split("?")[0];
-	    } catch (error) {
-	      e = error;
-	      return window.location.href;
 	    }
-	  }
-	  if (fun_map.type === 'parm') {
-	    try {
-	      return window.location.href.split("?")[1];
-	    } catch (error1) {
-	      e = error1;
-	      return '';
-	    }
-	  }
-	  if (fun_map.type === 'value') {
-	    try {
-	      parm_map = {};
-	      parm_list = window.location.href.split("?")[1].split("&");
-	      for (i = 0, len = parm_list.length; i < len; i++) {
-	        parm_str = parm_list[i];
-	        parm_map[parm_str.split("=")[0]] = parm_str.split("=")[1];
-	      }
-	      if (fun_map.key && fun_map.key !== '') {
-	        return parm_map[fun_map.key];
-	      } else {
-	        return parm_map;
-	      }
-	    } catch (error2) {
-	      e = error2;
-	      return '';
-	    }
-	  }
-	  if (fun_map.type === 'set_value') {
-	    if (fun_map.key && fun_map.key !== '' && fun_map.value && fun_map.value !== '') {
-	      try {
-	        href_1 = window.location.href.split(fun_map.key)[0];
-	        href_2 = window.location.href.split(fun_map.key)[1];
-	        get_fun_map = {
-	          type: 'value',
-	          key: fun_map.key
+	    parm = {
+	      inline: true,
+	      on: 'blur',
+	      fields: fields
+	    };
+	    return $(form).form(parm);
+	  },
+	  notice: function(message, type, layout) {
+	    return noty({
+	      text: message,
+	      type: type,
+	      dismissQueue: true,
+	      timeout: 10000,
+	      closeWith: ['click'],
+	      layout: layout,
+	      theme: 'defaultTheme',
+	      maxVisible: 10
+	    });
+	  },
+	  noticeError: function(message) {
+	    return this.notice(message, 'error', 'center');
+	  },
+	  noticeSuccess: function(message) {
+	    return this.notice(message, 'success', 'center');
+	  },
+	  noticeWarning: function(message) {
+	    return this.notice(message, 'warning', 'center');
+	  },
+	  noticeMessage: function(message) {
+	    return this.notice(message, 'information', 'center');
+	  },
+	  component_load: function(parm) {
+	    return $.ajax({
+	      url: "static/build/" + parm.component_name + ".js",
+	      dataType: 'script',
+	      success: function() {
+	        return parm.success();
+	      },
+	      async: true
+	    });
+	  },
+	  post_load: function(post_parm) {
+	    return $.ajax({
+	      url: '/post_request',
+	      type: 'POST',
+	      data: post_parm.parm,
+	      success: (function(_this) {
+	        return function(data, status, response) {
+	          if (data.error === 1) {
+	            return _this.noticeError(data.error_text);
+	          } else {
+	            return post_parm.del_fun(data.response_data);
+	          }
 	        };
-	        href_3 = href_2.split(href_parm(get_fun_map))[1];
-	        complete_href = href_1 + fun_map.key + '=' + fun_map.value + href_3;
-	        return window.history.pushState({}, 0, complete_href);
-	      } catch (error3) {
-	        e = error3;
-	        return window.history.pushState({}, 0, window.location.href + '?' + fun_map.key + '=' + fun_map.value);
-	      }
-	    } else if (fun_map.value && fun_map.value !== '') {
+	      })(this)
+	    });
+	  },
+	  href_parm: function(fun_map) {
+	    var complete_href, e, error, error1, error2, error3, error4, get_fun_map, href_1, href_2, href_3, i, len, parm_list, parm_map, parm_str;
+	    if (fun_map.type === 'base_href') {
 	      try {
-	        if (window.location.href.split("?")[1]) {
-	          return window.history.pushState({}, 0, window.location.href + '&' + fun_map.value);
+	        return window.location.href.split("?")[0];
+	      } catch (error) {
+	        e = error;
+	        return window.location.href;
+	      }
+	    }
+	    if (fun_map.type === 'parm') {
+	      try {
+	        return window.location.href.split("?")[1];
+	      } catch (error1) {
+	        e = error1;
+	        return '';
+	      }
+	    }
+	    if (fun_map.type === 'value') {
+	      try {
+	        parm_map = {};
+	        parm_list = window.location.href.split("?")[1].split("&");
+	        for (i = 0, len = parm_list.length; i < len; i++) {
+	          parm_str = parm_list[i];
+	          parm_map[parm_str.split("=")[0]] = parm_str.split("=")[1];
+	        }
+	        if (fun_map.key && fun_map.key !== '') {
+	          return parm_map[fun_map.key];
 	        } else {
+	          return parm_map;
+	        }
+	      } catch (error2) {
+	        e = error2;
+	        return '';
+	      }
+	    }
+	    if (fun_map.type === 'set_value') {
+	      if (fun_map.key && fun_map.key !== '' && fun_map.value && fun_map.value !== '') {
+	        try {
+	          href_1 = window.location.href.split(fun_map.key)[0];
+	          href_2 = window.location.href.split(fun_map.key)[1];
+	          get_fun_map = {
+	            type: 'value',
+	            key: fun_map.key
+	          };
+	          href_3 = href_2.split(this.href_parm(get_fun_map))[1];
+	          complete_href = href_1 + fun_map.key + '=' + fun_map.value + href_3;
+	          return window.history.pushState({}, 0, complete_href);
+	        } catch (error3) {
+	          e = error3;
+	          return window.history.pushState({}, 0, window.location.href + '?' + fun_map.key + '=' + fun_map.value);
+	        }
+	      } else if (fun_map.value && fun_map.value !== '') {
+	        try {
+	          if (window.location.href.split("?")[1]) {
+	            return window.history.pushState({}, 0, window.location.href + '&' + fun_map.value);
+	          } else {
+	            return window.history.pushState({}, 0, window.location.href + '?' + fun_map.value);
+	          }
+	        } catch (error4) {
+	          e = error4;
 	          return window.history.pushState({}, 0, window.location.href + '?' + fun_map.value);
 	        }
-	      } catch (error4) {
-	        e = error4;
-	        return window.history.pushState({}, 0, window.location.href + '?' + fun_map.value);
 	      }
 	    }
+	  },
+	  isPositiveNum: function(st) {
+	    var ree;
+	    ree = /^[1-9]*[0-9][0-9]*$/;
+	    return ree.test(st);
+	  },
+	  cl_copy: function(map) {
+	    return jQuery.extend(true, {}, map);
 	  }
-	};
-
-	window.isPositiveNum = function(st) {
-	  var ree;
-	  ree = /^[1-9]*[0-9][0-9]*$/;
-	  return ree.test(st);
-	};
-
-	window.cl_copy = function(map) {
-	  return jQuery.extend(true, {}, map);
 	};
 
 
@@ -692,12 +740,12 @@
 	      parm = JSON.stringify({
 	        request_type: "get_bar_data"
 	      });
-	      return post_load({
+	      return cl.post_load({
 	        parm: parm,
 	        url: "post_request",
 	        del_fun: (function(_this) {
 	          return function(data) {
-	            return _this.bar_data = data;
+	            return _this.bar_data = data.datas;
 	          };
 	        })(this)
 	      });
@@ -710,7 +758,7 @@
 /* 28 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"ui fixed inverted vertical sticky menu\" style=\"min-height: 100%;padding-top: 80px;max-width: 140px\">\n\t<div class=\"ui container\">\n\t\t<a class=\"header item\" @click=\"change_component('welcome')\">\n\t\t\t<i class=\"home icon\"></i>首页\n\t\t</a>\n\t\t<div class=\"ui simple dropdown item\" v-for=\"bar in bar_data\">\n\t\t    (% bar.business_name %)<i class=\"dropdown icon\"></i>\n\t\t    <div class=\"menu\">\n\t\t\t\t<a class=\"item\" @click=\"change_component(child_bar.component)\" v-for=\"child_bar in bar.child\"><i class=\"(% child_bar.icon %) icon\"></i>(% child_bar.business_name %)</a>\n\t\t\t</div>\n\t\t</div>\n<!-- \t\t<div class=\"ui simple dropdown item\">\n\t\t\t基础配置<i class=\"dropdown icon\"></i>\n\t\t\t<div class=\"menu\">\n\t\t\t\t<a class=\"item\" @click=\"change_component('user_management')\"><i class=\"users icon\"></i>用户</a>\n\t\t\t\t<a class=\"item\" @click=\"change_component('role_management')\"><i class=\"spy icon\"></i>角色</a>\n\t\t\t\t<a class=\"item\" @click=\"change_component('business_management')\"><i class=\"tasks icon\"></i>业务</a>\n\t\t\t\t<a class=\"item\" @click=\"change_component('model_management')\"><i class=\"puzzle icon\"></i>模块</a>\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"ui simple dropdown item\">\n\t\t\t权限配置<i class=\"dropdown icon\"></i>\n\t\t\t<div class=\"menu\">\n\t\t\t\t<a class=\"item\" @click=\"change_component('user_role')\"><i class=\"linkify icon\"></i>用户－角色</a>\n\t\t\t\t<a class=\"item\" @click=\"change_component('role_business')\"><i class=\"share alternate icon\"></i>角色－业务</a>\n\t\t\t\t<a class=\"item\" @click=\"change_component('business_model')\"><i class=\"maximize icon\"></i>业务－模块</a>\n\t\t\t</div>\n\t\t</div> -->\n\t</div> \n</div>";
+	module.exports = "<div class=\"ui fixed inverted vertical sticky menu\" style=\"min-height: 100%;padding-top: 80px;max-width: 140px\">\n\t<div class=\"ui container\">\n\t\t<a class=\"header item\" @click=\"change_component('welcome')\">\n\t\t\t<i class=\"home icon\"></i>首页\n\t\t</a>\n\t\t<div class=\"ui simple dropdown item\" v-for=\"bar in bar_data\">\n\t\t    (% bar.business_name %)<i class=\"dropdown icon\"></i>\n\t\t    <div class=\"menu\">\n\t\t\t\t<a class=\"item\" @click=\"change_component(child_bar.component)\" v-for=\"child_bar in bar.child\"><i class=\"(% child_bar.icon %) icon\"></i>(% child_bar.business_name %)</a>\n\t\t\t</div>\n\t\t</div>\n\t</div> \n</div>";
 
 /***/ },
 /* 29 */

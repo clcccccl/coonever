@@ -102,42 +102,29 @@
 	  },
 	  methods: {
 	    init_form: function() {
-	      return $('.ui.form.business').form({
-	        on: 'blur',
-	        fields: {
-	          empty: {
-	            identifier: 'business_name',
-	            rules: [
-	              {
-	                type: 'empty',
-	                prompt: '请输入业务名'
-	              }
-	            ]
-	          },
-	          dropdown: {
-	            identifier: 'business_code',
-	            rules: [
-	              {
-	                type: 'empty',
-	                prompt: '请输入业务编码'
-	              }
-	            ]
-	          }
-	        }
-	      });
+	      var field1, field2;
+	      field1 = {
+	        name: 'business_name',
+	        type: 'empty',
+	        prompt: '请输入业务名'
+	      };
+	      field2 = {
+	        name: 'business_code',
+	        type: 'empty',
+	        prompt: '请输入业务编码'
+	      };
+	      return cl.initValidationForm('.ui.form.business', [field1, field2]);
 	    },
 	    load: function() {
 	      var parm;
 	      parm = JSON.stringify({
 	        request_type: "get_businesses_tree"
 	      });
-	      return $.ajax({
-	        url: '/post_request',
-	        type: 'POST',
-	        data: parm,
-	        success: (function(_this) {
-	          return function(data, status, response) {
-	            return _this.businesses = data.response_data;
+	      return cl.post_load({
+	        parm: parm,
+	        del_fun: (function(_this) {
+	          return function(data) {
+	            return _this.businesses = data.datas;
 	          };
 	        })(this)
 	      });
@@ -163,12 +150,10 @@
 	        request_type: "save_business",
 	        request_map: this.business
 	      });
-	      return $.ajax({
-	        url: '/post_request',
-	        type: 'POST',
-	        data: parm,
-	        success: (function(_this) {
-	          return function(data, status, response) {
+	      return cl.post_load({
+	        parm: parm,
+	        del_fun: (function(_this) {
+	          return function(data) {
 	            $('#edit-business-modal').modal('hide');
 	            return _this.load();
 	          };

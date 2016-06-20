@@ -398,105 +398,153 @@
 /* 21 */
 /***/ function(module, exports) {
 
-	window.component_load = function(parm) {
-	  return $.ajax({
-	    url: "static/build/" + parm.component_name + ".js",
-	    dataType: 'script',
-	    success: function() {
-	      return parm.success();
-	    },
-	    async: true
-	  });
-	};
-
-	window.post_load = function(post_parm) {
-	  return $.ajax({
-	    url: '/post_request',
-	    type: 'POST',
-	    data: post_parm.parm,
-	    success: (function(_this) {
-	      return function(data, status, response) {
-	        return post_parm.del_fun(data.response_data);
+	window.cl = {
+	  initValidationForm: function(form, field_datas) {
+	    var field_data, fields, i, len, parm;
+	    fields = {};
+	    for (i = 0, len = field_datas.length; i < len; i++) {
+	      field_data = field_datas[i];
+	      fields[field_data.name] = {
+	        identifier: field_data.name,
+	        rules: [
+	          {
+	            type: field_data.type,
+	            prompt: field_data.prompt
+	          }
+	        ]
 	      };
-	    })(this)
-	  });
-	};
-
-	window.href_parm = function(fun_map) {
-	  var complete_href, e, error, error1, error2, error3, error4, get_fun_map, href_1, href_2, href_3, i, len, parm_list, parm_map, parm_str;
-	  if (fun_map.type === 'base_href') {
-	    try {
-	      return window.location.href.split("?")[0];
-	    } catch (error) {
-	      e = error;
-	      return window.location.href;
 	    }
-	  }
-	  if (fun_map.type === 'parm') {
-	    try {
-	      return window.location.href.split("?")[1];
-	    } catch (error1) {
-	      e = error1;
-	      return '';
-	    }
-	  }
-	  if (fun_map.type === 'value') {
-	    try {
-	      parm_map = {};
-	      parm_list = window.location.href.split("?")[1].split("&");
-	      for (i = 0, len = parm_list.length; i < len; i++) {
-	        parm_str = parm_list[i];
-	        parm_map[parm_str.split("=")[0]] = parm_str.split("=")[1];
-	      }
-	      if (fun_map.key && fun_map.key !== '') {
-	        return parm_map[fun_map.key];
-	      } else {
-	        return parm_map;
-	      }
-	    } catch (error2) {
-	      e = error2;
-	      return '';
-	    }
-	  }
-	  if (fun_map.type === 'set_value') {
-	    if (fun_map.key && fun_map.key !== '' && fun_map.value && fun_map.value !== '') {
-	      try {
-	        href_1 = window.location.href.split(fun_map.key)[0];
-	        href_2 = window.location.href.split(fun_map.key)[1];
-	        get_fun_map = {
-	          type: 'value',
-	          key: fun_map.key
+	    parm = {
+	      inline: true,
+	      on: 'blur',
+	      fields: fields
+	    };
+	    return $(form).form(parm);
+	  },
+	  notice: function(message, type, layout) {
+	    return noty({
+	      text: message,
+	      type: type,
+	      dismissQueue: true,
+	      timeout: 10000,
+	      closeWith: ['click'],
+	      layout: layout,
+	      theme: 'defaultTheme',
+	      maxVisible: 10
+	    });
+	  },
+	  noticeError: function(message) {
+	    return this.notice(message, 'error', 'center');
+	  },
+	  noticeSuccess: function(message) {
+	    return this.notice(message, 'success', 'center');
+	  },
+	  noticeWarning: function(message) {
+	    return this.notice(message, 'warning', 'center');
+	  },
+	  noticeMessage: function(message) {
+	    return this.notice(message, 'information', 'center');
+	  },
+	  component_load: function(parm) {
+	    return $.ajax({
+	      url: "static/build/" + parm.component_name + ".js",
+	      dataType: 'script',
+	      success: function() {
+	        return parm.success();
+	      },
+	      async: true
+	    });
+	  },
+	  post_load: function(post_parm) {
+	    return $.ajax({
+	      url: '/post_request',
+	      type: 'POST',
+	      data: post_parm.parm,
+	      success: (function(_this) {
+	        return function(data, status, response) {
+	          if (data.error === 1) {
+	            return _this.noticeError(data.error_text);
+	          } else {
+	            return post_parm.del_fun(data.response_data);
+	          }
 	        };
-	        href_3 = href_2.split(href_parm(get_fun_map))[1];
-	        complete_href = href_1 + fun_map.key + '=' + fun_map.value + href_3;
-	        return window.history.pushState({}, 0, complete_href);
-	      } catch (error3) {
-	        e = error3;
-	        return window.history.pushState({}, 0, window.location.href + '?' + fun_map.key + '=' + fun_map.value);
-	      }
-	    } else if (fun_map.value && fun_map.value !== '') {
+	      })(this)
+	    });
+	  },
+	  href_parm: function(fun_map) {
+	    var complete_href, e, error, error1, error2, error3, error4, get_fun_map, href_1, href_2, href_3, i, len, parm_list, parm_map, parm_str;
+	    if (fun_map.type === 'base_href') {
 	      try {
-	        if (window.location.href.split("?")[1]) {
-	          return window.history.pushState({}, 0, window.location.href + '&' + fun_map.value);
+	        return window.location.href.split("?")[0];
+	      } catch (error) {
+	        e = error;
+	        return window.location.href;
+	      }
+	    }
+	    if (fun_map.type === 'parm') {
+	      try {
+	        return window.location.href.split("?")[1];
+	      } catch (error1) {
+	        e = error1;
+	        return '';
+	      }
+	    }
+	    if (fun_map.type === 'value') {
+	      try {
+	        parm_map = {};
+	        parm_list = window.location.href.split("?")[1].split("&");
+	        for (i = 0, len = parm_list.length; i < len; i++) {
+	          parm_str = parm_list[i];
+	          parm_map[parm_str.split("=")[0]] = parm_str.split("=")[1];
+	        }
+	        if (fun_map.key && fun_map.key !== '') {
+	          return parm_map[fun_map.key];
 	        } else {
+	          return parm_map;
+	        }
+	      } catch (error2) {
+	        e = error2;
+	        return '';
+	      }
+	    }
+	    if (fun_map.type === 'set_value') {
+	      if (fun_map.key && fun_map.key !== '' && fun_map.value && fun_map.value !== '') {
+	        try {
+	          href_1 = window.location.href.split(fun_map.key)[0];
+	          href_2 = window.location.href.split(fun_map.key)[1];
+	          get_fun_map = {
+	            type: 'value',
+	            key: fun_map.key
+	          };
+	          href_3 = href_2.split(this.href_parm(get_fun_map))[1];
+	          complete_href = href_1 + fun_map.key + '=' + fun_map.value + href_3;
+	          return window.history.pushState({}, 0, complete_href);
+	        } catch (error3) {
+	          e = error3;
+	          return window.history.pushState({}, 0, window.location.href + '?' + fun_map.key + '=' + fun_map.value);
+	        }
+	      } else if (fun_map.value && fun_map.value !== '') {
+	        try {
+	          if (window.location.href.split("?")[1]) {
+	            return window.history.pushState({}, 0, window.location.href + '&' + fun_map.value);
+	          } else {
+	            return window.history.pushState({}, 0, window.location.href + '?' + fun_map.value);
+	          }
+	        } catch (error4) {
+	          e = error4;
 	          return window.history.pushState({}, 0, window.location.href + '?' + fun_map.value);
 	        }
-	      } catch (error4) {
-	        e = error4;
-	        return window.history.pushState({}, 0, window.location.href + '?' + fun_map.value);
 	      }
 	    }
+	  },
+	  isPositiveNum: function(st) {
+	    var ree;
+	    ree = /^[1-9]*[0-9][0-9]*$/;
+	    return ree.test(st);
+	  },
+	  cl_copy: function(map) {
+	    return jQuery.extend(true, {}, map);
 	  }
-	};
-
-	window.isPositiveNum = function(st) {
-	  var ree;
-	  ree = /^[1-9]*[0-9][0-9]*$/;
-	  return ree.test(st);
-	};
-
-	window.cl_copy = function(map) {
-	  return jQuery.extend(true, {}, map);
 	};
 
 
@@ -614,29 +662,18 @@
 	  },
 	  methods: {
 	    init_form: function() {
-	      return $('#login-form').form({
-	        on: 'blur',
-	        fields: {
-	          account: {
-	            identifier: 'account',
-	            rules: [
-	              {
-	                type: 'empty',
-	                prompt: '帐号'
-	              }
-	            ]
-	          },
-	          password: {
-	            identifier: 'password',
-	            rules: [
-	              {
-	                type: 'empty',
-	                prompt: '请输入角色名'
-	              }
-	            ]
-	          }
-	        }
-	      });
+	      var field1, field2;
+	      field1 = {
+	        name: 'account',
+	        type: 'empty',
+	        prompt: '帐号'
+	      };
+	      field2 = {
+	        name: 'password',
+	        type: 'empty',
+	        prompt: '请输入密码'
+	      };
+	      return cl.initValidationForm('#login-form', [field1, field2]);
 	    },
 	    login: function() {
 	      var parm;
@@ -674,7 +711,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = Vue.extend({
-	  template: __webpack_require__(49),
+	  template: __webpack_require__(34),
 	  data: function() {
 	    return {
 	      new_user: {},
@@ -687,48 +724,28 @@
 	  },
 	  methods: {
 	    init_form: function() {
-	      return $('#register-form').form({
-	        inline: true,
-	        on: 'blur',
-	        fields: {
-	          name: {
-	            identifier: 'name',
-	            rules: [
-	              {
-	                type: 'empty',
-	                prompt: '姓名不能为空'
-	              }
-	            ]
-	          },
-	          account: {
-	            identifier: 'account',
-	            rules: [
-	              {
-	                type: 'empty',
-	                prompt: '帐号不能为空'
-	              }
-	            ]
-	          },
-	          password: {
-	            identifier: 'password',
-	            rules: [
-	              {
-	                type: 'empty',
-	                prompt: '请输入密码'
-	              }
-	            ]
-	          },
-	          repassword: {
-	            identifier: 'repassword',
-	            rules: [
-	              {
-	                type: 'match[password]',
-	                prompt: '请再次输入密码'
-	              }
-	            ]
-	          }
-	        }
-	      });
+	      var field1, field2, field3, field4;
+	      field1 = {
+	        name: 'name',
+	        type: 'empty',
+	        prompt: '姓名不能为空'
+	      };
+	      field2 = {
+	        name: 'account',
+	        type: 'empty',
+	        prompt: '帐号不能为空'
+	      };
+	      field3 = {
+	        name: 'password',
+	        type: 'empty',
+	        prompt: '请输入密码'
+	      };
+	      field4 = {
+	        name: 'repassword',
+	        type: 'empty',
+	        prompt: '请再次输入密码'
+	      };
+	      return cl.initValidationForm('#register-form', [field1, field2, field3, field4]);
 	    },
 	    test_account: function() {
 	      var parm;
@@ -741,7 +758,7 @@
 	          account: this.new_user.account
 	        }
 	      });
-	      return post_load({
+	      return cl.post_load({
 	        parm: parm,
 	        del_fun: (function(_this) {
 	          return function(data) {
@@ -762,13 +779,11 @@
 	      parm = JSON.stringify({
 	        request_map: this.new_user
 	      });
-	      return $.ajax({
-	        url: '/login',
-	        type: 'PUT',
-	        data: parm,
-	        success: (function(_this) {
-	          return function(data, status, response) {
-	            if (data.response_data.length > 0) {
+	      return cl.post_load({
+	        parm: parm,
+	        del_fun: (function(_this) {
+	          return function(data) {
+	            if (data) {
 	              return window.location.href = "/home";
 	            }
 	          };
@@ -780,22 +795,7 @@
 
 
 /***/ },
-/* 34 */,
-/* 35 */,
-/* 36 */,
-/* 37 */,
-/* 38 */,
-/* 39 */,
-/* 40 */,
-/* 41 */,
-/* 42 */,
-/* 43 */,
-/* 44 */,
-/* 45 */,
-/* 46 */,
-/* 47 */,
-/* 48 */,
-/* 49 */
+/* 34 */
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"ui main text container\" style=\"min-height: 100%;padding-top: 150px;\" id=\"register-form\">\n\t<h1 class=\"ui header\">用户注册</h1>\n\t<div class=\"ui form\">\n\t\t<div class=\"field\">\n\t\t\t<label>姓名</label>\n\t\t\t<input type=\"text\" name=\"name\" placeholder=\"姓名\" v-model=\"new_user.name\">\n\t\t</div>\n\t\t<div class=\"field\">\n\t\t\t<label>帐号<span v-if=\"!can_user\" style=\"margin-left: 300px;color: #9f3a38\">该帐号已存在</span></label>\n\t\t\t<input type=\"text\" name=\"account\" placeholder=\"帐号\" v-model=\"new_user.account\" @blur=\"test_account\">\n\t\t</div>\n\t\t<div class=\"field\">\n\t\t\t<label>密码</label>\n\t\t\t<input type=\"password\" name=\"password\" placeholder=\"密码\" v-model=\"new_user.password\">\n\t\t</div>\n\t\t<div class=\"field\">\n\t\t\t<label>重复密码</label>\n\t\t\t<input type=\"password\" name=\"repassword\" placeholder=\"重复密码\" v-model=\"new_user.repassword\">\n\t\t</div>\n\t\t<button class=\"ui positive button\" @click=\"register\">注册</button>\n\t</div>\n</div>";
