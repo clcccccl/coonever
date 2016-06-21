@@ -20,8 +20,8 @@
 					<th>api</th>
 					<th>归属</th>
 					<th>api介绍</th>
-					<th>是否弃用</th>
-					<th>是否限权</th>
+					<th>在线验证</th>
+					<th>限权验证</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -31,7 +31,7 @@
 					<td>(% api.api_explain %)</td>
 					<td>
 					    <div class="ui toggle checkbox">
-						    <input type="checkbox" name="public" v-model="api.disable" @click="change_status(api)">
+						    <input type="checkbox" name="public" v-model="api.session" @click="change_status(api)">
 						    <label> </label>
 					    </div>
 					</td>

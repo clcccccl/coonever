@@ -11,7 +11,7 @@ module.exports =
       api: {}
       pag_count: 0
       search_key: ''
-    events: 
+    events:
       page_change: (page)->
         @load(page)
     watch:

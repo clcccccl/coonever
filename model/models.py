@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 #!/usr/bin/env python
 
+import datetime
 from peewee import *
 from psycopg2 import IntegrityError
-import datetime
+
 from db_base import pg_base, pg_update
 
 
@@ -138,6 +139,15 @@ class User_info(pg_base.BaseTable):
     name = CharField(max_length=30, null=False)  # 姓名
     account = CharField(max_length=30, unique=True, null=False)  # 账号
     password = CharField(max_length=30, null=False)  # 密码
+
+
+class Session(pg_base.BaseTable):
+    """
+    在线表
+    """
+    account = CharField(max_length=30, null=False)  # 账号
+    session = CharField(max_length=40, unique=True, null=False)  # session
+    invalid_time = DateTimeField(null=False)  # 失效时间
 
 
 def forciblyCreateAllTable():

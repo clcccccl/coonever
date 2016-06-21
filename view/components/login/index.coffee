@@ -26,5 +26,7 @@ module.exports =
           type: 'POST'
           data : parm
           success: (data, status, response) =>
-            if data.response_data.length > 0
+            if data.error == 1
+              cl.noticeError(data.error_text)
+            else
               window.location.href="/home"

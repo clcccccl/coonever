@@ -18,9 +18,8 @@ def validationSessionHome(method):
     '''
     @functools.wraps(method)
     def wrapper(self, *args, **kwargs):
-        self.getUserFromCookie()
-        self.getUser()
-        if sys_lib.validation_session(self.user):
+        self.getSessionFromCookie()
+        if sys_lib.validation_session(self.session):
             method(self, *args, **kwargs)
         else:
             self.redirect('/login')
@@ -38,7 +37,7 @@ def validationSession(method):
         if self.need_validation_session:
             self.getUserFromCookie()
             self.getUser()
-            if sys_lib.validation_session(self.user):
+            if sys_lib.validation_session(self.session):
                 self.request_argument['user'] = self.user
                 method(self, *args, **kwargs)
             else:
@@ -74,27 +73,34 @@ class Main(BaseHandler):
 
 class Login(BaseHandler):
     def get(self):
+        self.set_header("Content-Type", "text/html")
+        session = self.get_secure_cookie("session")
+        if session:
+            sys_lib.clear_session(session)
         self.clear_cookie(name='user_id')
         self.clear_cookie(name='account')
-        self.set_header("Content-Type", "text/html")
+        self.clear_cookie(name='session')
         self.render('login.html')
 
+    @handleError
     def post(self):
         self.set_header("Content-Type", "application/json")
-        user = sys_lib.user_login(json.loads(self.request.body))
+        user, session = sys_lib.user_login(json.loads(self.request.body))
         if len(user) > 0:
+            self.set_secure_cookie("session", session)
             self.set_secure_cookie("account", str(user[0].account))
             self.set_secure_cookie("user_id", str(user[0].id), expires_days=1)
-        self.write(json.dumps({"response_data": user}))
+        self.write(json.dumps({"response_data": user, "error": 0 if user else 1, "error_text": '' if user else '帐号活着密码错误'}))
 
     @handleError
     def put(self):
         self.set_header("Content-Type", "application/json")
-        user = sys_lib.user_register(json.loads(self.request.body))
+        user, session = sys_lib.user_register(json.loads(self.request.body))
         if len(user) > 0:
+            self.set_secure_cookie("session", session)
             self.set_secure_cookie("account", str(user[0].account))
             self.set_secure_cookie("user_id", str(user[0].id), expires_days=1)
-        self.write(json.dumps({"response_data": user}))
+        self.write(json.dumps({"response_data": user, "error": 0 if user else 1, "error_text": '' if user else '帐号活着密码错误'}))
 
 
 class Test(BaseHandler):
@@ -109,15 +115,11 @@ class Home(BaseHandler):
         self.set_header("Content-Type", "text/html")
         self.render('home.html')
 
-    def getUserFromCookie(self):
+    def getSessionFromCookie(self):
         '''
         从Cookie中获取用户信息
         '''
-        self.user_id = self.get_secure_cookie("user_id")
-        self.account = self.get_secure_cookie("account")
-
-    def getUser(self):
-        self.user = (sys_lib.get_user_by_id(self.user_id) if self.user_id else {})
+        self.session = self.get_secure_cookie("session")
 
 
 class PostHandler(PostHandler):

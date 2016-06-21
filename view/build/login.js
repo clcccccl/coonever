@@ -689,7 +689,9 @@
 	        data: parm,
 	        success: (function(_this) {
 	          return function(data, status, response) {
-	            if (data.response_data.length > 0) {
+	            if (data.error === 1) {
+	              return cl.noticeError(data.error_text);
+	            } else {
 	              return window.location.href = "/home";
 	            }
 	          };

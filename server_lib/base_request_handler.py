@@ -62,6 +62,7 @@ class PostHandler(BaseHandler):
         self.user = {}
         self.user_id = None
         self.account = None
+        self.session = None
         self.request_argument = {}
         self.api = None
         self.api_data = {}
@@ -89,6 +90,7 @@ class PostHandler(BaseHandler):
         '''
         self.user_id = self.get_secure_cookie("user_id")
         self.account = self.get_secure_cookie("account")
+        self.session = self.get_secure_cookie("session")
 
     def getModel(self):
         pass

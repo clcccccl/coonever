@@ -8,9 +8,27 @@ create by chenli at 16/01/07 11:37
 '''
 
 import math
+import uuid
+import datetime
 
 from db_base import pg_update
 from sys_wraps import CooError
+
+
+def clear_session(session):
+    data = {}
+    data['invalid_time'] = str(datetime.datetime.now())[:19]
+    data['status'] = 1
+    pg_update.update("session", data, where=" session = '%s'" % session)
+
+
+def get_session_by_session(session):
+    where = "session = '%s' and status = 0 and invalid_time > now() " % session
+    return pg_update.select("session", where=where)
+
+
+def update_session(session):
+    pg_update.update("session", {'invalid_time': str(datetime.datetime.now() + datetime.timedelta(seconds=600))[:19]}, where=" session = '%s' " % session)
 
 
 def user_register(user):
@@ -72,6 +90,30 @@ def get_user_by_ap(user):
     '''
     where = " account = '%s' and password = '%s' " % (user['account'], user['password'])
     return pg_update.select("user_info", where=where, columns='id,account')
+
+
+def add_session_by_account(account):
+    '''
+    session注册
+    '''
+    where = "account = '%s' and status = 0 and invalid_time > now() " % account
+    session = pg_update.select("session", where=where)
+    if session:
+        raise CooError(text='该帐号已被登陆！')
+    data = {}
+    data['account'] = account
+    data['session'] = str(uuid.uuid4())
+    # 60秒后失效
+    data['invalid_time'] = str(datetime.datetime.now() + datetime.timedelta(seconds=600))[:19]
+    try:
+        pg_update.insertOne("session", data)
+        return data['session']
+    except Exception, e:
+        if str(e).find('unique') != -1:
+            return add_session_by_account(account)
+        else:
+            print e
+            raise CooError(text='未知错误')
 
 
 def get_user_by_id(user_id):

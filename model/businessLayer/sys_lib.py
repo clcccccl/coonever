@@ -9,6 +9,9 @@ from sys_wraps import CooError
 '''
 
 
+def clear_session(session):
+    sys_lib_impl.clear_session(session)
+
 def get_modle_by_api(api):
     api = sys_lib_impl.get_api_by_api(api)
     if api:
@@ -22,7 +25,11 @@ def user_login(parm):
     用户登录
     '''
     user = parm.get('request_map')
-    return sys_lib_impl.get_user_by_ap(user)
+    user = sys_lib_impl.get_user_by_ap(user)
+    if not user:
+        raise CooError(text='用户名或密码错误')
+    session = sys_lib_impl.add_session_by_account(user[0]['account'])
+    return user, session
 
 
 def user_register(parm):
@@ -32,7 +39,11 @@ def user_register(parm):
     user = parm.get('request_map')
     del user['repassword']
     sys_lib_impl.user_register(user)
-    return sys_lib_impl.get_user_by_ap(user)
+    user = sys_lib_impl.get_user_by_ap(user)
+    if not user:
+        raise CooError(text='用户名或密码错误')
+    session = sys_lib_impl.add_session_by_account(user[0]['account'])
+    return user, session
 
 
 def get_user_by_id(user_id):
@@ -54,11 +65,16 @@ def test_need_validation(api):
         raise CooError(fun_name='test_need_validation', api=api, text='通过api测试是否需要验证失败')
 
 
-def validation_session(user):
+def validation_session(session):
     '''
     在线验证
     '''
-    return True if user else False
+    sessions = sys_lib_impl.get_session_by_session(session)
+    if sessions:
+        sys_lib_impl.update_session(session)
+        return True
+    else:
+        return False
 
 
 def validation_permission(user, business_model):
