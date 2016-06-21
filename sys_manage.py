@@ -55,6 +55,7 @@ def __addBusinessApi(api, business):
     ''' % (api, business)
     business_apis = pg_update.selectBySql(sql)
     if len(business_apis) == 0:
+        data_map = {}
         data_map['api'] = api
         data_map['business_code'] = business
         pg_update.insertOne("business_api", data_map)

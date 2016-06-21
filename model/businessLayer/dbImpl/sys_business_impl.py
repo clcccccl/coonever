@@ -93,6 +93,14 @@ def delete_user_role(user_account=None, role_code=None):
         pg_update.delete('user_role', where=where)
 
 
+def del_user_by_account(account):
+    '''
+    删除用户
+    '''
+    where = (" account = '%s' " % account)
+    pg_update.delete('user_info', where=where)
+
+
 def add_user_role(user_account, roles):
     '''
     新增用户所属角色
@@ -185,17 +193,15 @@ def get_apis(parm):
           limit %s offset %s
     ''' % (where, limit, offset)
     apis = pg_update.selectBySql(sql)
-    api_str = ''
-    for api in apis:
-        api_str += "'" + api['api'] + "',"
+    api_str = ','.join(["'" + api['api'] + "'" for api in apis])
     sql = '''
         select b_a.api,b.business_code,b.business_name
           from business_api b_a,business b
           where b_a.api in (%s)
             and b_a.business_code = b.business_code
             and b_a.status = 0
-    ''' % api_str[:-1]
-    business_apis = pg_update.selectBySql(sql)
+    ''' % api_str
+    business_apis = pg_update.selectBySql(sql) if apis else []
     for api in apis:
         api['business'] = []
         api['business_text'] = ''

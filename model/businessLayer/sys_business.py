@@ -59,6 +59,15 @@ def change_user_role(parm):
     sys_business_impl.add_user_role(user_account, roles)
 
 
+def del_user(parm):
+    '''
+    删除用户
+    '''
+    request_map = parm.get('request_map')
+    account = request_map.get('account')
+    sys_business_impl.del_user_by_account(account)
+
+
 '''
 角色管理－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－
 '''

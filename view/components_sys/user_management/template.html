@@ -1,7 +1,7 @@
 <div class="ui main container" style="min-height: 100%;padding-left: 100px">
 	<div class="ui top attached menu">
 		<div class="ui dropdown icon item">
-			<h3 class="ui header">用户管理<i class="grey add circle icon himg" @click="add_user"></i></h3>
+			<h3 class="ui header">用户管理</h3>
 		</div>
 		<div class="right menu">
 			<div class="ui right aligned category search item">
@@ -14,30 +14,6 @@
 		</div>
 	</div>
 	<div class="ui bottom attached segment" style="background-color: #F8F8F8;border:0px;">
-		<div class="content" v-if="edit_add">
-			<div class="ui form" id="user-form">
-				<div class="field">
-					<div class="fields">
-						<div class="field">
-							<input type="text" name="user_name" placeholder="用户名" v-model="user_map.name">
-						</div>
-						<div class="field">
-							<input type="text" name="account" placeholder="帐号" v-model="user_map.account">
-						</div>
-						<div class="field">
-							<input type="password" name="password" placeholder="密码" v-model="user_map.password">
-						</div>
-						<div class="field">
-							<input type="password" name="repassword" placeholder="重复密码" v-model="user_map.repassword">
-						</div>
-						<div class="field">
-							<i class="large brown minus icon hideimg" @click="hide_form"></i>
-							<i class="large green submit checkmark icon hideimg" @click="save_user"></i>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
 		<table class="ui very basic table">
 			<thead>
 				<tr>
@@ -65,8 +41,12 @@
 						</div>
 					</td>
 					<td>
-						<a><i class="large olive edit icon" @click="edit_user(user)"></i></a>
-						<a><i class="large brown remove circle icon"></i></a>
+						<div class="ui left pointing dropdown link item">
+					    	<i class="large brown remove circle icon"></i>
+							<div class="menu">
+								<button class="item" style="background: #FFFAF3" @click="del(user)">确认删除?请谨慎操作！</button>
+							</div>
+						</div>
 					</td>
 				</tr>
 			</tbody>
