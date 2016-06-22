@@ -3,7 +3,8 @@ module.exports = {
   entry: {
         home: "./home.coffee",
         login: "./login.coffee",
-        welcome: "./components_sys/welcome/index.coffee",
+        welcome: "./components_norm/welcome/index.coffee",
+        user_detail: "./components_norm/user_detail/index.coffee",
         business_management: "./components_sys/business_management/index.coffee",
         user_management: "./components_sys/user_management/index.coffee",
         api_management: "./components_sys/api_management/index.coffee",

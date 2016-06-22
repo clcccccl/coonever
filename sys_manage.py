@@ -78,6 +78,7 @@ def __addRoleBusiness(role, business):
 
 
 def __main():
+    __addApi()
     pass
 
 

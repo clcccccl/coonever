@@ -47,3 +47,7 @@ def get_child_businesses(parent_business_code):
             business['child'] = pg_update.select("business", order_by='id',
                                                  where=" parent_business_code = '%s' " % parent_business_code)
     return child_business
+
+
+def get_user_head_file_name_by_account(account):
+    return pg_update.select("user_detail", where=" account = '%s' and status = 0 " % account)

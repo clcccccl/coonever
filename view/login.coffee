@@ -9,7 +9,7 @@ v_head = new Vue
   	head_type: 'login'
   	login_view: 'login'
   components:
-    'login': require('./components/login')
-    'register': require('./components/register')
+    'login': require('./components_norm/login')
+    'register': require('./components_norm/register')
     'foot_c': require('./components/foot')
     'head_c': require('./components/head')

@@ -141,6 +141,14 @@ class User_info(pg_base.BaseTable):
     password = CharField(max_length=30, null=False)  # 密码
 
 
+class User_detail(pg_base.BaseTable):
+    """
+    用户详细信息表
+    """
+    account = CharField(max_length=30, unique=True, null=False)  # 账号
+    head_file = TextField(null=True)  # 头像地址
+
+
 class Session(pg_base.BaseTable):
     """
     在线表

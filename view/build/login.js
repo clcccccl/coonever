@@ -60,9 +60,9 @@
 	    };
 	  },
 	  components: {
-	    'login': __webpack_require__(31),
-	    'register': __webpack_require__(33),
-	    'foot_c': __webpack_require__(29),
+	    'login': __webpack_require__(32),
+	    'register': __webpack_require__(34),
+	    'foot_c': __webpack_require__(30),
 	    'head_c': __webpack_require__(23)
 	  }
 	});
@@ -567,14 +567,30 @@
 
 	module.exports = Vue.extend({
 	  template: __webpack_require__(26),
+	  directives: {
+	    'user-head': __webpack_require__(27)
+	  },
 	  props: ['show_left_bar', 'head_type', 'login_view'],
+	  attached: function() {
+	    return this.init_popup();
+	  },
 	  methods: {
+	    init_popup: function() {
+	      return $('.user-head').popup({
+	        inline: false,
+	        hoverable: true,
+	        position: 'bottom right'
+	      });
+	    },
 	    changer_menu: function() {
 	      return this.show_left_bar = !this.show_left_bar;
 	    },
 	    change_component: function(component_name) {
 	      this.login_view = component_name;
-	      return this.head_type = component_name;
+	      this.head_type = component_name;
+	      if (component_name !== 'login' && component_name !== 'register') {
+	        return this.$dispatch('change_component', component_name);
+	      }
 	    },
 	    logout: function() {
 	      return window.location.href = "/login";
@@ -627,31 +643,58 @@
 /* 26 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"ui fixed inverted menu grid four column\" style=\"padding: 0px\" id=\"v-head\">\n\t<div class=\"column\">\n\t\t<div class=\"ui dividing\" v-on:click=\"changer_menu\" style=\"color: #ffffff;padding:10px;padding-right: 20px\" v-if=\"head_type=='ok'\">\n\t\t\t<label><i class=\"grid layout icon\"></i>菜单</label>\n\t\t</div>\n\t</div>\n\t<div class=\"column\">\n\t</div>\n\t<div class=\"column\">\n\t</div>\n\t<div class=\"column\">\n\t\t<div class=\"ui dividing\" style=\"color: #ffffff;float:right;padding:10px;padding-right: 20px\" v-if=\"head_type=='login'\" v-on:click=\"change_component('register')\">\n\t\t<label><i class=\"add square icon\"></i>注册</label>\n\t\t</div>\n\t\t<div class=\"ui dividing\" style=\"color: #ffffff;float:right;padding:10px;padding-right: 20px\" v-if=\"head_type=='register'\" v-on:click=\"change_component('login')\">\n\t\t\t<label><i class=\"ticket icon\"></i>登陆</label>\n\t\t</div>\n\t\t<div class=\"ui dividing\" style=\"color: #ffffff;float:right;padding:10px;padding-right: 20px\" v-if=\"head_type=='ok'\" v-on:click=\"logout\">\n\t\t\t<label><i class=\"power icon\"></i>退出</label>\n\t\t</div>\n\t</div>\n</div>\n";
+	module.exports = "<div class=\"ui fixed inverted menu grid four column\" style=\"padding: 0px\" id=\"v-head\">\n\t<div class=\"column\">\n\t\t<div class=\"ui dividing\" v-on:click=\"changer_menu\" style=\"color: #ffffff;padding:10px;padding-right: 20px\" v-if=\"head_type!='login' && head_type!='register'\">\n\t\t\t<label><i class=\"grid layout icon\"></i>菜单</label>\n\t\t</div>\n\t</div>\n\t<div class=\"column\">\n\t</div>\n\t<div class=\"column\">\n\t</div>\n\t<div class=\"column\">\n\t\t<div class=\"ui dividing\" style=\"color: #ffffff;float:right;padding:10px;padding-right: 20px\" v-if=\"head_type=='login'\" v-on:click=\"change_component('register')\">\n\t\t<label><i class=\"add square icon\"></i>注册</label>\n\t\t</div>\n\t\t<div class=\"ui dividing\" style=\"color: #ffffff;float:right;padding:10px;padding-right: 20px\" v-if=\"head_type=='register'\" v-on:click=\"change_component('login')\">\n\t\t\t<label><i class=\"ticket icon\"></i>登陆</label>\n\t\t</div>\n\t\t<div class=\"ui dividing\" style=\"color: #ffffff;float:right;padding:10px;padding-right: 20px\" v-if=\"head_type!='login' && head_type!='register'\">\n        \t<a class=\"ui image label user-head\" style=\"height: 30px\" v-on:click=\"change_component('user_detail')\"><img v-user-head=\"head_type\" style=\"min-height: 30px;\"> chenli </a>\n        \t<div class=\"ui popup card\" style=\"padding: 0px;margin: 0px\">\n        \t\t<div class=\"image\">\n        \t\t\t<img  v-user-head=\"head_type\" style=\"max-height: 210px\">\n        \t\t</div>\n        \t\t<div class=\"content\">\n        \t\t\t<div class=\"header\">陈力</div>\n        \t\t\t<div class=\"meta\">\n        \t\t\t\t<a>自己</a>\n        \t\t\t</div>\n        \t\t\t<div class=\"description\">You Konw Nothing !</div>\n        \t\t</div>\n        \t\t<div class=\"extra content\">\n        \t\t\t<span class=\"right floated\" v-on:click=\"logout\"><label><i class=\"power icon\"></i>退出</label></span>\n        \t\t</div>\n        \t</div>\n        </div>\n    </div>\n</div>\n";
 
 /***/ },
-/* 27 */,
+/* 27 */
+/***/ function(module, exports) {
+
+	module.exports = {
+	  bind: function() {},
+	  update: function(value, old_value) {
+	    var parm;
+	    if (value === 'login' || value === 'register') {
+	      return;
+	    }
+	    parm = JSON.stringify({
+	      request_type: "get_user_head_file_name"
+	    });
+	    return cl.post_load({
+	      parm: parm,
+	      del_fun: (function(_this) {
+	        return function(data) {
+	          return _this.el.src = "/static/static/userfile/image/" + data.data.file_name;
+	        };
+	      })(this)
+	    });
+	  },
+	  unbind: function() {}
+	};
+
+
+/***/ },
 /* 28 */,
-/* 29 */
+/* 29 */,
+/* 30 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = Vue.extend({
-	  template: __webpack_require__(30)
+	  template: __webpack_require__(31)
 	});
 
 
 /***/ },
-/* 30 */
+/* 31 */
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"ui fixed inverted vertical footer segment\">\n\t<div class=\"ui center aligned container\">\n\t\t<div class=\"ui horizontal inverted small divided link list\">\n\t\t\t<a class=\"item\" href=\"#\">Site Map</a>\n\t\t\t<a class=\"item\" href=\"#\">Contact Us</a>\n\t\t\t<a class=\"item\" href=\"#\">Terms and Conditions</a>\n\t\t\t<a class=\"item\" href=\"#\">Privacy Policy</a>\n\t\t</div>\n\t</div>\n</div>";
 
 /***/ },
-/* 31 */
+/* 32 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = Vue.extend({
-	  template: __webpack_require__(32),
+	  template: __webpack_require__(33),
 	  data: function() {
 	    return {
 	      user: {}
@@ -703,17 +746,17 @@
 
 
 /***/ },
-/* 32 */
+/* 33 */
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"ui main text container\" style=\"min-height: 100%;padding-top: 180px;\" id=\"login-form\">\n\t<h1 class=\"ui header\">用户登录</h1>\n\t<div class=\"ui form\">\n\t\t<div class=\"field\">\n\t\t\t<label>帐号</label>\n\t\t\t<input type=\"text\" name=\"account\" placeholder=\"帐号\" v-model=\"user.account\">\n\t\t</div>\n\t\t<div class=\"field\">\n\t\t\t<label>密码</label>\n\t\t\t<input type=\"password\" name=\"password\" placeholder=\"密码\" v-model=\"user.password\">\n\t\t</div>\n\t\t<button class=\"ui button\" @click=\"login\">登录</button>\n\t</div>\n</div>";
 
 /***/ },
-/* 33 */
+/* 34 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = Vue.extend({
-	  template: __webpack_require__(34),
+	  template: __webpack_require__(35),
 	  data: function() {
 	    return {
 	      new_user: {},
@@ -781,11 +824,15 @@
 	      parm = JSON.stringify({
 	        request_map: this.new_user
 	      });
-	      return cl.post_load({
-	        parm: parm,
-	        del_fun: (function(_this) {
-	          return function(data) {
-	            if (data) {
+	      return $.ajax({
+	        url: '/login',
+	        type: 'PUT',
+	        data: parm,
+	        success: (function(_this) {
+	          return function(data, status, response) {
+	            if (data.error === 1) {
+	              return cl.noticeError(data.error_text);
+	            } else {
 	              return window.location.href = "/home";
 	            }
 	          };
@@ -797,7 +844,7 @@
 
 
 /***/ },
-/* 34 */
+/* 35 */
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"ui main text container\" style=\"min-height: 100%;padding-top: 150px;\" id=\"register-form\">\n\t<h1 class=\"ui header\">用户注册</h1>\n\t<div class=\"ui form\">\n\t\t<div class=\"field\">\n\t\t\t<label>姓名</label>\n\t\t\t<input type=\"text\" name=\"name\" placeholder=\"姓名\" v-model=\"new_user.name\">\n\t\t</div>\n\t\t<div class=\"field\">\n\t\t\t<label>帐号<span v-if=\"!can_user\" style=\"margin-left: 300px;color: #9f3a38\">该帐号已存在</span></label>\n\t\t\t<input type=\"text\" name=\"account\" placeholder=\"帐号\" v-model=\"new_user.account\" @blur=\"test_account\">\n\t\t</div>\n\t\t<div class=\"field\">\n\t\t\t<label>密码</label>\n\t\t\t<input type=\"password\" name=\"password\" placeholder=\"密码\" v-model=\"new_user.password\">\n\t\t</div>\n\t\t<div class=\"field\">\n\t\t\t<label>重复密码</label>\n\t\t\t<input type=\"password\" name=\"repassword\" placeholder=\"重复密码\" v-model=\"new_user.repassword\">\n\t\t</div>\n\t\t<button class=\"ui positive button\" @click=\"register\">注册</button>\n\t</div>\n</div>";

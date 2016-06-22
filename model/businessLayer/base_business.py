@@ -27,3 +27,13 @@ def test_account(parm):
     account = parm.get('request_map')['account']
     users = base_business_impl.get_user_by_account(account)
     return len(users)
+
+
+def get_user_head_file_name(parm):
+    '''
+    获取用户头像地址
+    '''
+    account = parm['user']['account']
+    user_detail = base_business_impl.get_user_head_file_name_by_account(account)
+    file_name = user_detail[0]['head_file'] if user_detail and user_detail[0]['head_file'] else 'default.png'
+    return {'data': {'file_name': file_name}}

@@ -1,6 +1,6 @@
 <div class="ui fixed inverted menu grid four column" style="padding: 0px" id="v-head">
 	<div class="column">
-		<div class="ui dividing" v-on:click="changer_menu" style="color: #ffffff;padding:10px;padding-right: 20px" v-if="head_type=='ok'">
+		<div class="ui dividing" v-on:click="changer_menu" style="color: #ffffff;padding:10px;padding-right: 20px" v-if="head_type!='login' && head_type!='register'">
 			<label><i class="grid layout icon"></i>菜单</label>
 		</div>
 	</div>
@@ -15,8 +15,23 @@
 		<div class="ui dividing" style="color: #ffffff;float:right;padding:10px;padding-right: 20px" v-if="head_type=='register'" v-on:click="change_component('login')">
 			<label><i class="ticket icon"></i>登陆</label>
 		</div>
-		<div class="ui dividing" style="color: #ffffff;float:right;padding:10px;padding-right: 20px" v-if="head_type=='ok'" v-on:click="logout">
-			<label><i class="power icon"></i>退出</label>
-		</div>
-	</div>
+		<div class="ui dividing" style="color: #ffffff;float:right;padding:10px;padding-right: 20px" v-if="head_type!='login' && head_type!='register'">
+        	<a class="ui image label user-head" style="height: 30px" v-on:click="change_component('user_detail')"><img v-user-head="head_type" style="min-height: 30px;"> chenli </a>
+        	<div class="ui popup card" style="padding: 0px;margin: 0px">
+        		<div class="image">
+        			<img  v-user-head="head_type" style="max-height: 210px">
+        		</div>
+        		<div class="content">
+        			<div class="header">陈力</div>
+        			<div class="meta">
+        				<a>自己</a>
+        			</div>
+        			<div class="description">You Konw Nothing !</div>
+        		</div>
+        		<div class="extra content">
+        			<span class="right floated" v-on:click="logout"><label><i class="power icon"></i>退出</label></span>
+        		</div>
+        	</div>
+        </div>
+    </div>
 </div>

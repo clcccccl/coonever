@@ -44,9 +44,13 @@ module.exports =
         if !$('#register-form').form('is valid') or !@can_user
           return
         parm = JSON.stringify
-          request_map: @new_user
-        cl.post_load
-          parm:parm
-          del_fun:(data)=>
-            if data
+          request_map:  @new_user
+        $.ajax
+          url: '/login'
+          type: 'PUT'
+          data : parm
+          success: (data, status, response) =>
+            if data.error == 1
+              cl.noticeError(data.error_text)
+            else
               window.location.href="/home"
