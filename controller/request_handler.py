@@ -6,7 +6,7 @@ import pdb
 import importlib
 import functools
 
-from base_request_handler import BaseHandler, BasicPostHandler, PostHandler
+from base_request_handler import BaseHandler, BasicPostHandler, PostHandler, FileUploadCl
 from sys_wraps import handleError
 from model.businessLayer import sys_business, base_business, sys_lib
 
@@ -164,6 +164,35 @@ class PostHandler(PostHandler):
 
     def test_need_validation(self):
         self.api_data, self.need_validation_session, self.need_validation_permission = sys_lib.test_need_validation(self.api)
+
+
+class FileUpload(BaseHandler):
+    '''
+    文件上传相关API
+    '''
+    def post(self):
+        '''
+        新增文件
+        '''
+        self.set_header("Content-Type", "application/json")
+        if self.request.files and self.request.files['file']:
+            file = self.request.files['file'][0]
+            file_data = {}
+            file_data['file_size'] = int(self.get_argument("size"))
+            file_data['file_type'] = self.get_argument("file_type")
+            file_data['file_name'] = file['filename']
+            file_data['file_suffix'] = self.get_argument("file_suffix")
+            if file_data['file_type'] == 'user_head':
+                file_data['path'] = "view/static/userfile/image/"
+            else:
+                file_data['path'] = "view/static/userfile/other/"
+            file_data = sys_lib.add_file(file_data)
+            open_file = open(file_data['path'], 'w')
+            open_file.write(file["body"])
+            open_file.close()
+            self.write(json.dumps({'error': '0', 'data': file_data}))
+        else:
+            self.write(json.dumps({'error': '1', 'data': {}}))
 
 if __name__ == "__main__":
     pass

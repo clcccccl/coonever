@@ -9,8 +9,13 @@ from sys_wraps import CooError
 '''
 
 
+def add_file(dile_data):
+    return sys_lib_impl.add_file(dile_data)
+
+
 def clear_session(session):
     sys_lib_impl.clear_session(session)
+
 
 def get_modle_by_api(api):
     api = sys_lib_impl.get_api_by_api(api)

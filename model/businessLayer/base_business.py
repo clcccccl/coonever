@@ -37,3 +37,13 @@ def get_user_head_file_name(parm):
     user_detail = base_business_impl.get_user_head_file_name_by_account(account)
     file_name = user_detail[0]['head_file'] if user_detail and user_detail[0]['head_file'] else 'default.png'
     return {'data': {'file_name': file_name}}
+
+
+def get_user_detail(parm):
+    '''
+    获取用户自己的详细信息
+    '''
+    account = parm['user']['account']
+    user_detail = base_business_impl.get_user_detail_by_account(account)
+    user_detail['head_file'] = user_detail['head_file'] if user_detail['head_file'] else 'default.png'
+    return {'data': user_detail}

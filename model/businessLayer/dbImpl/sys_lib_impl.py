@@ -15,6 +15,15 @@ from db_base import pg_update
 from sys_wraps import CooError
 
 
+def add_file(file_data):
+    file_seq = pg_update.getSeq('file')
+    file_data['id'] = int(file_seq)
+    file_data['exist'] = 1
+    file_data['path'] = file_data['path'] + str(file_seq) + '_' + file_data['file_name']
+    pg_update.insertOne("file", file_data)
+    return file_data
+
+
 def clear_session(session):
     data = {}
     data['invalid_time'] = str(datetime.datetime.now())[:19]

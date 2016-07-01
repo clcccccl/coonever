@@ -45,17 +45,42 @@
 /***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(43);
+	__webpack_require__(48);
 
 	module.exports = Vue.extend({
-	  template: __webpack_require__(45),
-	  directives: {
-	    'user-head': __webpack_require__(27)
+	  template: __webpack_require__(50),
+	  components: {
+	    'user-info': __webpack_require__(30),
+	    'file-display': __webpack_require__(51)
 	  },
 	  data: function() {
 	    return {
-	      model: "user_detail"
+	      user_detail: {},
+	      type: 'info',
+	      user_head_chnage_file: {
+	        file_name: ''
+	      }
 	    };
+	  },
+	  attached: function() {
+	    return this.get_user_detail();
+	  },
+	  methods: {
+	    get_user_detail: function() {
+	      var parm;
+	      parm = JSON.stringify({
+	        request_type: "get_user_detail"
+	      });
+	      return cl.post_load({
+	        parm: parm,
+	        del_fun: (function(_this) {
+	          return function(data) {
+	            _this.user_detail = data.data;
+	            return _this.user_head_chnage_file = data.data.head_file;
+	          };
+	        })(this)
+	      });
+	    }
 	  }
 	});
 
@@ -374,27 +399,17 @@
 
 /***/ },
 
-/***/ 27:
+/***/ 29:
 /***/ function(module, exports) {
 
 	module.exports = {
 	  bind: function() {},
 	  update: function(value, old_value) {
-	    var parm;
-	    if (value === 'login' || value === 'register') {
-	      return;
+	    if (value) {
+	      return this.el.src = "/static/static/userfile/image/" + value;
+	    } else {
+	      return this.el.src = "/static/static/userfile/image/default.png";
 	    }
-	    parm = JSON.stringify({
-	      request_type: "get_user_head_file_name"
-	    });
-	    return cl.post_load({
-	      parm: parm,
-	      del_fun: (function(_this) {
-	        return function(data) {
-	          return _this.el.src = "/static/static/userfile/image/" + data.data.file_name;
-	        };
-	      })(this)
-	    });
 	  },
 	  unbind: function() {}
 	};
@@ -402,13 +417,60 @@
 
 /***/ },
 
-/***/ 43:
+/***/ 30:
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = Vue.extend({
+	  template: __webpack_require__(31),
+	  directives: {
+	    'user-head': __webpack_require__(29),
+	    'dateformat': __webpack_require__(32)
+	  },
+	  props: ['type', 'user_detail'],
+	  methods: {
+	    logout: function() {
+	      return window.location.href = "/login";
+	    }
+	  }
+	});
+
+
+/***/ },
+
+/***/ 31:
+/***/ function(module, exports) {
+
+	module.exports = "<div class=\"image\" v-if=\"type!='popup'\">\n\t<img v-user-head=\"user_detail.head_file\" style=\"max-height: 200px;\">\n</div>\n<div class=\"content\" style=\"padding-top: 10px\" v-if=\"type!='popup'\">\n\t<h3 class=\"ui header\">(% user_detail.name %)<div class=\"sub header\">(% user_detail.account %)</div>\n\t</h3>\n\t<div class=\"description\">(% user_detail.motto %)</div>\n\t<div class=\"description\" style=\"padding-top: 10px;color:#999999\" >加入时间：\n\t    <span v-dateformat=\"user_detail.create_date\"></span>\n\t</div>\n</div>\n<div class=\"image\" v-if=\"type=='popup'\">\n\t<img  v-user-head=\"user_detail.head_file\" style=\"max-height: 200px\">\n</div>\n<div class=\"content\" v-if=\"type=='popup'\">\n\t<div class=\"header\">(% user_detail.name %)</div>\n\t<div class=\"meta\">\n\t\t<a>(% user_detail.account %)</a>\n\t</div>\n\t<div class=\"description\">(% user_detail.motto %)</div>\n</div>\n<div class=\"extra content\" v-if=\"type=='popup'\">\n\t<span class=\"right floated\" v-on:click=\"logout\"><label><i class=\"power icon\"></i>退出</label></span>\n</div>";
+
+/***/ },
+
+/***/ 32:
+/***/ function(module, exports) {
+
+	module.exports = {
+	  bind: function() {},
+	  update: function(value, old_value) {
+	    var date_str, el;
+	    if (value) {
+	      el = $(this.el);
+	      date_str = cl.dateFormat(value);
+	      console.log(date_str);
+	      return $(this.el).html(date_str);
+	    }
+	  },
+	  unbind: function() {}
+	};
+
+
+/***/ },
+
+/***/ 48:
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(44);
+	var content = __webpack_require__(49);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(4)(content, {});
@@ -429,7 +491,7 @@
 
 /***/ },
 
-/***/ 44:
+/***/ 49:
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(3)();
@@ -437,17 +499,125 @@
 
 
 	// module
-	exports.push([module.id, "", ""]);
+	exports.push([module.id, ".ui.menu .item:before {\n  background: #F0F0F0;\n}\n.ui.attached.menu {\n  background-color: #F0F0F0;\n}\n.ui.attached.menu:not(.tabular) {\n  border: 0px;\n  border-bottom: 1px solid #ddd;\n}\n.ui.header .icon.himg {\n  padding-left: 30px;\n}\n.icon.hideimg {\n  margin-left: 20px;\n}\n.ui.attached.menu .h3 {\n  color: #aaaaaa;\n}\n", ""]);
 
 	// exports
 
 
 /***/ },
 
-/***/ 45:
+/***/ 50:
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"ui main container\" style=\"min-height: 100%;padding-left: 100px\">\n\t<div class=\"ui two column middle aligned very relaxed stackable grid container\">\n\t\t<div class=\"column\">\n\t\t\t<div class=\"card\" style=\"margin: 70px\">\n\t\t\t\t<div class=\"image\">\n\t\t\t  \t    <img v-user-head=\"model\" style=\"max-height: 200px;\">\n\t\t\t\t</div>\n\t\t\t\t<div class=\"content\" style=\"padding-top: 10px\">\n\t\t\t\t\t<h3 class=\"ui header\">菜蜜 <div class=\"sub header\">caimi</div>\n\t\t\t\t\t</h3>\n\t\t\t\t\t<div class=\"description\">You Konwn Nothing!</div>\n\t\t\t\t\t<div class=\"description\" style=\"padding-top: 10px;color:#999999\">注册时间：2016-06-22</div>\n\t\t\t\t\t<div class=\"description\" style=\"padding-top: 10px;color:#999999\">上次登录时间：2016-07-02</div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"ui vertical divider\" style=\"margin-top: 100px;margin-bottom: 100px\">Or</div>\n\t\t<div class=\"center aligned column\">\n\t\t\t<h1 class=\"ui header\">修改密码</h1>\n\t\t\t<div class=\"ui form\">\n\t\t\t\t<div class=\"field\">\n\t\t\t\t\t<input type=\"text\" name=\"account\" placeholder=\"原密码\">\n\t\t\t\t</div>\n\t\t\t\t<div class=\"field\">\n\t\t\t\t\t<input type=\"password\" name=\"password\" placeholder=\"新密码\">\n\t\t\t\t</div>\n\t\t\t\t<div class=\"field\">\n\t\t\t\t\t<input type=\"password\" name=\"repassword\" placeholder=\"重复新密码\">\n\t\t\t\t</div>\n\t\t\t\t<button class=\"ui button\">保存</button>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n</div>";
+	module.exports = "<div class=\"ui main container\" style=\"min-height: 100%;padding-left: 100px\">\n\t<div class=\"ui two column middle aligned very relaxed stackable grid container\">\n\t\t<div class=\"six wide column\" style=\"margin-bottom: 50%\">\n\t\t\t<div class=\"card\" style=\"margin: 20px\">\n\t\t\t\t<user-info :type.sync=\"type\" :user_detail.sync=\"user_detail\"></user-info>\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"ui vertical divider\" style=\"margin-top: 100px;margin-bottom: 100px;color: #bbbbbb\">|||</div>\n\t\t<div class=\"ten column\">\n\t\t\t<div style=\"margin: 10px\">\n\t\t\t\t<div class=\"ui top attached menu\">\n\t\t\t\t\t<div class=\"ui dropdown icon item\">\n\t\t\t\t\t\t<h3 class=\"ui header\" style=\"color: #666\">资料详细</h3>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"ui bottom attached segment\" style=\"background-color: #F8F8F8;border:0px;\">\n\t\t\t\t\t<div class=\"ui form\">\n\t\t\t\t\t\t<label style=\"color: #bbb\">姓名</label>\n\t\t\t\t\t\t<div class=\"field\">\n\t\t\t\t\t\t\t<input type=\"text\" name=\"old_password\" placeholder=\"姓名\">\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<label style=\"color: #bbb\">一句话</label>\n\t\t\t\t\t\t<div class=\"field\">\n\t\t\t\t\t\t\t<textarea  rows=\"3\" type=\"text\" name=\"password\"></textarea>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<button class=\"ui black button\">保存</button>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\t\n\t\t\t</div>\n\t\t\t<div style=\"margin: 10px\">\n\t\t\t\t<div class=\"ui top attached menu\">\n\t\t\t\t\t<div class=\"ui dropdown icon item\">\n\t\t\t\t\t\t<h3 class=\"ui header\" style=\"color: #666\">头像</h3>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"ui bottom attached segment\" style=\"background-color: #F8F8F8;border:0px;\">\n\t\t\t\t\t<file-display :file.sync=\"user_head_chnage_file\"></file-display>\n\t\t\t\t</div>\t\n\t\t\t</div>\n\t\t\t<div style=\"margin: 10px\">\n\t\t\t\t<div class=\"ui top attached menu\">\n\t\t\t\t\t<div class=\"ui dropdown icon item\">\n\t\t\t\t\t\t<h3 class=\"ui header\" style=\"color: #666\">密码</h3>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"ui bottom attached segment\" style=\"background-color: #F8F8F8;border:0px;\">\n\t\t\t\t\t<div class=\"ui form\">\n\t\t\t\t\t\t<div class=\"field\">\n\t\t\t\t\t\t\t<input type=\"password\" name=\"old_password\" placeholder=\"原密码\">\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"field\">\n\t\t\t\t\t\t\t<input type=\"password\" name=\"password\" placeholder=\"新密码\">\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"field\">\n\t\t\t\t\t\t\t<input type=\"password\" name=\"repassword\" placeholder=\"重复新密码\">\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<button class=\"ui black button\">修改密码</button>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\t\n\t\t\t</div>\n\t\t</div>\n\t</div>\n</div>";
+
+/***/ },
+
+/***/ 51:
+/***/ function(module, exports, __webpack_require__) {
+
+	__webpack_require__(52);
+
+	module.exports = Vue.extend({
+	  template: __webpack_require__(54),
+	  directives: {
+	    'user-head': __webpack_require__(29)
+	  },
+	  props: ['file'],
+	  data: function() {
+	    return {
+	      new_file: null,
+	      append_files: []
+	    };
+	  },
+	  methods: {
+	    upload: function() {
+	      var data, file_suffix, files, text_list;
+	      files = this.$els.newfile.files;
+	      data = new FormData();
+	      text_list = files[0]['name'].split(".");
+	      if (text_list.length < 2) {
+	        cl.noticeWarning('系统无法识别你所选择的文件，请从新选择!');
+	        return;
+	      }
+	      file_suffix = text_list[text_list.length - 1];
+	      if (file_suffix !== 'png' && file_suffix !== 'svg' && file_suffix !== 'jpg' && file_suffix !== 'JPG') {
+	        cl.noticeWarning('请选择图片文件!');
+	        return;
+	      }
+	      data.append('file', files[0]);
+	      data.append('size', files[0]['size']);
+	      data.append('file_type', 'user_head');
+	      data.append('file_suffix', file_suffix);
+	      return $.ajax({
+	        url: '/file_upload',
+	        type: 'POST',
+	        data: data,
+	        processData: false,
+	        contentType: false,
+	        success: (function(_this) {
+	          return function(data, status, response) {
+	            if (data.error === '1') {
+	              return cl.noticeError('文件上传失败');
+	            } else {
+	              return cl.noticeSuccess('文件上传成功');
+	            }
+	          };
+	        })(this)
+	      });
+	    }
+	  }
+	});
+
+
+/***/ },
+
+/***/ 52:
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(53);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(4)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/less-loader/index.js!./style.less", function() {
+				var newContent = require("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/less-loader/index.js!./style.less");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+
+/***/ 53:
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(3)();
+	// imports
+
+
+	// module
+	exports.push([module.id, ".btn-file {\n  position: relative;\n  overflow: hidden;\n}\n.btn-file input[type=file] {\n  position: absolute;\n  top: 0;\n  right: 0;\n  min-width: 100%;\n  min-height: 100%;\n  text-align: right;\n  filter: alpha(opacity=0);\n  opacity: 0;\n  outline: none;\n  background: white;\n  cursor: inherit;\n  display: block;\n}\n", ""]);
+
+	// exports
+
+
+/***/ },
+
+/***/ 54:
+/***/ function(module, exports) {
+
+	module.exports = "<div class=\"image\">\n\t<img v-user-head=\"file.file_name\" style=\"max-height: 200px;\">\n</div>\n<div class=\"content\" style=\"padding-top: 15px\">\n\t<div class=\"ui medium buttons\">\n\t<span class=\" ui grey button btn-file\">\n        选择文件<input class=\"input_file\" v-el:newfile type=\"file\" @change=\"upload\"/>\n    </span>\n\t\t<div class=\"or\"></div>\n\t\t<button class=\"ui black button\">保存</button>\n\t</div>\n</div>";
 
 /***/ }
 

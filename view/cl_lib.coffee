@@ -97,3 +97,5 @@ window.cl=
     return ree.test(st)
   cl_copy: (map)->
     return jQuery.extend(true, {} , map)
+  dateFormat:(mask)->
+    return mask.substring(0,16)

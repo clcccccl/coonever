@@ -10,6 +10,33 @@ create by chenli at 16/01/07 11:37
 import math
 
 from db_base import pg_update
+from sys_wraps import CooError
+
+
+def get_user_detail_by_account(account):
+    '''
+    通过帐号获取用户详细信息
+    '''
+    sql = '''
+      select ui.*,ud.head_file,ud.motto
+        from user_info ui
+        left join (
+        select * from user_detail where status=0 and account='%s'
+        )ud
+          on ud.account=ui.account
+        where
+          ui.status=0 and ui.account='%s'
+    ''' % (account, account)
+    users = pg_update.selectBySql(sql)
+    if len(users) != 1:
+        raise CooError(text='系统数据异常')
+    sql = '''
+      select r.* from user_role ur,role r
+        where ur.account = '%s' and ur.role_code = r.role_code
+    '''
+    roles = pg_update.selectBySql(sql)
+    users[0]['roles'] = roles
+    return users[0]
 
 
 def get_user_by_account(account):

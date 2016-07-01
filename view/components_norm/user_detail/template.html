@@ -1,33 +1,62 @@
 <div class="ui main container" style="min-height: 100%;padding-left: 100px">
 	<div class="ui two column middle aligned very relaxed stackable grid container">
-		<div class="column">
-			<div class="card" style="margin: 70px">
-				<div class="image">
-			  	    <img v-user-head="model" style="max-height: 200px;">
-				</div>
-				<div class="content" style="padding-top: 10px">
-					<h3 class="ui header">菜蜜 <div class="sub header">caimi</div>
-					</h3>
-					<div class="description">You Konwn Nothing!</div>
-					<div class="description" style="padding-top: 10px;color:#999999">注册时间：2016-06-22</div>
-					<div class="description" style="padding-top: 10px;color:#999999">上次登录时间：2016-07-02</div>
-				</div>
+		<div class="six wide column" style="margin-bottom: 50%">
+			<div class="card" style="margin: 20px">
+				<user-info :type.sync="type" :user_detail.sync="user_detail"></user-info>
 			</div>
 		</div>
-		<div class="ui vertical divider" style="margin-top: 100px;margin-bottom: 100px">Or</div>
-		<div class="center aligned column">
-			<h1 class="ui header">修改密码</h1>
-			<div class="ui form">
-				<div class="field">
-					<input type="text" name="account" placeholder="原密码">
+		<div class="ui vertical divider" style="margin-top: 100px;margin-bottom: 100px;color: #bbbbbb">|||</div>
+		<div class="ten column">
+			<div style="margin: 10px">
+				<div class="ui top attached menu">
+					<div class="ui dropdown icon item">
+						<h3 class="ui header" style="color: #666">资料详细</h3>
+					</div>
 				</div>
-				<div class="field">
-					<input type="password" name="password" placeholder="新密码">
+				<div class="ui bottom attached segment" style="background-color: #F8F8F8;border:0px;">
+					<div class="ui form">
+						<label style="color: #bbb">姓名</label>
+						<div class="field">
+							<input type="text" name="old_password" placeholder="姓名">
+						</div>
+						<label style="color: #bbb">一句话</label>
+						<div class="field">
+							<textarea  rows="3" type="text" name="password"></textarea>
+						</div>
+						<button class="ui black button">保存</button>
+					</div>
+				</div>	
+			</div>
+			<div style="margin: 10px">
+				<div class="ui top attached menu">
+					<div class="ui dropdown icon item">
+						<h3 class="ui header" style="color: #666">头像</h3>
+					</div>
 				</div>
-				<div class="field">
-					<input type="password" name="repassword" placeholder="重复新密码">
+				<div class="ui bottom attached segment" style="background-color: #F8F8F8;border:0px;">
+					<file-display :file.sync="user_head_chnage_file"></file-display>
+				</div>	
+			</div>
+			<div style="margin: 10px">
+				<div class="ui top attached menu">
+					<div class="ui dropdown icon item">
+						<h3 class="ui header" style="color: #666">密码</h3>
+					</div>
 				</div>
-				<button class="ui button">保存</button>
+				<div class="ui bottom attached segment" style="background-color: #F8F8F8;border:0px;">
+					<div class="ui form">
+						<div class="field">
+							<input type="password" name="old_password" placeholder="原密码">
+						</div>
+						<div class="field">
+							<input type="password" name="password" placeholder="新密码">
+						</div>
+						<div class="field">
+							<input type="password" name="repassword" placeholder="重复新密码">
+						</div>
+						<button class="ui black button">修改密码</button>
+					</div>
+				</div>	
 			</div>
 		</div>
 	</div>

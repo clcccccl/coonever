@@ -1,0 +1,12 @@
+<div class="image">
+	<img v-user-head="file.file_name" style="max-height: 200px;">
+</div>
+<div class="content" style="padding-top: 15px">
+	<div class="ui medium buttons">
+	<span class=" ui grey button btn-file">
+        选择文件<input class="input_file" v-el:newfile type="file" @change="upload"/>
+    </span>
+		<div class="or"></div>
+		<button class="ui black button">保存</button>
+	</div>
+</div>

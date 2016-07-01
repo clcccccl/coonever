@@ -147,6 +147,7 @@ class User_detail(pg_base.BaseTable):
     """
     account = CharField(max_length=30, unique=True, null=False)  # 账号
     head_file = TextField(null=True)  # 头像地址
+    motto = TextField(null=True)  # 格言
 
 
 class Session(pg_base.BaseTable):
@@ -156,6 +157,18 @@ class Session(pg_base.BaseTable):
     account = CharField(max_length=30, null=False)  # 账号
     session = CharField(max_length=40, unique=True, null=False)  # session
     invalid_time = DateTimeField(null=False)  # 失效时间
+
+
+class File(pg_base.BaseTable):
+    '''
+    文件表
+    '''
+    path = TextField(null=True)  # 文件路径
+    file_name = TextField(null=True)  # 文件名
+    file_type = TextField(null=True)  # 文件类型
+    file_suffix = TextField(null=True)  # 文件后缀
+    exist = IntegerField(null=False)  # 是否存在(0不存在，1存在)
+    file_size = IntegerField(null=False)  # 文件大小
 
 
 def forciblyCreateAllTable():
@@ -171,6 +184,7 @@ def forciblyCreateAllTable():
     pg_update.forciblyCreateTable(User_Business)
     pg_update.forciblyCreateTable(User_info)
     pg_update.forciblyCreateTable(Role_Business)
+    pg_update.forciblyCreateTable(File)
 
 
 def initializeDb():
@@ -226,4 +240,5 @@ if __name__ == "__main__":
     首先在程序中加限制，其次在插入数据时可以捕获异常来处理
     '''
     # initializeDb()
+    pg_update.forciblyCreateTable(File)
     pass

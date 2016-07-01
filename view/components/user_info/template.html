@@ -1,0 +1,24 @@
+<div class="image" v-if="type!='popup'">
+	<img v-user-head="user_detail.head_file" style="max-height: 200px;">
+</div>
+<div class="content" style="padding-top: 10px" v-if="type!='popup'">
+	<h3 class="ui header">(% user_detail.name %)<div class="sub header">(% user_detail.account %)</div>
+	</h3>
+	<div class="description">(% user_detail.motto %)</div>
+	<div class="description" style="padding-top: 10px;color:#999999" >加入时间：
+	    <span v-dateformat="user_detail.create_date"></span>
+	</div>
+</div>
+<div class="image" v-if="type=='popup'">
+	<img  v-user-head="user_detail.head_file" style="max-height: 200px">
+</div>
+<div class="content" v-if="type=='popup'">
+	<div class="header">(% user_detail.name %)</div>
+	<div class="meta">
+		<a>(% user_detail.account %)</a>
+	</div>
+	<div class="description">(% user_detail.motto %)</div>
+</div>
+<div class="extra content" v-if="type=='popup'">
+	<span class="right floated" v-on:click="logout"><label><i class="power icon"></i>退出</label></span>
+</div>

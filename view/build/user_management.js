@@ -45,13 +45,13 @@
 /***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(46);
+	__webpack_require__(55);
 
 	module.exports = Vue.extend({
-	  template: __webpack_require__(48),
+	  template: __webpack_require__(57),
 	  components: {
 	    'paging': __webpack_require__(6),
-	    'choose-role': __webpack_require__(49)
+	    'choose-role': __webpack_require__(58)
 	  },
 	  data: function() {
 	    return {
@@ -571,13 +571,13 @@
 
 /***/ },
 
-/***/ 46:
+/***/ 55:
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(47);
+	var content = __webpack_require__(56);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(4)(content, {});
@@ -598,7 +598,7 @@
 
 /***/ },
 
-/***/ 47:
+/***/ 56:
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(3)();
@@ -613,21 +613,21 @@
 
 /***/ },
 
-/***/ 48:
+/***/ 57:
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"ui main container\" style=\"min-height: 100%;padding-left: 100px\">\n\t<div class=\"ui top attached menu\">\n\t\t<div class=\"ui dropdown icon item\">\n\t\t\t<h3 class=\"ui header\">用户管理</h3>\n\t\t</div>\n\t\t<div class=\"right menu\">\n\t\t\t<div class=\"ui right aligned category search item\">\n\t\t\t\t<div class=\"ui transparent icon input\">\n\t\t\t\t\t<input class=\"prompt\" type=\"text\" v-model=\"search_key\" placeholder=\"Search users...\">\n\t\t\t\t\t<i class=\"search link icon\" @click=\"load(1)\"></i>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"results\"></div>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n\t<div class=\"ui bottom attached segment\" style=\"background-color: #F8F8F8;border:0px;\">\n\t\t<table class=\"ui very basic table\">\n\t\t\t<thead>\n\t\t\t\t<tr>\n\t\t\t\t\t<th>用户名</th>\n\t\t\t\t\t<th>帐号</th>\n\t\t\t\t\t<th>角色</th>\n\t\t\t\t\t<th>操作</th>\n\t\t\t\t</tr>\n\t\t\t</thead>\n\t\t\t<tbody>\n\t\t\t\t<tr v-for=\"user in users\">\n\t\t\t\t\t<td>(% user.name %)</td>\n\t\t\t\t\t<td>(% user.account %)</td>\n\t\t\t\t\t<td>\n\t\t\t\t\t\t<div class=\"ui left pointing dropdown link item\" id=\"(% user.account %)\">\n\t\t\t\t\t\t\t(% user.role %)<a><i class=\"configure icon\"></i></a>\n\t\t\t\t\t\t\t<div class=\"menu\" style='min-width: 300px;'>\n\t\t\t\t\t\t\t\t<div class=\"header\">\n\t\t\t\t\t\t\t\t\t<i class=\"tags icon\"></i>\n\t\t\t\t\t\t\t\t\t角色选择\n\t\t\t\t\t\t\t\t\t<a><i class=\"large green submit checkmark icon hideimg\" @click=\"change_role(user)\"></i></a>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t<choose-role :roles.sync=\"role_tree\" style=\"margin-bottom: 20px;\"></choose-role>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</td>\n\t\t\t\t\t<td>\n\t\t\t\t\t\t<div class=\"ui left pointing dropdown link item\">\n\t\t\t\t\t    \t<i class=\"large brown remove circle icon\"></i>\n\t\t\t\t\t\t\t<div class=\"menu\">\n\t\t\t\t\t\t\t\t<button class=\"item\" style=\"background: #FFFAF3\" @click=\"del(user)\">确认删除?请谨慎操作！</button>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</td>\n\t\t\t\t</tr>\n\t\t\t</tbody>\n\t\t</table>\n\t\t<paging :pag_count.sync=\"pag_count\"></paging>\t\n\t</div>\n</div>";
 
 /***/ },
 
-/***/ 49:
+/***/ 58:
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(50);
+	__webpack_require__(59);
 
 	module.exports = Vue.extend({
 	  name: 'choose-role',
-	  template: __webpack_require__(52),
+	  template: __webpack_require__(61),
 	  props: ['roles'],
 	  methods: {
 	    select_role: function(roles) {
@@ -644,13 +644,13 @@
 
 /***/ },
 
-/***/ 50:
+/***/ 59:
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(51);
+	var content = __webpack_require__(60);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(4)(content, {});
@@ -671,7 +671,7 @@
 
 /***/ },
 
-/***/ 51:
+/***/ 60:
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(3)();
@@ -686,7 +686,7 @@
 
 /***/ },
 
-/***/ 52:
+/***/ 61:
 /***/ function(module, exports) {
 
 	module.exports = "<div>\n    <div class=\"item_role\" data-value=\"important\" v-for=\"role in roles\">\n\t\t<div class=\"ui checkbox\" v-if=\"role.role_code != 'root'\" >\n\t\t\t<input type=\"checkbox\" name=\"example\" v-model=\"role.checked\" style=\"disabled\" disabled=\"(% role.role_type == 'root' %)\">\n\t\t\t<label>(% role.role_name %)</label>\n\t\t</div>\n\t\t<choose-role :roles.sync=\"role.child\"></choose-role>\n\t\t<div class=\"item\">\n\t\t</div>\n\t</div>\n</div>\n";

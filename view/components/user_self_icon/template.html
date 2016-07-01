@@ -1,0 +1,4 @@
+<a class="ui image label user-head" style="height: 30px" v-on:click="change_component('user_detail')"><img v-user-head="user.head_file" style="min-height: 30px;">(% user.name %)</a>
+<div class="ui popup card" style="padding: 0px;margin: 0px">
+	<user-info :type.sync="info_type" :user_detail.sync="user"></user-info>
+</div>
