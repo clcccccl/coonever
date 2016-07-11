@@ -39,25 +39,22 @@ def getExpInfoAll(just_info=False):
         return traceback.format_exc()
 
 
-class ClModelImpl():
+class ClModelImpl(object):
     '''
     数据实现基类
     '''
-    def __init__(self, error_type=1, user_id=0, api=None, text=None, fun_name=None, add_log=True):
-        self.error_type = error_type
-        self.user_id = user_id
-        self.api = api
-        self.fun_name = fun_name
-        self.text = text
-        self.value = "api:" + str(self.api) + " fun_name:" + str(self.fun_name) + " user_id:" + str(self.user_id) + " value:" + str(self.text)
-        # if add_log:
-        #     self.add_log()
+    def __init__(self):
+        pass
 
-    # def add_log(self):
-    #     log_hander.info(self.value)
+    def str_len_test(self, key, str_data, max_len):
+        if len(str_data) > max_len:
+            raise CooError(text=key + '最大长度为:' + str(max_len) + ' but "%s"' % str_data + '长度为' + str(len(str_data)))
 
-    def __str__(self):
-        return repr(self.value)
+    def __del__(self):
+        '''
+        析构函数
+        '''
+        pass
 
 
 class CooError(Exception):

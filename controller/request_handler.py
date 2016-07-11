@@ -154,7 +154,7 @@ class PostHandler(PostHandler):
         self.write(write_data)
 
     def getUser(self):
-        self.user = (sys_lib.get_user_by_id(self.user_id) if self.user_id else {})
+        self.user = (sys_lib.get_user_by_account(self.account) if self.account else {})
 
     def getModel(self):
         if self.api_data:

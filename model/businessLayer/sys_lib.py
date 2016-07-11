@@ -1,24 +1,28 @@
 # -*- coding: utf-8 -*-
 #!/usr/bin/env python
 
-from dbImpl import sys_lib_impl
 from sys_wraps import CooError
+
+from dbImpl.user import Api, User, RoleBusiness, UserRole
+from dbImpl.sys import Session, File
+
 
 '''
 系统接口
 '''
 
 
-def add_file(dile_data):
-    return sys_lib_impl.add_file(dile_data)
+def add_file(file_data):
+    return File.add_file(file_data)
 
 
 def clear_session(session):
-    sys_lib_impl.clear_session(session)
+    print type(session)
+    Session.clear_session(session)
 
 
 def get_modle_by_api(api):
-    api = sys_lib_impl.get_api_by_api(api)
+    api = Api.get_api_by_api(api)
     if api:
         return api[0]['path']
     else:
@@ -30,10 +34,10 @@ def user_login(parm):
     用户登录
     '''
     user = parm.get('request_map')
-    user = sys_lib_impl.get_user_by_ap(user)
+    user = User.get_user_by_ap(user)
     if not user:
         raise CooError(text='用户名或密码错误')
-    session = sys_lib_impl.add_session_by_account(user[0]['account'])
+    session = Session.add_session_by_account(user[0]['account'])
     return user, session
 
 
@@ -41,28 +45,28 @@ def user_register(parm):
     '''
     用户注册
     '''
-    user = parm.get('request_map')
-    del user['repassword']
-    sys_lib_impl.user_register(user)
-    user = sys_lib_impl.get_user_by_ap(user)
+    request_map = parm.get('request_map')
+    user = User(name=request_map.get('name'), account=request_map.get('account'), password=request_map.get('password'))
+    user.add_user()
+    user = User.get_user_by_ap(user.user_map)
     if not user:
         raise CooError(text='用户名或密码错误')
-    session = sys_lib_impl.add_session_by_account(user[0]['account'])
+    session = Session.add_session_by_account(user[0]['account'])
     return user, session
 
 
-def get_user_by_id(user_id):
+def get_user_by_account(account):
     '''
-    通过帐号和id获取用户
+    通过帐号获取用户
     '''
-    return sys_lib_impl.get_user_by_id(user_id)
+    return UserRole.get_user_roles_by_account(account)
 
 
 def test_need_validation(api):
     '''
     获取api数据，检查是否需要在线验证，是否需要权限验证
     '''
-    api_datas = sys_lib_impl.get_api_by_api(api)
+    api_datas = Api.get_api_by_api(api)
     if api_datas:
         api_data = api_datas[0]
         return api_data, True if api_data['session'] == 1 else False, True if api_data['restrict'] == 1 else False
@@ -74,9 +78,9 @@ def validation_session(session):
     '''
     在线验证
     '''
-    sessions = sys_lib_impl.get_session_by_session(session)
+    sessions = Session.get_session_by_session(session)
     if sessions:
-        sys_lib_impl.update_session(session)
+        Session.update_session(session)
         return True
     else:
         return False
@@ -88,4 +92,4 @@ def validation_permission(user, business_model):
     '''
     api = business_model.split('.')[-1]
     roles = user['roles']
-    return sys_lib_impl.roles_business_test(roles, api)
+    return RoleBusiness.roles_api_test(roles, api)

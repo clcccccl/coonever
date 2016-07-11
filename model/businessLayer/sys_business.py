@@ -9,11 +9,12 @@ create by chenli at 16/01/07 11:37
 '''
 
 import pdb
+import math
 
 import tools
 
 from sys_wraps import CooError
-from dbImpl import sys_business_impl
+from dbImpl.user import User, UserRole, Role, Business, RoleBusiness, Api
 
 
 '''
@@ -25,7 +26,27 @@ def get_users(parm):
     '''
     获取系统内的用户
     '''
-    return sys_business_impl.get_users(parm.get('request_map'))
+    limit = 10
+    parm = parm.get('request_map')
+    result = {}
+    page = parm['page']
+    search_key = parm['search_key']
+    offset = (int(page) - 1) * limit
+    where = ("status = 0 and name like '%%%s%%' " % search_key if search_key and search_key != '' else " status = 0 ")
+    users = User.get_users(offset, limit, where)
+    user_roles = UserRole.get_roles_by_accounts([user['account'] for user in users])
+    for user in users:
+        user['roles'] = []
+        user['role'] = ''
+        for user_role in user_roles:
+            if user_role['account'] == user['account']:
+                user['role'] += (user_role['role_name'] + ' ')
+                user['roles'].append(user_role)
+    count = User.users_count(where)
+    page_count = int(math.ceil(float(count) / limit))
+    result['datas'] = users
+    result['page_count'] = page_count
+    return result
 
 
 def new_user(parm):
@@ -33,8 +54,8 @@ def new_user(parm):
     新增用户
     '''
     request_map = parm.get('request_map')
-    user = {'name': request_map.get('name'), 'account': request_map.get('account'), 'password': request_map.get('password')}
-    sys_business_impl.add_user(user)
+    user = User(name=request_map.get('name'), account=request_map.get('account'), password=request_map.get('password'))
+    user.add_user()
 
 
 def edit_user(parm):
@@ -42,8 +63,8 @@ def edit_user(parm):
     用户信息更新
     '''
     request_map = parm.get('request_map')
-    user = {'name': request_map.get('name'), 'account': request_map.get('account'), 'password': request_map.get('password')}
-    sys_business_impl.update_user(user)
+    user = User(name=request_map.get('name'), account=request_map.get('account'), password=request_map.get('password'))
+    user.update_user()
 
 
 def change_user_role(parm):
@@ -54,9 +75,9 @@ def change_user_role(parm):
     user_account = request_map.get('account')
     roles = request_map.get('roles')
     #删除原对应角色
-    sys_business_impl.delete_user_role(user_account=user_account)
+    UserRole.delete_role_by_account(user_account)
     #新增用户对应角色
-    sys_business_impl.add_user_role(user_account, roles)
+    UserRole.add_user_role(user_account, roles)
 
 
 def del_user(parm):
@@ -65,7 +86,7 @@ def del_user(parm):
     '''
     request_map = parm.get('request_map')
     account = request_map.get('account')
-    sys_business_impl.del_user_by_account(account)
+    User.del_user_by_account(account)
 
 
 '''
@@ -79,11 +100,11 @@ def save_role(pam):
     '''
     request_map = pam.get('request_map')
     if request_map.get('id'):
-        sys_business_impl.update_role(request_map)
+        Role.update_role(request_map)
         if request_map.get('status') == 1:
-            sys_business_impl.delete_user_role(role_code=request_map['role_code'])
+            UserRole.delete_role_by_role_code(request_map['role_code'])
     else:
-        sys_business_impl.add_role(request_map)
+        Role.add_role(request_map)
 
 
 def get_roles_tree(parm):
@@ -91,7 +112,7 @@ def get_roles_tree(parm):
     获取角色树
     create by chenli at 16/01/07 11:37
     '''
-    roles = sys_business_impl.get_roles()
+    roles = Role.get_roles()
     for role in roles:
         role['show'] = True
     data = {'datas': tools.listToTree(roles, 'parent_role_code', 'role_code')}
@@ -103,7 +124,7 @@ def get_roles(parm):
     获取角色列表
     create by chenli at 16/01/07 11:37
     '''
-    return sys_business_impl.get_roles()
+    return Role.get_roles()
 
 
 '''
@@ -115,7 +136,7 @@ def get_businesses_tree(parm):
     '''
     获取业务树
     '''
-    businesses = sys_business_impl.get_businesses()
+    businesses = Business.get_businesses()
     for business in businesses:
         business['show'] = True
     return {'datas': tools.listToTree(businesses, 'parent_business_code', 'business_code')}
@@ -127,11 +148,11 @@ def save_business(pam):
     '''
     request_map = pam.get('request_map')
     if request_map.get('id'):
-        sys_business_impl.update_business(request_map)
+        Business.update_business(request_map)
         if request_map.get('status') == 1:
-            sys_business_impl.delete_role_business(request_map['business_code'])
+            RoleBusiness.delete_role_business_by_business_code(request_map['business_code'])
     else:
-        sys_business_impl.add_business(request_map)
+        Business.add_business(request_map)
 
 '''
 API管理－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－
@@ -142,7 +163,7 @@ def get_apis(parm):
     '''
     获取系统内的api
     '''
-    return sys_business_impl.get_apis(parm.get('request_map'))
+    return Api.get_apis(parm.get('request_map'))
 
 
 def edit_api(parm):
@@ -155,4 +176,4 @@ def edit_api(parm):
         api['disable'] = 1 if request_map['disable'] else 0
     if isinstance(request_map['restrict'], bool):
         api['restrict'] = 1 if request_map['restrict'] else 0
-    sys_business_impl.update_api(api)
+    Api.update_api(api)
