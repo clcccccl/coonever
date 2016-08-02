@@ -4,12 +4,26 @@
 from sys_wraps import CooError
 
 from dbImpl.user import Api, User, RoleBusiness, UserRole
-from dbImpl.sys import Session, File
+from dbImpl.sys import Session, File, MessageSendRecord, Message
 
 
 '''
 系统接口
 '''
+
+
+def get_messages_by_session(session):
+    session_date = Session.get_session_by_session(session)
+    return MessageSendRecord.get_message_by_account(session_date[0]['account']) if session_date else []
+
+
+def save_message_user_to_user(message, session, receive_account):
+    session_date = Session.get_session_by_session(session)
+    Message.add_message(message, 'user_user', 'user', session_date[0]['account'], 'user', receive_account)
+
+
+def chang_message_status(session, message):
+    pass
 
 
 def add_file(file_data):

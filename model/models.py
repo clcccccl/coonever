@@ -171,6 +171,38 @@ class File(pg_base.BaseTable):
     file_size = IntegerField(null=False)  # 文件大小
 
 
+class Message(pg_base.BaseTable):
+    '''
+    消息表
+    '''
+    message = TextField(null=True)  # 消息内容
+    message_type = TextField(null=True)  # 消息类型
+    send_type = TextField(null=True)  # 发送者 user,sys
+    send_value = TextField(null=True)  # 发送者 user为account，sys 为 super
+    receive_type = TextField(null=True)  # 接收者 user, role, all
+    receive_value = TextField(null=True)  # 接收者 user为account, role 为role_code，all为super
+    finish = IntegerField(null=True)  # 消息是否已完成
+
+
+class Message_Send_Record(pg_base.BaseTable):
+    '''
+    消息发送记录表
+    消息发送成功后将数据移至Message_Send_Record_His表
+    '''
+    message_id = IntegerField(null=False)  # message_id
+    send_status = IntegerField(null=True)  # 发送状态
+    receive_account = CharField(max_length=30, null=False)  # 接收者账号
+
+
+class Message_Send_Record_His(pg_base.BaseTable):
+    '''
+    消息发送记录历史
+    '''
+    message_id = IntegerField(null=False)  # message_id
+    send_status = IntegerField(null=True)  # 发送状态
+    receive_account = CharField(max_length=30, null=False)  # 接收者账号
+
+
 def forciblyCreateAllTable():
     pg_update.forciblyCreateTable(Role)
     pg_update.forciblyCreateTable(Model)
@@ -240,5 +272,7 @@ if __name__ == "__main__":
     首先在程序中加限制，其次在插入数据时可以捕获异常来处理
     '''
     # initializeDb()
-    pg_update.forciblyCreateTable(File)
+    pg_update.forciblyCreateTable(Message)
+    pg_update.forciblyCreateTable(Message_Send_Record)
+    pg_update.forciblyCreateTable(Message_Send_Record_His)
     pass

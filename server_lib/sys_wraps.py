@@ -14,6 +14,33 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 
 
+class MessageSocketsManager(object):
+    def __init__(self):
+        self.sockets = {}
+
+    def send_massages(self, session, messages):
+        if not messages:
+            return
+        user_socket = self.sockets.get(session)
+        if user_socket:
+            user_socket.write_message(messages)
+
+    def add_socket(self, socket):
+        user_socket = self.sockets.get(socket.session)
+        if user_socket:
+            # 使用该session已注册过socket，将原socket注销
+            user_socket.close()
+        self.sockets[socket.session] = socket
+
+    def remove_socket(self, session):
+        user_socket = self.sockets.get(session)
+        if user_socket:
+            if user_socket.ws_connection:
+                user_socket.ws_connection.close(code, reason)
+                user_socket.ws_connection = None
+            del self.sockets[session]
+
+
 def handleError(method):
     '''
     出现错误的时候,用json返回错误信息回去

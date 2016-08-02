@@ -3,13 +3,29 @@
 {% end %}
 {% block body %}
 <body id="test">
-    <component
-      :is="view"
-      transition="fade"
-      transition-mode="out-in">
-    </component>
+	<div>
+		<p>发送消息</p>
+		<input type="text" id="send_message">
+		<p>收到消息</p>
+		<p id="get_message"></p>
+	</div>
 </body>
 {% end %}
 {% block js %}
-<script src="{{ static_url("build/test.js") }}"></script>
+<script type="text/javascript">
+	var socket = null;
+	$(document).ready(function() {
+		socket =  new WebSocket("ws://127.0.0.1:8000/message_socket");
+		socket.onopen = function() {
+			socket.send("start");
+		};
+		socket.onmessage = function (evt) {
+			$("#get_message").append('<p>'+evt.data+'<p>')
+		};
+	});
+	function newmessage(){
+		mes = $("#send_message").val()
+		socket.send(mes);
+	}
+</script>
 {% end %}

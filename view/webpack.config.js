@@ -4,6 +4,7 @@ module.exports = {
         home: "./home.coffee",
         login: "./login.coffee",
         welcome: "./components_norm/welcome/index.coffee",
+        chat: "./components_norm/chat/index.coffee",
         user_detail: "./components_norm/user_detail/index.coffee",
         business_management: "./components_sys/business_management/index.coffee",
         user_management: "./components_sys/user_management/index.coffee",

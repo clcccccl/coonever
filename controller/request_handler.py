@@ -5,10 +5,70 @@ import json
 import pdb
 import importlib
 import functools
+import tornado.escape
+import tornado.websocket
+import time
+import thread
 
 from base_request_handler import BaseHandler, BasicPostHandler, PostHandler, FileUploadCl
-from sys_wraps import handleError
+from sys_wraps import handleError, MessageSocketsManager
 from model.businessLayer import sys_business, base_business, sys_lib
+
+message_sockets_manager = MessageSocketsManager()
+
+
+class MessageSocketHandler(tornado.websocket.WebSocketHandler):
+    i = 1
+
+    def open(self):
+        print 'open'
+        # 检查在线状态
+        # self.session = self.get_secure_cookie("session")
+        # if sys_lib.validation_session(self.session):
+        #     # 将新加的Socket链接交给MessageSocketsManager
+        #     message_sockets_manager.add_socket(self)
+        #     messages = sys_lib.get_messages_by_session(self.session)
+        #     message_sockets_manager.send_massages(self.session, messages)
+        # else:
+        #     self.close()
+        self.write_message('服务器socket 打开了')
+
+    def on_message(self, message):
+        print 'on_message' + message
+        # # 将message保存起来
+        # sys_lib.save_message_user_to_user(message, self.session, 'caimi')
+        # # 获取可以发送的消息
+        # message_sockets_manager.send_massages(self.session, message)
+        thread.start_new_thread(self.send_msss, (message,))
+
+    def on_close(self):
+        # if self.session:
+        #     message_sockets_manager.remove_socket(self.session)
+        print 'on_close'
+
+    def send_msss(self, message):
+        while True:
+            self.i += 1
+            time.sleep(5)
+            self.write_message(message + str(self.i))
+
+    def check_origin(self, origin):
+        return True
+
+    def write_message(self, message, binary=False):
+        if self.ws_connection is None:
+            raise Exception()
+        if isinstance(message, dict):
+            message = tornado.escape.json_encode(message)
+        self.ws_connection.write_message(message, binary=binary)
+        # sys_lib.chang_message_status(self.session, message)
+
+    def close(self, code=None, reason=None):
+        # if self.session:
+        #     message_sockets_manager.remove_socket(self.session)
+        if self.ws_connection:
+            self.ws_connection.close(code, reason)
+            self.ws_connection = None
 
 
 def validationSessionHome(method):

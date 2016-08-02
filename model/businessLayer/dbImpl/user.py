@@ -155,6 +155,13 @@ class UserRole(ClModelImpl):
             raise CooError(user_id=user_id, fun_name='get_user_roles_by_account', text='通过account获取用户失败')
 
     @classmethod
+    def get_users_by_role(self, role_code):
+        sql = '''
+         select * from user_role where role_code = '%s'
+        ''' % role_code
+        return pg_update.selectBySql(sql)
+
+    @classmethod
     def get_roles_by_account(self, account):
         sql = '''
         select * from role

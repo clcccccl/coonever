@@ -73,6 +73,61 @@ class Session(ClModelImpl):
                 print e
                 raise CooError(text='未知错误')
 
+
+class Message(ClModelImpl):
+    '''
+    消息相关操作
+    '''
+    @classmethod
+    def add_message(self, message, message_type, send_type, send_value, receive_type, receive_value):
+        message_data = {}
+        message_data['id'] = int(pg_update.getSeq('message'))
+        message_data['message'] = message
+        message_data['message_type'] = message_type
+        message_data['send_type'] = send_type
+        message_data['send_value'] = send_value
+        message_data['receive_type'] = receive_type
+        message_data['receive_value'] = receive_value
+        pg_update.insertOne("message", message_data)
+        MessageSendRecord.add_message_send_record(message_data)
+
+
+class MessageSendRecord(ClModelImpl):
+    '''
+    消息相关操作
+    '''
+    @classmethod
+    def add_message_send_record(self, message_data):
+        if message_data['receive_type'] == 'user':
+            message_record_data = {}
+            message_record_data['message_id'] = message_data['id']
+            message_record_data['send_status'] = 0
+            message_record_data['receive_account'] = message_data['receive_value']
+            pg_update.insertOne("message_send_record", message_record_data)
+        if message_data['receive_type'] == 'role':
+            message_record_datas = []
+            users = User.get_users_by_role(message_data['receive_value'])
+            for user in users:
+                message_record_data = {}
+                message_record_data['message_id'] = message_data['id']
+                message_record_data['send_status'] = 0
+                message_record_data['receive_account'] = user['account']
+                message_record_datas.append(message_record_data)
+            pg_update.insert("message_send_record", message_record_datas)
+
+    @classmethod
+    def get_message_by_account(self, account):
+        sql = '''
+          select m.message,m.message_type,m.send_type,m.send_value,msr.*
+          from message m, message_send_record msr
+          where msr.message_id = m.id
+            and msr.send_status = 0
+            and m.status = 0
+            and msr.status = 0
+            and msr.receive_account = '%s'
+        ''' % account
+        return pg_update.selectBySql(sql)
+
+
 if __name__ == "__main__":
-    __main()
     pass

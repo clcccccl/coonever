@@ -7,7 +7,7 @@ import os
 
 import tools
 
-from controller.request_handler import Main, Home, Test, Login, PostHandler, FileUpload
+from controller.request_handler import Main, Home, Test, Login, PostHandler, FileUpload, MessageSocketHandler
 
 
 class Application(tornado.web.Application):
@@ -18,7 +18,8 @@ class Application(tornado.web.Application):
             (r"/test", Test),
             (r"/login", Login),
             (r"/post_request", PostHandler),
-            (r"/file_upload", FileUpload)
+            (r"/file_upload", FileUpload),
+            (r"/message_socket", MessageSocketHandler)
         ]
         tornado.web.Application.__init__(self, handlers, **settings)
 
