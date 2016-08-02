@@ -1,6 +1,6 @@
 #coonever
 ##技术选择
-######tornado,postgresql,webpack,vue.js,semantic-ui
+######tornado,postgresql,webpack,vue.js 1.0,semantic-ui
 
 ##目的
 用户角色，业务，模块，权限的可配置化
@@ -8,13 +8,14 @@
 ##基础数据结构
 ######1.同一用户拥有多种角色
 ######2.同一角色拥有多种业务
-######3.同一业务拥有多种模块
+######3.同一业务拥有多个模块
+######4.同一模块调用多个api
 
 ##实现原理
 ###1.vue.js component前端模块化
 ######每个部件一个component，比如foot，head，lef_bar
 ######每个功能页面一个component，功能内容性的component异步加载
-######其他能复用的组件尽量独立为component
+######其他能复用的组件尽量独立为component，比如用户头像
 
 ###2.页面的组装
 ######根据登陆用户的信息获取到侧边菜单
@@ -46,3 +47,10 @@
 
 ####4.6业务实现
 使用response_data = getattr(mod, self.api)(self.request_argument)
+
+###5.业务具体实现
+对应每个表新建一个class，针对该表的所有操作都放在该class中，有必要可以做数据检验等
+
+###6.lib库
+####6.1数据库相关操作
+数据库的连接，数据增删改接口
