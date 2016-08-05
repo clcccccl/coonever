@@ -6,6 +6,16 @@
 				<i class="edit icon" style="margin-left: 10px" @click="edit_role(role)"></i>
 				<i class="add circle icon" @click="add_role(role)"></i>
 				<div class="ui left pointing dropdown link item">
+					<i class="configure icon" @click="getBussinessTree(role)"></i>
+					<div class="menu">
+						<div class="header item">
+							<i class="tags icon"></i>
+							业务选择
+						</div>
+						<choose-business class="business_tree" :businesses.sync="role.business_tree" :role_code.sync="role.role_code"></choose-business>
+					</div>
+				</div>
+				<div class="ui left pointing dropdown link item">
 					<i class="remove circle icon"></i>
 					<div class="menu">
 						<button class="item" style="background: #FFFAF3" @click="rm_role(role)">确认删除?请谨慎操作！</button>

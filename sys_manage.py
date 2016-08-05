@@ -33,6 +33,7 @@ def __addApi():
         if pg_update.select("api", where=" api = '%s' " % fun.__name__):
             # 已存在则跳过
             continue
+        print "新增api", fun.__name__
         data_map = {}
         data_map['api'] = fun.__name__
         data_map['api_explain'] = fun.__doc__.strip('\n').split('\n')[0].strip(' ').strip('\n') if fun.__doc__ else ''
@@ -79,6 +80,7 @@ def __addRoleBusiness(role, business):
 
 def __main():
     __addApi()
+    __addBusinessApi('save_role_business', 'business_management')
     pass
 
 

@@ -1,0 +1,11 @@
+<div>
+    <div class="item_business" data-value="important" v-for="business in businesses">
+		<div class="ui checkbox">
+			<input type="checkbox" name="example" v-model="business.checked" style="disabled" @change="changeChecked(business)">
+			<label>(% business.business_name %)</label>
+		</div>
+		<choose-business :businesses.sync="business.child" :role_code.sync="role_code"></choose-role>
+		<div class="item">
+		</div>
+	</div>
+</div>

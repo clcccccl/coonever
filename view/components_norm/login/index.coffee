@@ -10,7 +10,7 @@ module.exports =
         field1=
           name: 'account'
           type: 'empty',
-          prompt:'帐号'
+          prompt:'请输入帐号'
         field2=
           name:'password'
           type:'empty',

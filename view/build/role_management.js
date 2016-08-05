@@ -608,6 +608,9 @@
 	module.exports = Vue.extend({
 	  name: 'role_component',
 	  template: __webpack_require__(48),
+	  components: {
+	    'choose-business': __webpack_require__(49)
+	  },
 	  props: ['roles'],
 	  data: function() {
 	    return {
@@ -630,6 +633,24 @@
 	    return results;
 	  },
 	  methods: {
+	    getBussinessTree: function(role) {
+	      var parm;
+	      this.checked_business = [];
+	      parm = JSON.stringify({
+	        request_type: "get_role_businesses_tree",
+	        request_map: {
+	          role_code: role.role_code
+	        }
+	      });
+	      return cl.post_load({
+	        parm: parm,
+	        del_fun: (function(_this) {
+	          return function(data) {
+	            return Vue.set(role, 'business_tree', data.datas);
+	          };
+	        })(this)
+	      });
+	    },
 	    showChild: function(role) {
 	      if (role.child && role.child.length > 0) {
 	        return role.show = !role.show;
@@ -683,7 +704,7 @@
 
 
 	// module
-	exports.push([module.id, "", ""]);
+	exports.push([module.id, ".business_tree {\n  padding-right: 100px;\n  padding-bottom: 20px;\n}\n", ""]);
 
 	// exports
 
@@ -692,7 +713,88 @@
 /* 48 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"ui list\">\n\t<div v-for=\"role in roles\" class=\"item\">\n\t\t<i class=\"folder open icon\" v-bind:class=\"{ 'open': role.show}\" @click=\"showChild(role)\"></i>\n\t\t<div class=\"content\">\n\t\t\t<div class=\"header\">(% role.role_name %)\n\t\t\t\t<i class=\"edit icon\" style=\"margin-left: 10px\" @click=\"edit_role(role)\"></i>\n\t\t\t\t<i class=\"add circle icon\" @click=\"add_role(role)\"></i>\n\t\t\t\t<div class=\"ui left pointing dropdown link item\">\n\t\t\t\t\t<i class=\"remove circle icon\"></i>\n\t\t\t\t\t<div class=\"menu\">\n\t\t\t\t\t\t<button class=\"item\" style=\"background: #FFFAF3\" @click=\"rm_role(role)\">确认删除?请谨慎操作！</button>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div class=\"description\">(% role.role_explain %)</div>\n\t\t\t<role_component :roles.sync=\"role.child\" v-if=\"role.show && role.child && role.child.length > 0\"></role_component>\n\t\t</div>\n\t</div>\n</div>";
+	module.exports = "<div class=\"ui list\">\n\t<div v-for=\"role in roles\" class=\"item\">\n\t\t<i class=\"folder open icon\" v-bind:class=\"{ 'open': role.show}\" @click=\"showChild(role)\"></i>\n\t\t<div class=\"content\">\n\t\t\t<div class=\"header\">(% role.role_name %)\n\t\t\t\t<i class=\"edit icon\" style=\"margin-left: 10px\" @click=\"edit_role(role)\"></i>\n\t\t\t\t<i class=\"add circle icon\" @click=\"add_role(role)\"></i>\n\t\t\t\t<div class=\"ui left pointing dropdown link item\">\n\t\t\t\t\t<i class=\"configure icon\" @click=\"getBussinessTree(role)\"></i>\n\t\t\t\t\t<div class=\"menu\">\n\t\t\t\t\t\t<div class=\"header item\">\n\t\t\t\t\t\t\t<i class=\"tags icon\"></i>\n\t\t\t\t\t\t\t业务选择\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<choose-business class=\"business_tree\" :businesses.sync=\"role.business_tree\" :role_code.sync=\"role.role_code\"></choose-business>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"ui left pointing dropdown link item\">\n\t\t\t\t\t<i class=\"remove circle icon\"></i>\n\t\t\t\t\t<div class=\"menu\">\n\t\t\t\t\t\t<button class=\"item\" style=\"background: #FFFAF3\" @click=\"rm_role(role)\">确认删除?请谨慎操作！</button>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div class=\"description\">(% role.role_explain %)</div>\n\t\t\t<role_component :roles.sync=\"role.child\" v-if=\"role.show && role.child && role.child.length > 0\"></role_component>\n\t\t</div>\n\t</div>\n</div>";
+
+/***/ },
+/* 49 */
+/***/ function(module, exports, __webpack_require__) {
+
+	__webpack_require__(50);
+
+	module.exports = Vue.extend({
+	  name: 'choose-business',
+	  template: __webpack_require__(52),
+	  props: ['businesses', 'role_code'],
+	  methods: {
+	    changeChecked: function(business) {
+	      var parm;
+	      parm = JSON.stringify({
+	        request_type: "save_role_business",
+	        request_map: {
+	          role_code: this.role_code,
+	          business_code: business.business_code,
+	          checked: business.checked
+	        }
+	      });
+	      return cl.post_load({
+	        parm: parm,
+	        del_fun: (function(_this) {
+	          return function(data) {
+	            _this.users = data.datas;
+	            return _this.pag_count = data.page_count;
+	          };
+	        })(this)
+	      });
+	    }
+	  }
+	});
+
+
+/***/ },
+/* 50 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(51);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(4)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/less-loader/index.js!./style.less", function() {
+				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/less-loader/index.js!./style.less");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 51 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(3)();
+	// imports
+
+
+	// module
+	exports.push([module.id, ".item_business {\n  padding-left: 20px;\n  padding-top: 10px;\n}\n", ""]);
+
+	// exports
+
+
+/***/ },
+/* 52 */
+/***/ function(module, exports) {
+
+	module.exports = "<div>\n    <div class=\"item_business\" data-value=\"important\" v-for=\"business in businesses\">\n\t\t<div class=\"ui checkbox\">\n\t\t\t<input type=\"checkbox\" name=\"example\" v-model=\"business.checked\" style=\"disabled\" @change=\"changeChecked(business)\">\n\t\t\t<label>(% business.business_name %)</label>\n\t\t</div>\n\t\t<choose-business :businesses.sync=\"business.child\" :role_code.sync=\"role_code\"></choose-role>\n\t\t<div class=\"item\">\n\t\t</div>\n\t</div>\n</div>\n";
 
 /***/ }
 /******/ ]);

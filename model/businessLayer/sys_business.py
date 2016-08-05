@@ -142,17 +142,40 @@ def get_businesses_tree(parm):
     return {'datas': tools.listToTree(businesses, 'parent_business_code', 'business_code')}
 
 
-def save_business(pam):
+def get_role_businesses_tree(parm):
+    '''
+    根据角色获取业务树
+    '''
+    role_code = parm.get('request_map').get('role_code')
+    businesses = RoleBusiness.get_businesses_by_role(role_code)
+    role_business = RoleBusiness.get_businesses_by_roles([{'role_code': role_code}])
+    role_business = [business_code['business_code'] for business_code in role_business]
+    for business in businesses:
+        business['checked'] = True if business['business_code'] in role_business else False
+    return {'datas': tools.listToTree(businesses, 'parent_business_code', 'business_code')}
+
+
+def save_business(parm):
     '''
     业务的增删改
     '''
-    request_map = pam.get('request_map')
+    request_map = parm.get('request_map')
     if request_map.get('id'):
         Business.update_business(request_map)
         if request_map.get('status') == 1:
             RoleBusiness.delete_role_business_by_business_code(request_map['business_code'])
     else:
         Business.add_business(request_map)
+
+
+def save_role_business(parm):
+    request_map = parm.get('request_map')
+    checked = request_map.get('checked')
+    if checked:
+        RoleBusiness.add_role_business(request_map.get('role_code'), request_map.get('business_code'))
+    else:
+        RoleBusiness.delete_role_business(request_map.get('role_code'), request_map.get('business_code'))
+    return {}
 
 '''
 API管理－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－

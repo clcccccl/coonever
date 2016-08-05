@@ -254,6 +254,15 @@ class Role(ClModelImpl):
         '''
         pg_update.update("role", data_map, where=" id = %s " % data_map['id'])
 
+    @classmethod
+    def get_role_parent_role_code(slef, role_code):
+        '''
+        获取所有角色
+        create by chenli at 16/01/07 11:37
+        '''
+        parent_role_code = pg_update.select("role", where="role_code = '%s' " % role_code)[0]['parent_role_code']
+        return 'root' if parent_role_code == 'None' else parent_role_code
+
 
 class Business(ClModelImpl):
     '''
@@ -306,6 +315,16 @@ class RoleBusiness(ClModelImpl):
         pg_update.update("business", {'status': 1}, where=" business_code = '%s' " % business_code)
 
     @classmethod
+    def get_businesses_by_role(self, role_code):
+        '''
+        根据角色获取该角色可选业务
+        子角色可以选择父角色拥有的业务
+        '''
+        # 获取父角色代码
+        parent_role_code = Role.get_role_parent_role_code(role_code)
+        return self.get_businesses_by_role_code(parent_role_code)
+
+    @classmethod
     def get_businesses_by_roles(self, roles):
         '''
         获取所有业务
@@ -316,8 +335,27 @@ class RoleBusiness(ClModelImpl):
         sql = '''
           select business_code from business
             where business_code in
-              (select business_code from role_business where role_code in (%s))
+              (select business_code from role_business
+                where role_code in (%s)
+                  and status = 0
+              )
         ''' % roles_str
+        return pg_update.selectBySql(sql)
+
+    @classmethod
+    def get_businesses_by_role_code(self, role_code):
+        '''
+        获取某角色拥有的所有业务
+        '''
+        business_codes = pg_update.select("role_business", where="role_code = '%s'" % role_code)
+        where = ''
+        for business_code in business_codes:
+            where += "or seq_code like '%%%s%%'" % business_code['business_code']
+        sql = '''
+          select * from (
+            select * from business where status = 0
+          ) b where %s
+        ''' % where[2:]
         return pg_update.selectBySql(sql)
 
     @classmethod
@@ -361,6 +399,21 @@ class RoleBusiness(ClModelImpl):
                 and b.status = 0
         ''' % roles_str
         return pg_update.selectBySql(sql)
+
+    @classmethod
+    def delete_role_business(self, role_code, business_code):
+        '''
+        添加角色拥有业务
+        '''
+        where = (" role_code = '%s' and business_code = '%s' " % (role_code, business_code))
+        pg_update.delete('role_business', where=where)
+
+    @classmethod
+    def add_role_business(self, role_code, business_code):
+        '''
+        添加角色拥有业务
+        '''
+        pg_update.insertOne("role_business", {'role_code': role_code, 'business_code': business_code})
 
 
 class Api(ClModelImpl):

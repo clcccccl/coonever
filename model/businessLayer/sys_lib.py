@@ -31,7 +31,6 @@ def add_file(file_data):
 
 
 def clear_session(session):
-    print type(session)
     Session.clear_session(session)
 
 
