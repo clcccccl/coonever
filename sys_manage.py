@@ -19,7 +19,7 @@ def __getFuns():
     funs_str = []
     funs = globals().copy()
     for fun in funs:
-        if hasattr(funs[fun], '__call__') and fun[:2] != '__':
+        if type(funs[fun]).__name__ == 'function' and fun[:2] != '__':
             funs_str.append(funs[fun])
     return funs_str
 
@@ -79,8 +79,7 @@ def __addRoleBusiness(role, business):
 
 
 def __main():
-    __addApi()
-    __addBusinessApi('save_role_business', 'business_management')
+    __addBusinessApi('save_business_api', 'api_management')
     pass
 
 

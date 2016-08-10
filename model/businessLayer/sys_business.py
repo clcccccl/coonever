@@ -14,7 +14,7 @@ import math
 import tools
 
 from sys_wraps import CooError
-from dbImpl.user import User, UserRole, Role, Business, RoleBusiness, Api
+from dbImpl.user import User, UserRole, Role, Business, RoleBusiness, Api, BusinessApi
 
 
 '''
@@ -155,6 +155,19 @@ def get_role_businesses_tree(parm):
     return {'datas': tools.listToTree(businesses, 'parent_business_code', 'business_code')}
 
 
+def get_business_by_api(parm):
+    '''
+    根据api获取可拥有api的业务
+    '''
+    api = parm.get('request_map').get('api')
+    businesses = Business.get_component_businesses()
+    business_api = BusinessApi.get_businesses_by_api(api)
+    business_api = [business_code['business_code'] for business_code in business_api]
+    for business in businesses:
+        business['checked'] = True if business['business_code'] in business_api else False
+    return {'datas': businesses}
+
+
 def save_business(parm):
     '''
     业务的增删改
@@ -169,6 +182,9 @@ def save_business(parm):
 
 
 def save_role_business(parm):
+    '''
+    修改角色的业务
+    '''
     request_map = parm.get('request_map')
     checked = request_map.get('checked')
     if checked:
@@ -195,8 +211,21 @@ def edit_api(parm):
     '''
     request_map = parm.get('request_map')
     api = {'api': request_map['api']}
-    if isinstance(request_map['disable'], bool):
-        api['disable'] = 1 if request_map['disable'] else 0
+    if isinstance(request_map['session'], bool):
+        api['session'] = 1 if request_map['session'] else 0
     if isinstance(request_map['restrict'], bool):
         api['restrict'] = 1 if request_map['restrict'] else 0
     Api.update_api(api)
+
+
+def save_business_api(parm):
+    '''
+    修改业务api
+    '''
+    request_map = parm.get('request_map')
+    checked = request_map.get('checked')
+    if checked:
+        BusinessApi.add_business_api(request_map.get('business_code'), request_map.get('api'))
+    else:
+        BusinessApi.delete_business_api(request_map.get('business_code'), request_map.get('api'))
+    return {}

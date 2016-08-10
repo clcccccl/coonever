@@ -48,7 +48,7 @@
 	var component_chat;
 
 	component_chat = Vue.extend({
-	  template: __webpack_require__(19),
+	  template: __webpack_require__(23),
 	  data: function() {
 	    return {
 	      socket: null,
@@ -80,7 +80,7 @@
 
 /***/ },
 
-/***/ 19:
+/***/ 23:
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"ui main text container\" style=\"min-height: 100%;padding-top: 20px;\">\n<div class=\"ui comments\">\n  <h3 class=\"ui dividing header\">聊天</h3>\n  <div class=\"ui reply form\">\n    <div class=\"field\">\n      <input  @keyup.enter=\"newmessage\" v-model=\"message\"></input>\n    </div>\n  </div>\n  <div class=\"comment\">\n    <a class=\"avatar\">\n      <img src=\"/static/static/userfile/image/chenli.png\">\n    </a>\n    <div class=\"content\">\n      <a class=\"author\">马特</a>\n      <div class=\"metadata\">\n        <span class=\"date\">在今天5:42pm</span>\n      </div>\n      <div class=\"text\">\n        怎样的艺术！\n      </div>\n    </div>\n  </div>\n  <div class=\"comment\">\n    <a class=\"avatar\">\n      <img src=\"/static/static/userfile/image/chenli.png\">\n    </a>\n    <div class=\"content\">\n      <a class=\"author\">埃利奥特付</a>\n      <div class=\"metadata\">\n        <span class=\"date\">在昨天12:30am</span>\n      </div>\n      <div class=\"text\">\n        <p>这对我的调查非常有用。感谢！</p>\n      </div>\n    </div>\n  </div>\n  <div class=\"comment\">\n    <a class=\"avatar\">\n      <img src=\"/static/static/userfile/image/chenli.png\">\n    </a>\n    <div class=\"content\">\n      <a class=\"author\">乔亨德森</a>\n      <div class=\"metadata\">\n        <span class=\"date\">5天前</span>\n      </div>\n      <div class=\"text\">\n        老兄，这是可怕的。太感谢了！\n      </div>\n    </div>\n  </div>\n</div>\n</div>";

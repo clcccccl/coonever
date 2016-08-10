@@ -27,19 +27,35 @@
 			<tbody>
 				<tr v-for="api in apis">
 					<td>(% api.api %)</td>
-					<td>(% api.business_text %)</td>
+					<td>
+						<div class="ui left pointing dropdown link item"  id="(% api.api %)" v-if="api.restrict">
+							(% api.business_text %)<a><i class="configure icon" @click="getBusiness(api)"></i></a>
+							<div class="menu" style='padding: 0px 20px 20px 20px;'>
+								<div class="header item">
+									<i class="tags icon"></i>
+									业务选择
+								</div>
+								<div class="item_api" data-value="important" v-for="business in businesses">
+									<div class="ui checkbox">
+										<input type="checkbox" name="example" v-model="business.checked" style="disabled" @change="changeChecked(api, business)">
+										<label>(% business.business_name %)</label>
+									</div>
+								</div>
+							</div>
+						</div>
+					</td>
 					<td>(% api.api_explain %)</td>
 					<td>
-					    <div class="ui toggle checkbox">
-						    <input type="checkbox" name="public" v-model="api.session" @click="change_status(api)">
-						    <label> </label>
-					    </div>
+						<div class="ui toggle checkbox">
+							<input type="checkbox" name="public" v-model="api.session" @change="save_status(api)">
+							<label> </label>
+						</div>
 					</td>
 					<td>
-					    <div class="ui toggle checkbox">
-						    <input type="checkbox" name="public" v-model="api.restrict" @click="change_status(api)">
-						    <label> </label>
-					    </div>
+						<div class="ui toggle checkbox">
+							<input type="checkbox" name="public" v-model="api.restrict" @change="save_status(api)">
+							<label> </label>
+						</div>
 					</td>
 				</tr>
 			</tbody>

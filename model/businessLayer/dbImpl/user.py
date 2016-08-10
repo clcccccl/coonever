@@ -276,6 +276,13 @@ class Business(ClModelImpl):
         return pg_update.select("business", order_by="id", limit=-1)
 
     @classmethod
+    def get_component_businesses(self):
+        '''
+        获取所有业务
+        '''
+        return pg_update.select("business", order_by="id", where="component is not null", limit=-1)
+
+    @classmethod
     def update_business(self, data_map):
         '''
         编辑和删除业务
@@ -403,7 +410,7 @@ class RoleBusiness(ClModelImpl):
     @classmethod
     def delete_role_business(self, role_code, business_code):
         '''
-        添加角色拥有业务
+        删除角色拥有业务
         '''
         where = (" role_code = '%s' and business_code = '%s' " % (role_code, business_code))
         pg_update.delete('role_business', where=where)
@@ -479,6 +486,34 @@ class Api(ClModelImpl):
           select * from api where api = '%s'
         ''' % api
         return pg_update.selectBySql(sql)
+
+
+class BusinessApi(ClModelImpl):
+    '''
+    业务api相关操作
+    '''
+    @classmethod
+    def get_businesses_by_api(self, api):
+        '''
+        通过api获取业务api数据
+        '''
+        return pg_update.select("business_api", where=" api = '%s' " % api)
+
+    @classmethod
+    def delete_business_api(self, business_code, api):
+        '''
+        删除业务拥有api
+        '''
+        where = (" api = '%s' and business_code = '%s' " % (api, business_code))
+        pg_update.delete('business_api', where=where)
+
+    @classmethod
+    def add_business_api(self, business_code, api):
+        '''
+        添加业务拥有api
+        '''
+        pg_update.insertOne("business_api", {'api': api, 'business_code': business_code})
+
 
 
 if __name__ == "__main__":

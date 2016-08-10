@@ -49,7 +49,8 @@
 	module.exports = Vue.extend({
 	  template: __webpack_require__(5),
 	  components: {
-	    'paging': __webpack_require__(6)
+	    'paging': __webpack_require__(6),
+	    'api-choose-business': __webpack_require__(8)
 	  },
 	  data: function() {
 	    return {
@@ -57,24 +58,13 @@
 	      api_map: {},
 	      api: {},
 	      pag_count: 0,
-	      search_key: ''
+	      search_key: '',
+	      businesses: []
 	    };
 	  },
 	  events: {
 	    page_change: function(page) {
 	      return this.load(page);
-	    }
-	  },
-	  watch: {
-	    'api.disable': function() {
-	      if (typeof this.api.disable === 'boolean') {
-	        return this.save_status();
-	      }
-	    },
-	    'api.restrict': function() {
-	      if (typeof this.api.restrict === 'boolean') {
-	        return this.save_status();
-	      }
 	    }
 	  },
 	  attached: function() {
@@ -98,24 +88,65 @@
 	        del_fun: (function(_this) {
 	          return function(data) {
 	            _this.apis = data.datas;
-	            return _this.pag_count = data.page_count;
+	            _this.pag_count = data.page_count;
+	            return _this.$nextTick(function() {
+	              return this.init_dropdown();
+	            });
 	          };
 	        })(this)
 	      });
 	    },
-	    change_status: function(api) {
-	      return this.api = api;
+	    getBusiness: function(api) {
+	      var parm;
+	      this.businesses = [];
+	      this.api = api;
+	      parm = JSON.stringify({
+	        request_type: "get_business_by_api",
+	        request_map: {
+	          api: this.api.api
+	        }
+	      });
+	      return cl.post_load({
+	        parm: parm,
+	        del_fun: (function(_this) {
+	          return function(data) {
+	            _this.businesses = data.datas;
+	            return _this.$nextTick(function() {
+	              return this.init_dropdown();
+	            });
+	          };
+	        })(this)
+	      });
 	    },
 	    save_status: function(api) {
 	      var parm;
 	      parm = JSON.stringify({
 	        request_type: "edit_api",
-	        request_map: this.api
+	        request_map: api
 	      });
 	      return cl.post_load({
 	        parm: parm,
 	        del_fun: (function(_this) {
 	          return function(data) {};
+	        })(this)
+	      });
+	    },
+	    changeChecked: function(api, business) {
+	      var parm;
+	      parm = JSON.stringify({
+	        request_type: "save_business_api",
+	        request_map: {
+	          api: api.api,
+	          business_code: business.business_code,
+	          checked: business.checked
+	        }
+	      });
+	      return cl.post_load({
+	        parm: parm,
+	        del_fun: (function(_this) {
+	          return function(data) {
+	            return _this.load(1);
+	          };
 	        })(this)
 	      });
 	    }
@@ -160,7 +191,7 @@
 
 
 	// module
-	exports.push([module.id, ".ui.menu .item:before {\n  background: #F0F0F0;\n}\n.ui.attached.menu {\n  background-color: #F0F0F0;\n}\n.ui.attached.menu:not(.tabular) {\n  border: 0px;\n  border-bottom: 1px solid #ddd;\n}\n.ui.header .icon.himg {\n  padding-left: 30px;\n}\n.icon.hideimg {\n  margin-left: 20px;\n}\n", ""]);
+	exports.push([module.id, ".ui.menu .item:before {\n  background: #F0F0F0;\n}\n.ui.attached.menu {\n  background-color: #F0F0F0;\n}\n.ui.attached.menu:not(.tabular) {\n  border: 0px;\n  border-bottom: 1px solid #ddd;\n}\n.ui.header .icon.himg {\n  padding-left: 30px;\n}\n.icon.hideimg {\n  margin-left: 20px;\n}\n.item_api {\n  padding-top: 10px;\n}\n", ""]);
 
 	// exports
 
@@ -477,7 +508,7 @@
 /* 5 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"ui main container\" style=\"min-height: 100%;padding-left: 100px\">\n\t<div class=\"ui top attached menu\">\n\t\t<div class=\"ui dropdown icon item\">\n\t\t\t<h3 class=\"ui header\">API管理</h3>\n\t\t</div>\n\t\t<div class=\"right menu\">\n\t\t\t<div class=\"ui right aligned category search item\">\n\t\t\t\t<div class=\"ui transparent icon input\">\n\t\t\t\t\t<input class=\"prompt\" type=\"text\" v-model=\"search_key\" placeholder=\"Search api...\">\n\t\t\t\t\t<i class=\"search link icon\" @click=\"load(1)\"></i>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"results\"></div>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n\t<div class=\"ui bottom attached segment\" style=\"background-color: #F8F8F8;border:0px;\">\n\t\t<table class=\"ui very basic table\">\n\t\t\t<thead>\n\t\t\t\t<tr>\n\t\t\t\t\t<th>api</th>\n\t\t\t\t\t<th>归属</th>\n\t\t\t\t\t<th>api介绍</th>\n\t\t\t\t\t<th>在线验证</th>\n\t\t\t\t\t<th>限权验证</th>\n\t\t\t\t</tr>\n\t\t\t</thead>\n\t\t\t<tbody>\n\t\t\t\t<tr v-for=\"api in apis\">\n\t\t\t\t\t<td>(% api.api %)</td>\n\t\t\t\t\t<td>(% api.business_text %)</td>\n\t\t\t\t\t<td>(% api.api_explain %)</td>\n\t\t\t\t\t<td>\n\t\t\t\t\t    <div class=\"ui toggle checkbox\">\n\t\t\t\t\t\t    <input type=\"checkbox\" name=\"public\" v-model=\"api.session\" @click=\"change_status(api)\">\n\t\t\t\t\t\t    <label> </label>\n\t\t\t\t\t    </div>\n\t\t\t\t\t</td>\n\t\t\t\t\t<td>\n\t\t\t\t\t    <div class=\"ui toggle checkbox\">\n\t\t\t\t\t\t    <input type=\"checkbox\" name=\"public\" v-model=\"api.restrict\" @click=\"change_status(api)\">\n\t\t\t\t\t\t    <label> </label>\n\t\t\t\t\t    </div>\n\t\t\t\t\t</td>\n\t\t\t\t</tr>\n\t\t\t</tbody>\n\t\t</table>\n\t\t<paging :pag_count.sync=\"pag_count\"></paging>\t\n\t</div>\n</div>";
+	module.exports = "<div class=\"ui main container\" style=\"min-height: 100%;padding-left: 100px\">\n\t<div class=\"ui top attached menu\">\n\t\t<div class=\"ui dropdown icon item\">\n\t\t\t<h3 class=\"ui header\">API管理</h3>\n\t\t</div>\n\t\t<div class=\"right menu\">\n\t\t\t<div class=\"ui right aligned category search item\">\n\t\t\t\t<div class=\"ui transparent icon input\">\n\t\t\t\t\t<input class=\"prompt\" type=\"text\" v-model=\"search_key\" placeholder=\"Search api...\">\n\t\t\t\t\t<i class=\"search link icon\" @click=\"load(1)\"></i>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"results\"></div>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n\t<div class=\"ui bottom attached segment\" style=\"background-color: #F8F8F8;border:0px;\">\n\t\t<table class=\"ui very basic table\">\n\t\t\t<thead>\n\t\t\t\t<tr>\n\t\t\t\t\t<th>api</th>\n\t\t\t\t\t<th>归属</th>\n\t\t\t\t\t<th>api介绍</th>\n\t\t\t\t\t<th>在线验证</th>\n\t\t\t\t\t<th>限权验证</th>\n\t\t\t\t</tr>\n\t\t\t</thead>\n\t\t\t<tbody>\n\t\t\t\t<tr v-for=\"api in apis\">\n\t\t\t\t\t<td>(% api.api %)</td>\n\t\t\t\t\t<td>\n\t\t\t\t\t\t<div class=\"ui left pointing dropdown link item\"  id=\"(% api.api %)\" v-if=\"api.restrict\">\n\t\t\t\t\t\t\t(% api.business_text %)<a><i class=\"configure icon\" @click=\"getBusiness(api)\"></i></a>\n\t\t\t\t\t\t\t<div class=\"menu\" style='padding: 0px 20px 20px 20px;'>\n\t\t\t\t\t\t\t\t<div class=\"header item\">\n\t\t\t\t\t\t\t\t\t<i class=\"tags icon\"></i>\n\t\t\t\t\t\t\t\t\t业务选择\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t<div class=\"item_api\" data-value=\"important\" v-for=\"business in businesses\">\n\t\t\t\t\t\t\t\t\t<div class=\"ui checkbox\">\n\t\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" name=\"example\" v-model=\"business.checked\" style=\"disabled\" @change=\"changeChecked(api, business)\">\n\t\t\t\t\t\t\t\t\t\t<label>(% business.business_name %)</label>\n\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</td>\n\t\t\t\t\t<td>(% api.api_explain %)</td>\n\t\t\t\t\t<td>\n\t\t\t\t\t\t<div class=\"ui toggle checkbox\">\n\t\t\t\t\t\t\t<input type=\"checkbox\" name=\"public\" v-model=\"api.session\" @change=\"save_status(api)\">\n\t\t\t\t\t\t\t<label> </label>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</td>\n\t\t\t\t\t<td>\n\t\t\t\t\t\t<div class=\"ui toggle checkbox\">\n\t\t\t\t\t\t\t<input type=\"checkbox\" name=\"public\" v-model=\"api.restrict\" @change=\"save_status(api)\">\n\t\t\t\t\t\t\t<label> </label>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</td>\n\t\t\t\t</tr>\n\t\t\t</tbody>\n\t\t</table>\n\t\t<paging :pag_count.sync=\"pag_count\"></paging>\t\n\t</div>\n</div>";
 
 /***/ },
 /* 6 */
@@ -554,6 +585,87 @@
 /***/ function(module, exports) {
 
 	module.exports = "<tr>\n\t<th colspan=\"4\" v-if=\"show_page\">\n\t\t<div class=\"ui right floated pagination menu\" style=\"background-color: #F0F0F0;\">\n\t\t\t<a class=\"icon item\" @click=\"next('asd')\"  v-bind:class=\"{ 'disabled': current_page == 1}\">\n\t\t\t\t<i class=\"left chevron icon\"></i>\n\t\t\t</a>\n\t\t\t<a class=\"item\" v-for=\"page in page_list\" v-if=\"page>(first_page - 1) && page<(first_page + show_count)\" v-bind:class=\"{ 'active': page==current_page}\" @click=\"this_page(page)\">(%page%)</a>\n\t\t\t<a class=\"icon item\" @click=\"next('add')\" v-bind:class=\"{ 'disabled': (current_page + 1) > pag_count}\">\n\t\t\t\t<i class=\"right chevron icon\"></i>\n\t\t\t</a>\n\t\t</div>\n\t</th>\n</tr>";
+
+/***/ },
+/* 8 */
+/***/ function(module, exports, __webpack_require__) {
+
+	__webpack_require__(9);
+
+	module.exports = Vue.extend({
+	  name: 'choose-business',
+	  template: __webpack_require__(11),
+	  props: ['businesses', 'role_code'],
+	  methods: {
+	    changeChecked: function(business) {
+	      var parm;
+	      parm = JSON.stringify({
+	        request_type: "save_role_business",
+	        request_map: {
+	          role_code: this.role_code,
+	          business_code: business.business_code,
+	          checked: business.checked
+	        }
+	      });
+	      return cl.post_load({
+	        parm: parm,
+	        del_fun: (function(_this) {
+	          return function(data) {
+	            _this.users = data.datas;
+	            return _this.pag_count = data.page_count;
+	          };
+	        })(this)
+	      });
+	    }
+	  }
+	});
+
+
+/***/ },
+/* 9 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(10);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(4)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/less-loader/index.js!./style.less", function() {
+				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/less-loader/index.js!./style.less");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 10 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(3)();
+	// imports
+
+
+	// module
+	exports.push([module.id, ".item_business {\n  padding-left: 20px;\n  padding-top: 10px;\n}\n", ""]);
+
+	// exports
+
+
+/***/ },
+/* 11 */
+/***/ function(module, exports) {
+
+	module.exports = "<div>\n    <div class=\"item_business\" data-value=\"important\" v-for=\"business in businesses\">\n\t\t<div class=\"ui checkbox\">\n\t\t\t<input type=\"checkbox\" name=\"example\" v-model=\"business.checked\" style=\"disabled\" @change=\"changeChecked(business)\">\n\t\t\t<label>(% business.business_name %)</label>\n\t\t</div>\n\t\t<div class=\"item\">\n\t\t</div>\n\t</div>\n</div>\n";
 
 /***/ }
 /******/ ]);

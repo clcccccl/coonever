@@ -44,10 +44,10 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(8);
+	__webpack_require__(12);
 
 	module.exports = Vue.extend({
-	  template: __webpack_require__(10),
+	  template: __webpack_require__(14),
 	  data: function() {
 	    return {
 	      businesses: [],
@@ -93,8 +93,8 @@
 	    }
 	  },
 	  components: {
-	    'business-component': __webpack_require__(11),
-	    'error-modal': __webpack_require__(13)
+	    'business-component': __webpack_require__(15),
+	    'error-modal': __webpack_require__(17)
 	  },
 	  attached: function() {
 	    this.load();
@@ -480,13 +480,17 @@
 /* 5 */,
 /* 6 */,
 /* 7 */,
-/* 8 */
+/* 8 */,
+/* 9 */,
+/* 10 */,
+/* 11 */,
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(9);
+	var content = __webpack_require__(13);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(4)(content, {});
@@ -506,7 +510,7 @@
 	}
 
 /***/ },
-/* 9 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(3)();
@@ -520,18 +524,18 @@
 
 
 /***/ },
-/* 10 */
+/* 14 */
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"ui main container\" style=\"min-height: 100%;padding-left: 100px\">\n\t<div class=\"ui top attached menu\">\n\t\t<div class=\"ui dropdown icon item\">\n\t\t\t<h3 class=\"ui header\">业务管理</h3>\n\t\t</div>\n\t</div>\n\t<div class=\"ui bottom attached segment\" style=\"background-color: #F8F8F8;border:0px;\" v-if=\"businesses.length > 0\">\n\t\t<business-component :businesses.sync=\"businesses\"></business-component>\n\t</div>\n\t<div class=\"ui modal\" id=\"edit-business-modal\">\n\t\t<i class=\"close icon\"></i>\n\t\t<div class=\"header\">业务详情</div>\n\t\t<div class=\"content\">\n\t\t\t<div class=\"ui form business\">\n\t\t\t\t<div class=\"field\">\n\t\t\t\t\t<label>业务名</label>\n\t\t\t\t\t<input name=\"business_name\" placeholder=\"请输入业务名\" type=\"text\" v-model=\"business.business_name\">\n\t\t\t\t</div>\n\t\t\t\t<div class=\"field\">\n\t\t\t\t\t<label>业务编码</label>\n\t\t\t\t\t<input name=\"business_code\" placeholder=\"请输入业务编码\" type=\"text\" v-model=\"business.business_code\">\n\t\t\t\t</div>\n\t\t\t\t<div class=\"field\">\n\t\t\t\t\t<label>业务描述</label>\n\t\t\t\t\t<input type=\"text\" placeholder=\"请输入业务描述\" v-model=\"business.business_explain\">\n\t\t\t\t</div>\n\t\t\t\t<div class=\"field\">\n\t\t\t\t\t<label>是否为子节点</label>\n\t\t\t\t\t<div class=\"ui toggle checkbox\">\n\t\t\t\t\t\t<input type=\"checkbox\" name=\"public\" v-model=\"business.is_leaf\">\n\t\t\t\t\t\t<label v-if=\"business.is_leaf\">(% is_leaf[1] %)</label>\n\t\t\t\t\t\t<label v-if=\"!business.is_leaf\">(% is_leaf[0] %)</label>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"field\" v-if=\"business.is_leaf\">\n\t\t\t\t\t<label>业务模块</label>\n\t\t\t\t\t<input name=\"component\" placeholder=\"请输入component\" type=\"text\" v-model=\"business.component\">\n\t\t\t\t</div>\n\t\t\t\t<div class=\"field\" v-if=\"business.is_leaf\">\n\t\t\t\t\t<label>菜单图标</label>\n\t\t\t\t\t<input type=\"text\" placeholder=\"请输入图标\" v-model=\"business.icon\">\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"actions\">\n\t\t\t<div class=\"ui buttons\">\n\t\t\t\t<button class=\"ui deny button\">返回</button>\n\t\t\t\t<div class=\"or\"></div>\n\t\t\t\t<button class=\"ui submit blue right button\" @click=\"save\">保存</button>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n\t<error-modal :error_options=\"rm_business_error_options\"></error-modal>\n</div>";
 
 /***/ },
-/* 11 */
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = Vue.extend({
 	  name: 'business_component',
-	  template: __webpack_require__(12),
+	  template: __webpack_require__(16),
 	  props: ['businesses'],
 	  data: function() {
 	    return {
@@ -573,48 +577,10 @@
 
 
 /***/ },
-/* 12 */
-/***/ function(module, exports) {
-
-	module.exports = "<div class=\"ui list\">\n\t<div v-for=\"business in businesses\" class=\"item\">\n\t\t<i class=\"folder open icon\" v-bind:class=\"{ 'open': business.show}\" @click=\"showChild(business)\"></i>\n\t\t<div class=\"content\">\n\t\t\t<div class=\"header\">(% business.business_name %)\n\t\t\t\t<i class=\"edit icon\" style=\"margin-left: 10px\" @click=\"edit_business(business)\"></i>\n\t\t\t\t<i class=\"add circle icon\" @click=\"add_business(business)\"></i>\n\t\t\t\t<div class=\"ui left pointing dropdown link item\">\n\t\t\t\t\t<i class=\"remove circle icon\"></i>\n\t\t\t\t\t<div class=\"menu\">\n\t\t\t\t\t\t<button class=\"item\" style=\"background: #FFFAF3\" @click=\"rm_business(business)\">确认删除?请谨慎操作！</button>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div class=\"description\">(% business.business_explain %)</div>\n\t\t\t<business_component :businesses.sync=\"business.child\" v-if=\"business.show && business.child && business.child.length > 0\"></business_component>\n\t\t</div>\n\t</div>\n</div>";
-
-/***/ },
-/* 13 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = Vue.extend({
-	  template: __webpack_require__(14),
-	  props: ['error_options'],
-	  components: {
-	    'modal-content': __webpack_require__(15)
-	  }
-	});
-
-
-/***/ },
-/* 14 */
-/***/ function(module, exports) {
-
-	module.exports = "<div class=\"ui modal\" id=\"(%error_options.id%)\">\n\t<i class=\"close icon\"></i>\n\t<div class=\"header\">\n\t\t(%error_options.modal_title%)\n\t</div>\n\t<div class=\"content\">\n\t\t<p>(%error_options.modal_content%)</p>\n\t</div>\n\t<div class=\"actions\">\n\t\t<div class=\"ui black deny button\">\n\t\t\t返回\n\t\t</div>\n\t</div>\n</div>";
-
-/***/ },
-/* 15 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = Vue.extend({
-	  template: __webpack_require__(16),
-	  props: ['content_options', 'content_data'],
-	  components: {
-	    'field': __webpack_require__(17)
-	  }
-	});
-
-
-/***/ },
 /* 16 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"content\">\n\t<div class=\"ui form\">\n\t\t<div class=\"field\" v-for=\"field in content_options\">\n\t\t\t<field :field_options=\"field\"></field>\n\t\t</div>\n\t</div>\n</div>";
+	module.exports = "<div class=\"ui list\">\n\t<div v-for=\"business in businesses\" class=\"item\">\n\t\t<i class=\"folder open icon\" v-bind:class=\"{ 'open': business.show}\" @click=\"showChild(business)\"></i>\n\t\t<div class=\"content\">\n\t\t\t<div class=\"header\">(% business.business_name %)\n\t\t\t\t<i class=\"edit icon\" style=\"margin-left: 10px\" @click=\"edit_business(business)\"></i>\n\t\t\t\t<i class=\"add circle icon\" @click=\"add_business(business)\"></i>\n\t\t\t\t<div class=\"ui left pointing dropdown link item\">\n\t\t\t\t\t<i class=\"remove circle icon\"></i>\n\t\t\t\t\t<div class=\"menu\">\n\t\t\t\t\t\t<button class=\"item\" style=\"background: #FFFAF3\" @click=\"rm_business(business)\">确认删除?请谨慎操作！</button>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div class=\"description\">(% business.business_explain %)</div>\n\t\t\t<business_component :businesses.sync=\"business.child\" v-if=\"business.show && business.child && business.child.length > 0\"></business_component>\n\t\t</div>\n\t</div>\n</div>";
 
 /***/ },
 /* 17 */
@@ -622,12 +588,50 @@
 
 	module.exports = Vue.extend({
 	  template: __webpack_require__(18),
-	  props: ['field_options']
+	  props: ['error_options'],
+	  components: {
+	    'modal-content': __webpack_require__(19)
+	  }
 	});
 
 
 /***/ },
 /* 18 */
+/***/ function(module, exports) {
+
+	module.exports = "<div class=\"ui modal\" id=\"(%error_options.id%)\">\n\t<i class=\"close icon\"></i>\n\t<div class=\"header\">\n\t\t(%error_options.modal_title%)\n\t</div>\n\t<div class=\"content\">\n\t\t<p>(%error_options.modal_content%)</p>\n\t</div>\n\t<div class=\"actions\">\n\t\t<div class=\"ui black deny button\">\n\t\t\t返回\n\t\t</div>\n\t</div>\n</div>";
+
+/***/ },
+/* 19 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = Vue.extend({
+	  template: __webpack_require__(20),
+	  props: ['content_options', 'content_data'],
+	  components: {
+	    'field': __webpack_require__(21)
+	  }
+	});
+
+
+/***/ },
+/* 20 */
+/***/ function(module, exports) {
+
+	module.exports = "<div class=\"content\">\n\t<div class=\"ui form\">\n\t\t<div class=\"field\" v-for=\"field in content_options\">\n\t\t\t<field :field_options=\"field\"></field>\n\t\t</div>\n\t</div>\n</div>";
+
+/***/ },
+/* 21 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = Vue.extend({
+	  template: __webpack_require__(22),
+	  props: ['field_options']
+	});
+
+
+/***/ },
+/* 22 */
 /***/ function(module, exports) {
 
 	module.exports = "<label>(% field_options.label %)</label>\n<input type=\"text\" disabled=\"(%field_options.edit%)\" v-if=\"field_options.type=='text'\">\n<textarea type=\"textarea\" disabled=\"(%field_options.edit%)\" rows=\"3\" v-if=\"field_options.type=='textarea'\"></textarea>\n";
