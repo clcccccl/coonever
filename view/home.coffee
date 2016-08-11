@@ -39,9 +39,12 @@ window.v_head = new Vue
       cl.component_load
         component_name: component_name
         success:=>
-          @change_component(component_name)
-    change_component:(component_name) ->
+          @change_component(component_name, true)
+    change_component:(component_name, success=false) ->
       if Vue.options.components.propertyIsEnumerable(component_name)
         @view = component_name
+      else if success
+        cl.noticeWarning("别乱来")
+        @change_component('welcome')
       else
         @load_new_component(component_name)

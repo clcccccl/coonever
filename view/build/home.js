@@ -46,11 +46,11 @@
 
 	var Vue;
 
-	__webpack_require__(24);
+	__webpack_require__(30);
 
-	__webpack_require__(26);
+	__webpack_require__(32);
 
-	Vue = __webpack_require__(27);
+	Vue = __webpack_require__(33);
 
 	window.v_head = new Vue({
 	  el: "#all",
@@ -63,9 +63,9 @@
 	    };
 	  },
 	  components: {
-	    'head_c': __webpack_require__(28),
-	    'left_bar_c': __webpack_require__(38),
-	    'foot_c': __webpack_require__(40)
+	    'head_c': __webpack_require__(34),
+	    'left_bar_c': __webpack_require__(44),
+	    'foot_c': __webpack_require__(46)
 	  },
 	  events: {
 	    change_component: function(component_name) {
@@ -102,14 +102,20 @@
 	        component_name: component_name,
 	        success: (function(_this) {
 	          return function() {
-	            return _this.change_component(component_name);
+	            return _this.change_component(component_name, true);
 	          };
 	        })(this)
 	      });
 	    },
-	    change_component: function(component_name) {
+	    change_component: function(component_name, success) {
+	      if (success == null) {
+	        success = false;
+	      }
 	      if (Vue.options.components.propertyIsEnumerable(component_name)) {
 	        return this.view = component_name;
+	      } else if (success) {
+	        cl.noticeWarning("别乱来");
+	        return this.change_component('welcome');
 	      } else {
 	        return this.load_new_component(component_name);
 	      }
@@ -448,13 +454,19 @@
 /* 21 */,
 /* 22 */,
 /* 23 */,
-/* 24 */
+/* 24 */,
+/* 25 */,
+/* 26 */,
+/* 27 */,
+/* 28 */,
+/* 29 */,
+/* 30 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(25);
+	var content = __webpack_require__(31);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(4)(content, {});
@@ -474,7 +486,7 @@
 	}
 
 /***/ },
-/* 25 */
+/* 31 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(3)();
@@ -488,7 +500,7 @@
 
 
 /***/ },
-/* 26 */
+/* 32 */
 /***/ function(module, exports) {
 
 	window.cl = {
@@ -645,7 +657,7 @@
 
 
 /***/ },
-/* 27 */
+/* 33 */
 /***/ function(module, exports) {
 
 	Vue.config.debug = true;
@@ -656,15 +668,15 @@
 
 
 /***/ },
-/* 28 */
+/* 34 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(29);
+	__webpack_require__(35);
 
 	module.exports = Vue.extend({
-	  template: __webpack_require__(31),
+	  template: __webpack_require__(37),
 	  components: {
-	    'user-self-icon': __webpack_require__(32)
+	    'user-self-icon': __webpack_require__(38)
 	  },
 	  props: ['show_left_bar', 'head_type', 'login_view'],
 	  methods: {
@@ -683,13 +695,13 @@
 
 
 /***/ },
-/* 29 */
+/* 35 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(30);
+	var content = __webpack_require__(36);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(4)(content, {});
@@ -709,7 +721,7 @@
 	}
 
 /***/ },
-/* 30 */
+/* 36 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(3)();
@@ -723,22 +735,22 @@
 
 
 /***/ },
-/* 31 */
+/* 37 */
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"ui fixed inverted menu grid four column\" style=\"padding: 0px\" id=\"v-head\">\n\t<div class=\"column\">\n\t\t<div class=\"ui dividing\" v-on:click=\"changer_menu\" style=\"color: #ffffff;padding:10px;padding-right: 20px\" v-if=\"head_type!='login' && head_type!='register'\">\n\t\t\t<label><i class=\"grid layout icon\"></i>菜单</label>\n\t\t</div>\n\t</div>\n\t<div class=\"column\">\n\t</div>\n\t<div class=\"column\">\n\t</div>\n\t<div class=\"column\">\n\t\t<div class=\"ui dividing\" style=\"color: #ffffff;float:right;padding:10px;padding-right: 20px\" v-if=\"head_type=='login'\" v-on:click=\"change_component('register')\">\n\t\t<label><i class=\"add square icon\"></i>注册</label>\n\t\t</div>\n\t\t<div class=\"ui dividing\" style=\"color: #ffffff;float:right;padding:10px;padding-right: 20px\" v-if=\"head_type=='register'\" v-on:click=\"change_component('login')\">\n\t\t\t<label><i class=\"ticket icon\"></i>登陆</label>\n\t\t</div>\n\t\t<div class=\"ui dividing\" style=\"color: #ffffff;float:right;padding:10px;padding-right: 20px\" v-if=\"head_type!='login' && head_type!='register'\">\n        \t<user-self-icon></user-self-icon>\n        </div>\n    </div>\n</div>\n";
 
 /***/ },
-/* 32 */
+/* 38 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = Vue.extend({
-	  template: __webpack_require__(33),
+	  template: __webpack_require__(39),
 	  directives: {
-	    'user-head': __webpack_require__(34)
+	    'user-head': __webpack_require__(40)
 	  },
 	  components: {
-	    'user-info': __webpack_require__(35)
+	    'user-info': __webpack_require__(41)
 	  },
 	  data: function() {
 	    return {
@@ -780,13 +792,13 @@
 
 
 /***/ },
-/* 33 */
+/* 39 */
 /***/ function(module, exports) {
 
 	module.exports = "<a class=\"ui image label user-head\" style=\"height: 30px\" v-on:click=\"change_component('user_detail')\"><img v-user-head=\"user.head_file\" style=\"min-height: 30px;\">(% user.name %)</a>\n<div class=\"ui popup card\" style=\"padding: 0px;margin: 0px\">\n\t<user-info :type.sync=\"info_type\" :user_detail.sync=\"user\"></user-info>\n</div>";
 
 /***/ },
-/* 34 */
+/* 40 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -803,14 +815,14 @@
 
 
 /***/ },
-/* 35 */
+/* 41 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = Vue.extend({
-	  template: __webpack_require__(36),
+	  template: __webpack_require__(42),
 	  directives: {
-	    'user-head': __webpack_require__(34),
-	    'dateformat': __webpack_require__(37)
+	    'user-head': __webpack_require__(40),
+	    'dateformat': __webpack_require__(43)
 	  },
 	  props: ['type', 'user_detail'],
 	  methods: {
@@ -822,13 +834,13 @@
 
 
 /***/ },
-/* 36 */
+/* 42 */
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"image\" v-if=\"type!='popup'\">\n\t<img v-user-head=\"user_detail.head_file\" style=\"max-height: 200px;\">\n</div>\n<div class=\"content\" style=\"padding-top: 10px\" v-if=\"type!='popup'\">\n\t<h3 class=\"ui header\">(% user_detail.name %)<div class=\"sub header\">(% user_detail.account %)</div>\n\t</h3>\n\t<div class=\"description\">(% user_detail.motto %)</div>\n\t<div class=\"description\" style=\"padding-top: 10px;color:#999999\" >加入时间：\n\t    <span v-dateformat=\"user_detail.create_date\"></span>\n\t</div>\n</div>\n<div class=\"image\" v-if=\"type=='popup'\">\n\t<img  v-user-head=\"user_detail.head_file\" style=\"max-height: 200px\">\n</div>\n<div class=\"content\" v-if=\"type=='popup'\">\n\t<div class=\"header\">(% user_detail.name %)</div>\n\t<div class=\"meta\">\n\t\t<a>(% user_detail.account %)</a>\n\t</div>\n\t<div class=\"description\">(% user_detail.motto %)</div>\n</div>\n<div class=\"extra content\" v-if=\"type=='popup'\">\n\t<span class=\"right floated\" v-on:click=\"logout\"><label><i class=\"power icon\"></i>退出</label></span>\n</div>";
 
 /***/ },
-/* 37 */
+/* 43 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -847,11 +859,11 @@
 
 
 /***/ },
-/* 38 */
+/* 44 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = Vue.extend({
-	  template: __webpack_require__(39),
+	  template: __webpack_require__(45),
 	  data: function() {
 	    return {
 	      bar_data: []
@@ -884,22 +896,22 @@
 
 
 /***/ },
-/* 39 */
+/* 45 */
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"ui fixed inverted vertical sticky menu\" style=\"min-height: 100%;padding-top: 80px;max-width: 140px\">\n\t<div class=\"ui container\">\n\t\t<a class=\"header item\" @click=\"change_component('welcome')\">\n\t\t\t<i class=\"home icon\"></i>首页\n\t\t</a>\n\t\t<div class=\"ui simple dropdown item\" v-for=\"bar in bar_data\">\n\t\t    (% bar.business_name %)<i class=\"dropdown icon\"></i>\n\t\t    <div class=\"menu\">\n\t\t\t\t<a class=\"item\" @click=\"change_component(child_bar.component)\" v-for=\"child_bar in bar.child\"><i class=\"(% child_bar.icon %) icon\"></i>(% child_bar.business_name %)</a>\n\t\t\t</div>\n\t\t</div>\n\t</div> \n</div>";
 
 /***/ },
-/* 40 */
+/* 46 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = Vue.extend({
-	  template: __webpack_require__(41)
+	  template: __webpack_require__(47)
 	});
 
 
 /***/ },
-/* 41 */
+/* 47 */
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"ui fixed inverted vertical footer segment\">\n\t<div class=\"ui center aligned container\">\n\t\t<div class=\"ui horizontal inverted small divided link list\">\n\t\t\t<a class=\"item\" href=\"#\">Site Map</a>\n\t\t\t<a class=\"item\" href=\"#\">Contact Us</a>\n\t\t\t<a class=\"item\" href=\"#\">Terms and Conditions</a>\n\t\t\t<a class=\"item\" href=\"#\">Privacy Policy</a>\n\t\t</div>\n\t</div>\n</div>";

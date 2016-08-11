@@ -6,6 +6,7 @@ module.exports =
     components:
       'paging': require('../../components/paging')
       'choose-role': require('../../components/choose_role')
+      'loading': require('../../components/loading')
     data: ->
       users:[]
       edit_add:false
@@ -15,6 +16,7 @@ module.exports =
       search_key: ''
       role_tree: []
       checked_roles:[]
+      loading: false
     events: 
       page_change: (page)->
         @load(page)
@@ -34,6 +36,7 @@ module.exports =
             @.$nextTick ->
               @init_dropdown()
       load:(page)->
+        @loading = true
         parm = JSON.stringify
           request_type: "get_users"
           request_map: {page:page,search_key:@search_key}
@@ -44,6 +47,7 @@ module.exports =
             @pag_count = data.page_count
             @.$nextTick ->
               @init_dropdown()
+              @loading = false
       change_role:(user)->
         @checked_roles = []
         @get_checked(@role_tree)
@@ -67,6 +71,7 @@ module.exports =
           if role.child
             @get_checked(role.child)
       del:(user) ->
+        @loading = true
         @user_map = cl.cl_copy(user)
         parm = JSON.stringify
           request_type: "del_user"
@@ -74,6 +79,7 @@ module.exports =
         cl.post_load
           parm:parm
           del_fun:(data)=>
+            @loading = false
             @load(1)
             @user_map = {}
 

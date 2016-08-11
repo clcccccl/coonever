@@ -1,10 +1,13 @@
-component_chat =
+require './style.less'
+
+module.exports =
   Vue.extend
     template: require('./template.html')
     data:->
       socket : null
       message : ''
     attached: ->
+      console.log 'asdasdas'
       @init_socket()
     methods:
       init_socket:->
@@ -16,5 +19,3 @@ component_chat =
           console.log evt.data
       newmessage:->
         @socket.send(@message)
-
-Vue.component('chat', component_chat)

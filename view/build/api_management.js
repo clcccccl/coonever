@@ -49,8 +49,7 @@
 	module.exports = Vue.extend({
 	  template: __webpack_require__(5),
 	  components: {
-	    'paging': __webpack_require__(6),
-	    'api-choose-business': __webpack_require__(8)
+	    'paging': __webpack_require__(6)
 	  },
 	  data: function() {
 	    return {
@@ -585,87 +584,6 @@
 /***/ function(module, exports) {
 
 	module.exports = "<tr>\n\t<th colspan=\"4\" v-if=\"show_page\">\n\t\t<div class=\"ui right floated pagination menu\" style=\"background-color: #F0F0F0;\">\n\t\t\t<a class=\"icon item\" @click=\"next('asd')\"  v-bind:class=\"{ 'disabled': current_page == 1}\">\n\t\t\t\t<i class=\"left chevron icon\"></i>\n\t\t\t</a>\n\t\t\t<a class=\"item\" v-for=\"page in page_list\" v-if=\"page>(first_page - 1) && page<(first_page + show_count)\" v-bind:class=\"{ 'active': page==current_page}\" @click=\"this_page(page)\">(%page%)</a>\n\t\t\t<a class=\"icon item\" @click=\"next('add')\" v-bind:class=\"{ 'disabled': (current_page + 1) > pag_count}\">\n\t\t\t\t<i class=\"right chevron icon\"></i>\n\t\t\t</a>\n\t\t</div>\n\t</th>\n</tr>";
-
-/***/ },
-/* 8 */
-/***/ function(module, exports, __webpack_require__) {
-
-	__webpack_require__(9);
-
-	module.exports = Vue.extend({
-	  name: 'choose-business',
-	  template: __webpack_require__(11),
-	  props: ['businesses', 'role_code'],
-	  methods: {
-	    changeChecked: function(business) {
-	      var parm;
-	      parm = JSON.stringify({
-	        request_type: "save_role_business",
-	        request_map: {
-	          role_code: this.role_code,
-	          business_code: business.business_code,
-	          checked: business.checked
-	        }
-	      });
-	      return cl.post_load({
-	        parm: parm,
-	        del_fun: (function(_this) {
-	          return function(data) {
-	            _this.users = data.datas;
-	            return _this.pag_count = data.page_count;
-	          };
-	        })(this)
-	      });
-	    }
-	  }
-	});
-
-
-/***/ },
-/* 9 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// style-loader: Adds some css to the DOM by adding a <style> tag
-
-	// load the styles
-	var content = __webpack_require__(10);
-	if(typeof content === 'string') content = [[module.id, content, '']];
-	// add the styles to the DOM
-	var update = __webpack_require__(4)(content, {});
-	if(content.locals) module.exports = content.locals;
-	// Hot Module Replacement
-	if(false) {
-		// When the styles change, update the <style> tags
-		if(!content.locals) {
-			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/less-loader/index.js!./style.less", function() {
-				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/less-loader/index.js!./style.less");
-				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-				update(newContent);
-			});
-		}
-		// When the module is disposed, remove the <style> tags
-		module.hot.dispose(function() { update(); });
-	}
-
-/***/ },
-/* 10 */
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(3)();
-	// imports
-
-
-	// module
-	exports.push([module.id, ".item_business {\n  padding-left: 20px;\n  padding-top: 10px;\n}\n", ""]);
-
-	// exports
-
-
-/***/ },
-/* 11 */
-/***/ function(module, exports) {
-
-	module.exports = "<div>\n    <div class=\"item_business\" data-value=\"important\" v-for=\"business in businesses\">\n\t\t<div class=\"ui checkbox\">\n\t\t\t<input type=\"checkbox\" name=\"example\" v-model=\"business.checked\" style=\"disabled\" @change=\"changeChecked(business)\">\n\t\t\t<label>(% business.business_name %)</label>\n\t\t</div>\n\t\t<div class=\"item\">\n\t\t</div>\n\t</div>\n</div>\n";
 
 /***/ }
 /******/ ]);

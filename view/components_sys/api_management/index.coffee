@@ -5,7 +5,6 @@ module.exports =
     template: require('./template.html')
     components:
       'paging': require('../../components/paging')
-      'api-choose-business': require('../../components/api_choose_business')
     data: ->
       apis:[]
       api_map : {}

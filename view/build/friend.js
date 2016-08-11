@@ -44,118 +44,32 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(52);
+	var component_frient;
 
-	module.exports = Vue.extend({
-	  template: __webpack_require__(54),
+	__webpack_require__(19);
+
+	component_frient = Vue.extend({
+	  template: __webpack_require__(21),
+	  components: {
+	    'chat': __webpack_require__(22),
+	    'add_friend': __webpack_require__(26)
+	  },
 	  data: function() {
 	    return {
-	      roles: [],
-	      role: {},
-	      parent_role: {},
-	      action: 0,
-	      rm_role_error_options: {
-	        id: "rm_role_error_modal",
-	        modal_title: "删除角色失败",
-	        modal_content: "该角色有子角色，无法删除"
-	      }
+	      friend_view: ''
 	    };
 	  },
-	  events: {
-	    edit_role: function(role) {
-	      $('.ui.form.role').form('reset');
-	      this.action = 0;
-	      this.role = {};
-	      this.role = jQuery.extend(true, {}, role);
-	      return $('#edit-role-modal').modal('show');
-	    },
-	    add_role: function(role) {
-	      $('.ui.form.role').form('reset');
-	      this.action = 1;
-	      this.parent_role = {};
-	      this.parent_role = jQuery.extend(true, {}, role);
-	      this.role = {};
-	      return $('#edit-role-modal').modal('show');
-	    },
-	    rm_role: function(role) {
-	      this.action = 2;
-	      this.role = {};
-	      this.role = jQuery.extend(true, {}, role);
-	      if (this.role.child && this.role.child.length > 0) {
-	        return $('#rm_role_error_modal').modal('show');
-	      } else {
-	        return this.save();
-	      }
-	    }
-	  },
-	  components: {
-	    'role-component': __webpack_require__(55),
-	    'error-modal': __webpack_require__(13)
-	  },
 	  attached: function() {
-	    this.load();
-	    return this.init_form();
+	    return this.friend_view = 'chat';
 	  },
 	  methods: {
-	    init_form: function() {
-	      var field1, field2;
-	      field1 = {
-	        name: 'role_name',
-	        type: 'empty',
-	        prompt: '请输入角色名'
-	      };
-	      field2 = {
-	        name: 'role_code',
-	        type: 'empty',
-	        prompt: '请输入角色编码'
-	      };
-	      return cl.initValidationForm('.ui.form.role', [field1, field2]);
-	    },
-	    load: function() {
-	      var parm;
-	      parm = JSON.stringify({
-	        request_type: "get_roles_tree"
-	      });
-	      return cl.post_load({
-	        parm: parm,
-	        del_fun: (function(_this) {
-	          return function(data) {
-	            return _this.roles = data.datas;
-	          };
-	        })(this)
-	      });
-	    },
-	    save: function() {
-	      var parm;
-	      if (!$('.ui.form.role').form('is valid')) {
-	        return;
-	      }
-	      if (this.action === 1) {
-	        this.role.parent_role_code = this.parent_role.role_code;
-	        this.role.role_type = 'norm';
-	        this.role.seq_code = this.parent_role.seq_code + '.' + this.role.role_code;
-	      }
-	      if (this.action === 2) {
-	        this.role.status = 1;
-	      }
-	      parm = JSON.stringify({
-	        request_type: "save_role",
-	        request_map: this.role
-	      });
-	      return cl.post_load({
-	        parm: parm,
-	        del_fun: (function(_this) {
-	          return function(data) {
-	            $('#edit-role-modal').modal('hide');
-	            return _this.load();
-	          };
-	        })(this)
-	      });
+	    changeFriendView: function(friend_view) {
+	      return this.friend_view = friend_view;
 	    }
 	  }
 	});
 
-	Vue.component('role_management', module.exports);
+	Vue.component('friend', component_frient);
 
 
 /***/ },
@@ -477,100 +391,19 @@
 /* 10 */,
 /* 11 */,
 /* 12 */,
-/* 13 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = Vue.extend({
-	  template: __webpack_require__(14),
-	  props: ['error_options'],
-	  components: {
-	    'modal-content': __webpack_require__(15)
-	  }
-	});
-
-
-/***/ },
-/* 14 */
-/***/ function(module, exports) {
-
-	module.exports = "<div class=\"ui modal\" id=\"(%error_options.id%)\">\n\t<i class=\"close icon\"></i>\n\t<div class=\"header\">\n\t\t(%error_options.modal_title%)\n\t</div>\n\t<div class=\"content\">\n\t\t<p>(%error_options.modal_content%)</p>\n\t</div>\n\t<div class=\"actions\">\n\t\t<div class=\"ui black deny button\">\n\t\t\t返回\n\t\t</div>\n\t</div>\n</div>";
-
-/***/ },
-/* 15 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = Vue.extend({
-	  template: __webpack_require__(16),
-	  props: ['content_options', 'content_data'],
-	  components: {
-	    'field': __webpack_require__(17)
-	  }
-	});
-
-
-/***/ },
-/* 16 */
-/***/ function(module, exports) {
-
-	module.exports = "<div class=\"content\">\n\t<div class=\"ui form\">\n\t\t<div class=\"field\" v-for=\"field in content_options\">\n\t\t\t<field :field_options=\"field\"></field>\n\t\t</div>\n\t</div>\n</div>";
-
-/***/ },
-/* 17 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = Vue.extend({
-	  template: __webpack_require__(18),
-	  props: ['field_options']
-	});
-
-
-/***/ },
-/* 18 */
-/***/ function(module, exports) {
-
-	module.exports = "<label>(% field_options.label %)</label>\n<input type=\"text\" disabled=\"(%field_options.edit%)\" v-if=\"field_options.type=='text'\">\n<textarea type=\"textarea\" disabled=\"(%field_options.edit%)\" rows=\"3\" v-if=\"field_options.type=='textarea'\"></textarea>\n";
-
-/***/ },
-/* 19 */,
-/* 20 */,
-/* 21 */,
-/* 22 */,
-/* 23 */,
-/* 24 */,
-/* 25 */,
-/* 26 */,
-/* 27 */,
-/* 28 */,
-/* 29 */,
-/* 30 */,
-/* 31 */,
-/* 32 */,
-/* 33 */,
-/* 34 */,
-/* 35 */,
-/* 36 */,
-/* 37 */,
-/* 38 */,
-/* 39 */,
-/* 40 */,
-/* 41 */,
-/* 42 */,
-/* 43 */,
-/* 44 */,
-/* 45 */,
-/* 46 */,
-/* 47 */,
-/* 48 */,
-/* 49 */,
-/* 50 */,
-/* 51 */,
-/* 52 */
+/* 13 */,
+/* 14 */,
+/* 15 */,
+/* 16 */,
+/* 17 */,
+/* 18 */,
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(53);
+	var content = __webpack_require__(20);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(4)(content, {});
@@ -590,7 +423,7 @@
 	}
 
 /***/ },
-/* 53 */
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(3)();
@@ -598,95 +431,61 @@
 
 
 	// module
-	exports.push([module.id, ".ui.menu .item:before {\n  background: #F0F0F0;\n}\n.ui.attached.menu {\n  background-color: #F0F0F0;\n}\n.ui.attached.menu:not(.tabular) {\n  border: 0px;\n  border-bottom: 1px solid #ddd;\n}\n.ui.header .icon.himg {\n  padding-left: 30px;\n}\n.icon.hideimg {\n  margin-left: 20px;\n}\n", ""]);
+	exports.push([module.id, ".ig_other {\n  display: block;\n  width: 2.5em;\n  height: auto;\n  float: left;\n  margin: 0.2em 0em 0em;\n}\n.ig_other img {\n  display: block;\n  margin: 0em auto;\n  width: 100%;\n  height: 100%;\n  border-radius: 0.25rem;\n}\n.name_other {\n  display: block;\n  font-size: 1em;\n  color: rgba(0, 0, 0, 0.87);\n  font-weight: bold;\n}\n.content .text {\n  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;\n}\n", ""]);
 
 	// exports
 
 
 /***/ },
-/* 54 */
+/* 21 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"ui main container\" style=\"min-height: 100%;padding-left: 100px\">\n\t<div class=\"ui top attached menu\">\n\t\t<div class=\"ui dropdown icon item\">\n\t\t\t<h3 class=\"ui header\">角色管理</h3>\n\t\t</div>\n\t</div>\n\t<div class=\"ui bottom attached segment\" style=\"background-color: #F8F8F8;border:0px;\" v-if=\"roles.length > 0\">\n\t\t<role-component :roles.sync=\"roles\"></role-component>\n\t</div>\n\t<div class=\"ui modal\" id=\"edit-role-modal\">\n\t\t<i class=\"close icon\"></i>\n\t\t<div class=\"header\">角色详情</div>\n\t\t<div class=\"content\">\n\t\t\t<div class=\"ui form role\">\n\t\t\t\t<div class=\"field\">\n\t\t\t\t\t<label>角色名</label>\n\t\t\t\t\t<input name=\"role_name\" placeholder=\"请输入角色名\" type=\"text\" v-model=\"role.role_name\">\n\t\t\t\t</div>\n\t\t\t\t<div class=\"field\">\n\t\t\t\t\t<label>角色编码</label>\n\t\t\t\t\t<input name=\"role_code\" placeholder=\"请输入角色编码\" type=\"text\" v-model=\"role.role_code\">\n\t\t\t\t</div>\n\t\t\t\t<div class=\"field\">\n\t\t\t\t\t<label>角色描述</label>\n\t\t\t\t\t<input type=\"text\" placeholder=\"请输入角色描述\" v-model=\"role.role_explain\">\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"actions\">\n\t\t\t<div class=\"ui buttons\">\n\t\t\t\t<button class=\"ui deny button\">返回</button>\n\t\t\t\t<div class=\"or\"></div>\n\t\t\t\t<button class=\"ui submit blue right button\" @click=\"save\">保存</button>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n\t<error-modal :error_options=\"rm_role_error_options\"></error-modal>\n</div>";
+	module.exports = "<div class=\"ui grid main container\" style=\"min-height: 80%;padding-top: 80px;padding-left: 100px\">\n  <div class=\"four wide column\">\n    <div class=\"ui fluid category search\">\n      <div class=\"ui icon input\">\n        <input class=\"prompt\" type=\"text\" placeholder=\"Search friend...\">\n        <i class=\"search icon\"></i>\n      </div>\n      <i class=\"add large user icon\" style=\"color: #666666;padding-left: 5px;\" @click=\"changeFriendView('add_friend')\"></i>\n    </div>\n    <div class=\"ui vertical fluid tabular menu\">\n      <a class=\"item ui image label\"><img src=\"/static/static/userfile/image/chenli.png\"> <span>陈力</span> <i class=\"large talk icon\"></i></a>\n      <a class=\"active item ui image label\"><img src=\"/static/static/userfile/image/chenli.png\"> <span>陈力</span></a>\n      <a class=\"item ui image label\"><img src=\"/static/static/userfile/image/chenli.png\"> <span>陈力</span></a>\n      <a class=\"item ui image label\"><img src=\"/static/static/userfile/image/chenli.png\"> <span>陈力</span></a>\n      <a class=\"item ui image label\"><img src=\"/static/static/userfile/image/chenli.png\"> <span>陈力</span></a>\n      <a class=\"item ui image label\"><img src=\"/static/static/userfile/image/chenli.png\"> <span>陈力</span> <i class=\"large talk icon\"></i></a>\n      <a class=\"item ui image label\"><img src=\"/static/static/userfile/image/chenli.png\"> <span>陈力</span> <i class=\"large talk icon\"></i></a>\n    </div>\n  </div>\n  <div class=\"twelve wide stretched column\">\n    <component\n      :is=\"friend_view\"\n      transition=\"fade\"\n      transition-mode=\"out-in\">\n    </component>\n  </div>\n</div>\n";
 
 /***/ },
-/* 55 */
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(56);
+	__webpack_require__(23);
 
 	module.exports = Vue.extend({
-	  name: 'role_component',
-	  template: __webpack_require__(58),
-	  components: {
-	    'choose-business': __webpack_require__(59)
-	  },
-	  props: ['roles'],
+	  template: __webpack_require__(25),
 	  data: function() {
 	    return {
-	      rm_text: ''
+	      socket: null,
+	      message: ''
 	    };
 	  },
 	  attached: function() {
-	    var i, len, ref, results, role;
-	    $('.ui.dropdown').dropdown();
-	    ref = this.roles;
-	    results = [];
-	    for (i = 0, len = ref.length; i < len; i++) {
-	      role = ref[i];
-	      if (!(role.child && role.child.length > 0)) {
-	        results.push(role.show = false);
-	      } else {
-	        results.push(void 0);
-	      }
-	    }
-	    return results;
+	    console.log('asdasdas');
+	    return this.init_socket();
 	  },
 	  methods: {
-	    getBussinessTree: function(role) {
-	      var parm;
-	      this.checked_business = [];
-	      parm = JSON.stringify({
-	        request_type: "get_role_businesses_tree",
-	        request_map: {
-	          role_code: role.role_code
-	        }
-	      });
-	      return cl.post_load({
-	        parm: parm,
-	        del_fun: (function(_this) {
-	          return function(data) {
-	            return Vue.set(role, 'business_tree', data.datas);
-	          };
-	        })(this)
-	      });
+	    init_socket: function() {
+	      this.socket = null;
+	      this.socket = new WebSocket("ws://127.0.0.1:8000/message_socket");
+	      this.socket.onopen = function() {
+	        return console.log('onopen');
+	      };
+	      return this.socket.onmessage = function(evt) {
+	        return console.log(evt.data);
+	      };
 	    },
-	    showChild: function(role) {
-	      if (role.child && role.child.length > 0) {
-	        return role.show = !role.show;
-	      }
-	    },
-	    edit_role: function(role) {
-	      return this.$dispatch('edit_role', role);
-	    },
-	    add_role: function(role) {
-	      return this.$dispatch('add_role', role);
-	    },
-	    rm_role: function(role) {
-	      return this.$dispatch('rm_role', role);
+	    newmessage: function() {
+	      return this.socket.send(this.message);
 	    }
 	  }
 	});
 
 
 /***/ },
-/* 56 */
+/* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(57);
+	var content = __webpack_require__(24);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(4)(content, {});
@@ -706,7 +505,7 @@
 	}
 
 /***/ },
-/* 57 */
+/* 24 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(3)();
@@ -714,60 +513,61 @@
 
 
 	// module
-	exports.push([module.id, ".business_tree {\n  padding-right: 100px;\n  padding-bottom: 20px;\n}\n", ""]);
+	exports.push([module.id, ".ig_other {\n  display: block;\n  width: 2.5em;\n  height: auto;\n  float: left;\n  margin: 0.2em 0em 0em;\n}\n.ig_other img {\n  display: block;\n  margin: 0em auto;\n  width: 100%;\n  height: 100%;\n  border-radius: 0.25rem;\n}\n.name_other {\n  display: block;\n  font-size: 1em;\n  color: rgba(0, 0, 0, 0.87);\n  font-weight: bold;\n}\n.content .text {\n  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;\n}\n", ""]);
 
 	// exports
 
 
 /***/ },
-/* 58 */
+/* 25 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"ui list\">\n\t<div v-for=\"role in roles\" class=\"item\">\n\t\t<i class=\"folder open icon\" v-bind:class=\"{ 'open': role.show}\" @click=\"showChild(role)\"></i>\n\t\t<div class=\"content\">\n\t\t\t<div class=\"header\">(% role.role_name %)\n\t\t\t\t<i class=\"edit icon\" style=\"margin-left: 10px\" @click=\"edit_role(role)\"></i>\n\t\t\t\t<i class=\"add circle icon\" @click=\"add_role(role)\"></i>\n\t\t\t\t<div class=\"ui left pointing dropdown link item\">\n\t\t\t\t\t<i class=\"configure icon\" @click=\"getBussinessTree(role)\"></i>\n\t\t\t\t\t<div class=\"menu\">\n\t\t\t\t\t\t<div class=\"header item\">\n\t\t\t\t\t\t\t<i class=\"tags icon\"></i>\n\t\t\t\t\t\t\t业务选择\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<choose-business class=\"business_tree\" :businesses.sync=\"role.business_tree\" :role_code.sync=\"role.role_code\"></choose-business>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"ui left pointing dropdown link item\">\n\t\t\t\t\t<i class=\"remove circle icon\"></i>\n\t\t\t\t\t<div class=\"menu\">\n\t\t\t\t\t\t<button class=\"item\" style=\"background: #FFFAF3\" @click=\"rm_role(role)\">确认删除?请谨慎操作！</button>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div class=\"description\">(% role.role_explain %)</div>\n\t\t\t<role_component :roles.sync=\"role.child\" v-if=\"role.show && role.child && role.child.length > 0\"></role_component>\n\t\t</div>\n\t</div>\n</div>";
+	module.exports = "<div class=\"ui segment\">\n  <div class=\"ui comments\">\n    <h3 class=\"ui dividing header\">聊天</h3>\n    <div class=\"ui reply form\">\n      <div class=\"field\">\n        <input  @keyup.enter=\"newmessage\" v-model=\"message\"></input>\n      </div>\n    </div>\n    <div class=\"comment\">\n      <a class=\"avatar\">\n        <img src=\"/static/static/userfile/image/chenli.png\">\n      </a>\n      <div class=\"content\">\n        <a class=\"author\">马特</a>\n        <div class=\"metadata\">\n          <span class=\"date\">在今天5:42pm</span>\n        </div>\n        <div class=\"text\">\n          怎样的艺术！怎样的艺术！怎样的艺术！怎样的艺术！怎样的艺术！怎样的艺术！怎样的艺术！怎样的艺术！怎样的艺术！怎样的艺术！怎样的艺术！怎样的艺术！怎样的艺术！\n        </div>\n      </div>\n    </div>\n    <div class=\"comment\">\n      <a class=\"avatar\">\n        <img src=\"/static/static/userfile/image/chenli.png\">\n      </a>\n      <div class=\"content\">\n        <a class=\"author\">埃利奥特付</a>\n        <div class=\"metadata\">\n          <span class=\"date\">在昨天12:30am</span>\n        </div>\n        <div class=\"text\">\n          <p>这对我的调查非常有用。感谢！</p>\n        </div>\n      </div>\n    </div>\n    <div class=\"comment\">\n      <a class=\"avatar\">\n        <img src=\"/static/static/userfile/image/chenli.png\">\n      </a>\n      <div class=\"content\">\n        <a class=\"author\">乔亨德森</a>\n        <div class=\"metadata\">\n          <span class=\"date\">5天前</span>\n        </div>\n        <div class=\"text\">\n          老兄，这是可怕的。太感谢了！\n        </div>\n      </div>\n    </div>\n    <div class=\"comment\">\n      <a class=\"avatar\">\n        <img src=\"/static/static/userfile/image/chenli.png\">\n      </a>\n      <div class=\"content\">\n        <a class=\"author\">乔亨德森</a>\n        <div class=\"metadata\">\n          <span class=\"date\">5天前</span>\n        </div>\n        <div class=\"text\">\n          老兄，这是可怕的。太感谢了！\n        </div>\n      </div>\n    </div>\n    <div class=\"comment\">\n      <a class=\"avatar\">\n        <img src=\"/static/static/userfile/image/chenli.png\">\n      </a>\n      <div class=\"content\">\n        <a class=\"author\">乔亨德森</a>\n        <div class=\"metadata\">\n          <span class=\"date\">5天前</span>\n        </div>\n        <div class=\"text\">\n          老兄，这是可怕的。太感谢了！\n        </div>\n      </div>\n    </div>\n    <div class=\"comment\">\n      <a class=\"avatar\">\n        <img src=\"/static/static/userfile/image/chenli.png\">\n      </a>\n      <div class=\"content\">\n        <a class=\"author\">乔亨德森</a>\n        <div class=\"metadata\">\n          <span class=\"date\">5天前</span>\n        </div>\n        <div class=\"text\">\n          老兄，这是可怕的。太感谢了！\n        </div>\n      </div>\n    </div>\n    <div class=\"comment\">\n      <a class=\"avatar\">\n        <img src=\"/static/static/userfile/image/chenli.png\">\n      </a>\n      <div class=\"content\">\n        <a class=\"author\">乔亨德森</a>\n        <div class=\"metadata\">\n          <span class=\"date\">5天前</span>\n        </div>\n        <div class=\"text\">\n          老兄，这是可怕的。太感谢了！\n        </div>\n      </div>\n    </div>\n    <div class=\"comment\">\n      <a class=\"avatar\">\n        <img src=\"/static/static/userfile/image/chenli.png\">\n      </a>\n      <div class=\"content\">\n        <a class=\"author\">乔亨德森</a>\n        <div class=\"metadata\">\n          <span class=\"date\">5天前</span>\n        </div>\n        <div class=\"text\">\n          老兄，这是可怕的。太感谢了！\n        </div>\n      </div>\n    </div>\n    <div class=\"comment\">\n      <a class=\"avatar\">\n        <img src=\"/static/static/userfile/image/chenli.png\">\n      </a>\n      <div class=\"content\">\n        <a class=\"author\">乔亨德森</a>\n        <div class=\"metadata\">\n          <span class=\"date\">5天前</span>\n        </div>\n        <div class=\"text\">\n          老兄，这是可怕的。太感谢了！\n        </div>\n      </div>\n    </div>\n    <div class=\"comment\">\n      <a class=\"avatar\">\n        <img src=\"/static/static/userfile/image/chenli.png\">\n      </a>\n      <div class=\"content\">\n        <a class=\"author\">乔亨德森</a>\n        <div class=\"metadata\">\n          <span class=\"date\">5天前</span>\n        </div>\n        <div class=\"text\">\n          老兄，这是可怕的。太感谢了！\n        </div>\n      </div>\n    </div>\n    <div class=\"comment\">\n      <a class=\"avatar\">\n        <img src=\"/static/static/userfile/image/chenli.png\">\n      </a>\n      <div class=\"content\">\n        <a class=\"author\">乔亨德森</a>\n        <div class=\"metadata\">\n          <span class=\"date\">5天前</span>\n        </div>\n        <div class=\"text\">\n          老兄，这是可怕的。太感谢了！\n        </div>\n      </div>\n    </div>\n  </div>\n</div>";
 
 /***/ },
-/* 59 */
+/* 26 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(60);
+	__webpack_require__(27);
 
 	module.exports = Vue.extend({
-	  name: 'choose-business',
-	  template: __webpack_require__(62),
-	  props: ['businesses', 'role_code'],
+	  template: __webpack_require__(29),
+	  data: function() {
+	    return {
+	      socket: null,
+	      message: ''
+	    };
+	  },
+	  attached: function() {
+	    console.log('asdasdas');
+	    return this.init_socket();
+	  },
 	  methods: {
-	    changeChecked: function(business) {
-	      var parm;
-	      parm = JSON.stringify({
-	        request_type: "save_role_business",
-	        request_map: {
-	          role_code: this.role_code,
-	          business_code: business.business_code,
-	          checked: business.checked
-	        }
-	      });
-	      return cl.post_load({
-	        parm: parm,
-	        del_fun: (function(_this) {
-	          return function(data) {
-	            _this.users = data.datas;
-	            return _this.pag_count = data.page_count;
-	          };
-	        })(this)
-	      });
+	    init_socket: function() {
+	      this.socket = null;
+	      this.socket = new WebSocket("ws://127.0.0.1:8000/message_socket");
+	      this.socket.onopen = function() {
+	        return console.log('onopen');
+	      };
+	      return this.socket.onmessage = function(evt) {
+	        return console.log(evt.data);
+	      };
+	    },
+	    newmessage: function() {
+	      return this.socket.send(this.message);
 	    }
 	  }
 	});
 
 
 /***/ },
-/* 60 */
+/* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(61);
+	var content = __webpack_require__(28);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(4)(content, {});
@@ -787,7 +587,7 @@
 	}
 
 /***/ },
-/* 61 */
+/* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(3)();
@@ -795,16 +595,16 @@
 
 
 	// module
-	exports.push([module.id, ".item_business {\n  padding-left: 20px;\n  padding-top: 10px;\n}\n", ""]);
+	exports.push([module.id, ".ig_other {\n  display: block;\n  width: 2.5em;\n  height: auto;\n  float: left;\n  margin: 0.2em 0em 0em;\n}\n.ig_other img {\n  display: block;\n  margin: 0em auto;\n  width: 100%;\n  height: 100%;\n  border-radius: 0.25rem;\n}\n.name_other {\n  display: block;\n  font-size: 1em;\n  color: rgba(0, 0, 0, 0.87);\n  font-weight: bold;\n}\n.content .text {\n  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;\n}\n.ui.comments .comment:first-child {\n  padding-top: 20px;\n}\n", ""]);
 
 	// exports
 
 
 /***/ },
-/* 62 */
+/* 29 */
 /***/ function(module, exports) {
 
-	module.exports = "<div>\n    <div class=\"item_business\" data-value=\"important\" v-for=\"business in businesses\">\n\t\t<div class=\"ui checkbox\">\n\t\t\t<input type=\"checkbox\" name=\"example\" v-model=\"business.checked\" style=\"disabled\" @change=\"changeChecked(business)\">\n\t\t\t<label>(% business.business_name %)</label>\n\t\t</div>\n\t\t<choose-business :businesses.sync=\"business.child\" :role_code.sync=\"role_code\"></choose-role>\n\t\t<div class=\"item\">\n\t\t</div>\n\t</div>\n</div>\n";
+	module.exports = "<div class=\"ui segment\">\n  <div class=\"ui comments\">\n    <h3 class=\"ui dividing header\">世界</h3>\n    <div class=\"ui reply form\">\n      <div class=\"field\">\n        <div class=\"ui search\">\n          <div class=\"ui icon input\">\n            <input class=\"prompt\" type=\"text\" placeholder=\"输入账号或者用户名搜索\">\n            <i class=\"search icon\"></i>\n          </div>\n          <div class=\"results\"></div>\n        </div>\n      </div>\n    </div>\n    <div class=\"ui grid comments\">\n      <div class=\"comment eight wide column\">\n        <a class=\"avatar\">\n          <img src=\"/static/static/userfile/image/chenli.png\">\n        </a>\n        <div class=\"content\">\n          <a class=\"author\">埃利奥特付</a>\n          <div class=\"metadata\">\n            <span class=\"date\">在昨天12:30am</span>\n          </div>\n          <div class=\"text\">\n            <p>这对我的调查非常有用。感谢！</p>\n          </div>\n        </div>\n      </div>\n      <div class=\"comment eight wide column\">\n        <a class=\"avatar\">\n          <img src=\"/static/static/userfile/image/chenli.png\">\n        </a>\n        <div class=\"content\">\n          <a class=\"author\">马特</a>\n          <div class=\"metadata\">\n            <span class=\"date\">在今天5:42pm</span>\n          </div>\n          <div class=\"text\">\n            怎样的艺术！\n          </div>\n        </div>\n      </div>\n      \n      <div class=\"comment eight wide column\">\n        <a class=\"avatar\">\n          <img src=\"/static/static/userfile/image/chenli.png\">\n        </a>\n        <div class=\"content\">\n          <a class=\"author\">乔亨德森</a>\n          <div class=\"metadata\">\n            <span class=\"date\">5天前</span>\n          </div>\n          <div class=\"text\">\n            老兄，这是可怕的。太感谢了！\n          </div>\n        </div>\n      </div>\n      <div class=\"comment eight wide column\">\n        <a class=\"avatar\">\n          <img src=\"/static/static/userfile/image/chenli.png\">\n        </a>\n        <div class=\"content\">\n          <a class=\"author\">乔亨德森</a>\n          <div class=\"metadata\">\n            <span class=\"date\">5天前</span>\n          </div>\n          <div class=\"text\">\n            老兄，这是可怕的。太感谢了！\n          </div>\n        </div>\n      </div>\n      <div class=\"comment eight wide column\">\n        <a class=\"avatar\">\n          <img src=\"/static/static/userfile/image/chenli.png\">\n        </a>\n        <div class=\"content\">\n          <a class=\"author\">乔亨德森</a>\n          <div class=\"metadata\">\n            <span class=\"date\">5天前</span>\n          </div>\n          <div class=\"text\">\n            老兄，这是可怕的。太感谢了！\n          </div>\n        </div>\n      </div>\n      <div class=\"comment eight wide column\">\n        <a class=\"avatar\">\n          <img src=\"/static/static/userfile/image/chenli.png\">\n        </a>\n        <div class=\"content\">\n          <a class=\"author\">乔亨德森</a>\n          <div class=\"metadata\">\n            <span class=\"date\">5天前</span>\n          </div>\n          <div class=\"text\">\n            老兄，这是可怕的。太感谢了！\n          </div>\n        </div>\n      </div>\n      \n    </div>\n  </div>\n</div>";
 
 /***/ }
 /******/ ]);

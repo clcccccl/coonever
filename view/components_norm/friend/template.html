@@ -1,0 +1,27 @@
+<div class="ui grid main container" style="min-height: 80%;padding-top: 80px;padding-left: 100px">
+  <div class="four wide column">
+    <div class="ui fluid category search">
+      <div class="ui icon input">
+        <input class="prompt" type="text" placeholder="Search friend...">
+        <i class="search icon"></i>
+      </div>
+      <i class="add large user icon" style="color: #666666;padding-left: 5px;" @click="changeFriendView('add_friend')"></i>
+    </div>
+    <div class="ui vertical fluid tabular menu">
+      <a class="item ui image label"><img src="/static/static/userfile/image/chenli.png"> <span>陈力</span> <i class="large talk icon"></i></a>
+      <a class="active item ui image label"><img src="/static/static/userfile/image/chenli.png"> <span>陈力</span></a>
+      <a class="item ui image label"><img src="/static/static/userfile/image/chenli.png"> <span>陈力</span></a>
+      <a class="item ui image label"><img src="/static/static/userfile/image/chenli.png"> <span>陈力</span></a>
+      <a class="item ui image label"><img src="/static/static/userfile/image/chenli.png"> <span>陈力</span></a>
+      <a class="item ui image label"><img src="/static/static/userfile/image/chenli.png"> <span>陈力</span> <i class="large talk icon"></i></a>
+      <a class="item ui image label"><img src="/static/static/userfile/image/chenli.png"> <span>陈力</span> <i class="large talk icon"></i></a>
+    </div>
+  </div>
+  <div class="twelve wide stretched column">
+    <component
+      :is="friend_view"
+      transition="fade"
+      transition-mode="out-in">
+    </component>
+  </div>
+</div>
