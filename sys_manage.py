@@ -5,6 +5,7 @@ import pdb
 
 from model.businessLayer.sys_business import *
 from model.businessLayer.base_business import *
+from model.businessLayer.blog_api import *
 from db_base import pg_update
 
 '''
@@ -40,7 +41,7 @@ def __addApi():
         data_map['path'] = fun.__module__
         data_map['disable'] = 0
         data_map['error'] = 0
-        data_map['session'] = 1
+        data_map['session'] = 0
         data_map['restrict'] = (0 if fun.__module__ == 'model.businessLayer.base_business' else 1)
         pg_update.insertOne("api", data_map)
 
@@ -79,7 +80,7 @@ def __addRoleBusiness(role, business):
 
 
 def __main():
-    __addBusinessApi('save_business_api', 'api_management')
+    __addApi()
     pass
 
 

@@ -21,6 +21,12 @@
         <link href="{{ static_url("static/lib/Semantic-UI-CSS-master/components/icon.css") }}" rel="stylesheet" type="text/css">
         <link href="{{ static_url("static/lib/Semantic-UI-CSS-master/components/transition.css") }}" rel="stylesheet" type="text/css">
         <link href="{{ static_url("static/lib/Semantic-UI-CSS-master/semantic.css") }}" rel="stylesheet" type="text/css">
+        <link href="{{ static_url("static/lib/simditor/simditor.css") }}" rel="stylesheet" type="text/css">
+        <style type="text/css" media="screen">
+        [v-cloak] {
+            display: none;
+        }
+        </style>
         {% block css %}
         {% end %}
         <script src="{{ static_url("static/lib/vue.js") }}"></script>
@@ -30,6 +36,11 @@
         <script src="{{ static_url("static/lib/Semantic-UI-CSS-master/components/dropdown.js") }}"></script>
         <script src="{{ static_url("static/lib/Semantic-UI-CSS-master/components/visibility.js") }}"></script>
         <script src="{{ static_url("static/lib/jquery.noty.packaged.min.js") }}"></script>
+        <!-- simditor -->
+        <script src="{{ static_url("static/lib/simditor/module.js") }}"></script>
+        <script src="{{ static_url("static/lib/simditor/hotkeys.js") }}"></script>
+        <script src="{{ static_url("static/lib/simditor/uploader.js") }}"></script>
+        <script src="{{ static_url("static/lib/simditor/simditor.js") }}"></script>
     </head>
     {% block body %}
     {% end %}

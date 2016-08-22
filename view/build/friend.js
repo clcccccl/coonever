@@ -46,13 +46,13 @@
 
 	var component_frient;
 
-	__webpack_require__(19);
+	__webpack_require__(38);
 
 	component_frient = Vue.extend({
-	  template: __webpack_require__(21),
+	  template: __webpack_require__(40),
 	  components: {
-	    'chat': __webpack_require__(22),
-	    'add_friend': __webpack_require__(26)
+	    'chat': __webpack_require__(41),
+	    'add_friend': __webpack_require__(45)
 	  },
 	  data: function() {
 	    return {
@@ -397,13 +397,32 @@
 /* 16 */,
 /* 17 */,
 /* 18 */,
-/* 19 */
+/* 19 */,
+/* 20 */,
+/* 21 */,
+/* 22 */,
+/* 23 */,
+/* 24 */,
+/* 25 */,
+/* 26 */,
+/* 27 */,
+/* 28 */,
+/* 29 */,
+/* 30 */,
+/* 31 */,
+/* 32 */,
+/* 33 */,
+/* 34 */,
+/* 35 */,
+/* 36 */,
+/* 37 */,
+/* 38 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(20);
+	var content = __webpack_require__(39);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(4)(content, {});
@@ -423,7 +442,7 @@
 	}
 
 /***/ },
-/* 20 */
+/* 39 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(3)();
@@ -437,19 +456,19 @@
 
 
 /***/ },
-/* 21 */
+/* 40 */
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"ui grid main container\" style=\"min-height: 80%;padding-top: 80px;padding-left: 100px\">\n  <div class=\"four wide column\">\n    <div class=\"ui fluid category search\">\n      <div class=\"ui icon input\">\n        <input class=\"prompt\" type=\"text\" placeholder=\"Search friend...\">\n        <i class=\"search icon\"></i>\n      </div>\n      <i class=\"add large user icon\" style=\"color: #666666;padding-left: 5px;\" @click=\"changeFriendView('add_friend')\"></i>\n    </div>\n    <div class=\"ui vertical fluid tabular menu\">\n      <a class=\"item ui image label\"><img src=\"/static/static/userfile/image/chenli.png\"> <span>陈力</span> <i class=\"large talk icon\"></i></a>\n      <a class=\"active item ui image label\"><img src=\"/static/static/userfile/image/chenli.png\"> <span>陈力</span></a>\n      <a class=\"item ui image label\"><img src=\"/static/static/userfile/image/chenli.png\"> <span>陈力</span></a>\n      <a class=\"item ui image label\"><img src=\"/static/static/userfile/image/chenli.png\"> <span>陈力</span></a>\n      <a class=\"item ui image label\"><img src=\"/static/static/userfile/image/chenli.png\"> <span>陈力</span></a>\n      <a class=\"item ui image label\"><img src=\"/static/static/userfile/image/chenli.png\"> <span>陈力</span> <i class=\"large talk icon\"></i></a>\n      <a class=\"item ui image label\"><img src=\"/static/static/userfile/image/chenli.png\"> <span>陈力</span> <i class=\"large talk icon\"></i></a>\n    </div>\n  </div>\n  <div class=\"twelve wide stretched column\">\n    <component\n      :is=\"friend_view\"\n      transition=\"fade\"\n      transition-mode=\"out-in\">\n    </component>\n  </div>\n</div>\n";
 
 /***/ },
-/* 22 */
+/* 41 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(23);
+	__webpack_require__(42);
 
 	module.exports = Vue.extend({
-	  template: __webpack_require__(25),
+	  template: __webpack_require__(44),
 	  data: function() {
 	    return {
 	      socket: null,
@@ -479,13 +498,13 @@
 
 
 /***/ },
-/* 23 */
+/* 42 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(24);
+	var content = __webpack_require__(43);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(4)(content, {});
@@ -505,7 +524,7 @@
 	}
 
 /***/ },
-/* 24 */
+/* 43 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(3)();
@@ -519,55 +538,41 @@
 
 
 /***/ },
-/* 25 */
+/* 44 */
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"ui segment\">\n  <div class=\"ui comments\">\n    <h3 class=\"ui dividing header\">聊天</h3>\n    <div class=\"ui reply form\">\n      <div class=\"field\">\n        <input  @keyup.enter=\"newmessage\" v-model=\"message\"></input>\n      </div>\n    </div>\n    <div class=\"comment\">\n      <a class=\"avatar\">\n        <img src=\"/static/static/userfile/image/chenli.png\">\n      </a>\n      <div class=\"content\">\n        <a class=\"author\">马特</a>\n        <div class=\"metadata\">\n          <span class=\"date\">在今天5:42pm</span>\n        </div>\n        <div class=\"text\">\n          怎样的艺术！怎样的艺术！怎样的艺术！怎样的艺术！怎样的艺术！怎样的艺术！怎样的艺术！怎样的艺术！怎样的艺术！怎样的艺术！怎样的艺术！怎样的艺术！怎样的艺术！\n        </div>\n      </div>\n    </div>\n    <div class=\"comment\">\n      <a class=\"avatar\">\n        <img src=\"/static/static/userfile/image/chenli.png\">\n      </a>\n      <div class=\"content\">\n        <a class=\"author\">埃利奥特付</a>\n        <div class=\"metadata\">\n          <span class=\"date\">在昨天12:30am</span>\n        </div>\n        <div class=\"text\">\n          <p>这对我的调查非常有用。感谢！</p>\n        </div>\n      </div>\n    </div>\n    <div class=\"comment\">\n      <a class=\"avatar\">\n        <img src=\"/static/static/userfile/image/chenli.png\">\n      </a>\n      <div class=\"content\">\n        <a class=\"author\">乔亨德森</a>\n        <div class=\"metadata\">\n          <span class=\"date\">5天前</span>\n        </div>\n        <div class=\"text\">\n          老兄，这是可怕的。太感谢了！\n        </div>\n      </div>\n    </div>\n    <div class=\"comment\">\n      <a class=\"avatar\">\n        <img src=\"/static/static/userfile/image/chenli.png\">\n      </a>\n      <div class=\"content\">\n        <a class=\"author\">乔亨德森</a>\n        <div class=\"metadata\">\n          <span class=\"date\">5天前</span>\n        </div>\n        <div class=\"text\">\n          老兄，这是可怕的。太感谢了！\n        </div>\n      </div>\n    </div>\n    <div class=\"comment\">\n      <a class=\"avatar\">\n        <img src=\"/static/static/userfile/image/chenli.png\">\n      </a>\n      <div class=\"content\">\n        <a class=\"author\">乔亨德森</a>\n        <div class=\"metadata\">\n          <span class=\"date\">5天前</span>\n        </div>\n        <div class=\"text\">\n          老兄，这是可怕的。太感谢了！\n        </div>\n      </div>\n    </div>\n    <div class=\"comment\">\n      <a class=\"avatar\">\n        <img src=\"/static/static/userfile/image/chenli.png\">\n      </a>\n      <div class=\"content\">\n        <a class=\"author\">乔亨德森</a>\n        <div class=\"metadata\">\n          <span class=\"date\">5天前</span>\n        </div>\n        <div class=\"text\">\n          老兄，这是可怕的。太感谢了！\n        </div>\n      </div>\n    </div>\n    <div class=\"comment\">\n      <a class=\"avatar\">\n        <img src=\"/static/static/userfile/image/chenli.png\">\n      </a>\n      <div class=\"content\">\n        <a class=\"author\">乔亨德森</a>\n        <div class=\"metadata\">\n          <span class=\"date\">5天前</span>\n        </div>\n        <div class=\"text\">\n          老兄，这是可怕的。太感谢了！\n        </div>\n      </div>\n    </div>\n    <div class=\"comment\">\n      <a class=\"avatar\">\n        <img src=\"/static/static/userfile/image/chenli.png\">\n      </a>\n      <div class=\"content\">\n        <a class=\"author\">乔亨德森</a>\n        <div class=\"metadata\">\n          <span class=\"date\">5天前</span>\n        </div>\n        <div class=\"text\">\n          老兄，这是可怕的。太感谢了！\n        </div>\n      </div>\n    </div>\n    <div class=\"comment\">\n      <a class=\"avatar\">\n        <img src=\"/static/static/userfile/image/chenli.png\">\n      </a>\n      <div class=\"content\">\n        <a class=\"author\">乔亨德森</a>\n        <div class=\"metadata\">\n          <span class=\"date\">5天前</span>\n        </div>\n        <div class=\"text\">\n          老兄，这是可怕的。太感谢了！\n        </div>\n      </div>\n    </div>\n    <div class=\"comment\">\n      <a class=\"avatar\">\n        <img src=\"/static/static/userfile/image/chenli.png\">\n      </a>\n      <div class=\"content\">\n        <a class=\"author\">乔亨德森</a>\n        <div class=\"metadata\">\n          <span class=\"date\">5天前</span>\n        </div>\n        <div class=\"text\">\n          老兄，这是可怕的。太感谢了！\n        </div>\n      </div>\n    </div>\n    <div class=\"comment\">\n      <a class=\"avatar\">\n        <img src=\"/static/static/userfile/image/chenli.png\">\n      </a>\n      <div class=\"content\">\n        <a class=\"author\">乔亨德森</a>\n        <div class=\"metadata\">\n          <span class=\"date\">5天前</span>\n        </div>\n        <div class=\"text\">\n          老兄，这是可怕的。太感谢了！\n        </div>\n      </div>\n    </div>\n  </div>\n</div>";
 
 /***/ },
-/* 26 */
+/* 45 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(27);
+	__webpack_require__(46);
 
 	module.exports = Vue.extend({
-	  template: __webpack_require__(29),
+	  template: __webpack_require__(48),
 	  data: function() {
 	    return {
-	      socket: null,
-	      message: ''
+	      search: ''
 	    };
 	  },
 	  attached: function() {
-	    console.log('asdasdas');
-	    return this.init_socket();
+	    return load();
 	  },
 	  methods: {
-	    init_socket: function() {
-	      this.socket = null;
-	      this.socket = new WebSocket("ws://127.0.0.1:8000/message_socket");
-	      this.socket.onopen = function() {
-	        return console.log('onopen');
-	      };
-	      return this.socket.onmessage = function(evt) {
-	        return console.log(evt.data);
-	      };
-	    },
-	    newmessage: function() {
-	      return this.socket.send(this.message);
-	    }
+	    load: function() {}
 	  }
 	});
 
 
 /***/ },
-/* 27 */
+/* 46 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(28);
+	var content = __webpack_require__(47);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(4)(content, {});
@@ -587,7 +592,7 @@
 	}
 
 /***/ },
-/* 28 */
+/* 47 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(3)();
@@ -601,7 +606,7 @@
 
 
 /***/ },
-/* 29 */
+/* 48 */
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"ui segment\">\n  <div class=\"ui comments\">\n    <h3 class=\"ui dividing header\">世界</h3>\n    <div class=\"ui reply form\">\n      <div class=\"field\">\n        <div class=\"ui search\">\n          <div class=\"ui icon input\">\n            <input class=\"prompt\" type=\"text\" placeholder=\"输入账号或者用户名搜索\">\n            <i class=\"search icon\"></i>\n          </div>\n          <div class=\"results\"></div>\n        </div>\n      </div>\n    </div>\n    <div class=\"ui grid comments\">\n      <div class=\"comment eight wide column\">\n        <a class=\"avatar\">\n          <img src=\"/static/static/userfile/image/chenli.png\">\n        </a>\n        <div class=\"content\">\n          <a class=\"author\">埃利奥特付</a>\n          <div class=\"metadata\">\n            <span class=\"date\">在昨天12:30am</span>\n          </div>\n          <div class=\"text\">\n            <p>这对我的调查非常有用。感谢！</p>\n          </div>\n        </div>\n      </div>\n      <div class=\"comment eight wide column\">\n        <a class=\"avatar\">\n          <img src=\"/static/static/userfile/image/chenli.png\">\n        </a>\n        <div class=\"content\">\n          <a class=\"author\">马特</a>\n          <div class=\"metadata\">\n            <span class=\"date\">在今天5:42pm</span>\n          </div>\n          <div class=\"text\">\n            怎样的艺术！\n          </div>\n        </div>\n      </div>\n      \n      <div class=\"comment eight wide column\">\n        <a class=\"avatar\">\n          <img src=\"/static/static/userfile/image/chenli.png\">\n        </a>\n        <div class=\"content\">\n          <a class=\"author\">乔亨德森</a>\n          <div class=\"metadata\">\n            <span class=\"date\">5天前</span>\n          </div>\n          <div class=\"text\">\n            老兄，这是可怕的。太感谢了！\n          </div>\n        </div>\n      </div>\n      <div class=\"comment eight wide column\">\n        <a class=\"avatar\">\n          <img src=\"/static/static/userfile/image/chenli.png\">\n        </a>\n        <div class=\"content\">\n          <a class=\"author\">乔亨德森</a>\n          <div class=\"metadata\">\n            <span class=\"date\">5天前</span>\n          </div>\n          <div class=\"text\">\n            老兄，这是可怕的。太感谢了！\n          </div>\n        </div>\n      </div>\n      <div class=\"comment eight wide column\">\n        <a class=\"avatar\">\n          <img src=\"/static/static/userfile/image/chenli.png\">\n        </a>\n        <div class=\"content\">\n          <a class=\"author\">乔亨德森</a>\n          <div class=\"metadata\">\n            <span class=\"date\">5天前</span>\n          </div>\n          <div class=\"text\">\n            老兄，这是可怕的。太感谢了！\n          </div>\n        </div>\n      </div>\n      <div class=\"comment eight wide column\">\n        <a class=\"avatar\">\n          <img src=\"/static/static/userfile/image/chenli.png\">\n        </a>\n        <div class=\"content\">\n          <a class=\"author\">乔亨德森</a>\n          <div class=\"metadata\">\n            <span class=\"date\">5天前</span>\n          </div>\n          <div class=\"text\">\n            老兄，这是可怕的。太感谢了！\n          </div>\n        </div>\n      </div>\n      \n    </div>\n  </div>\n</div>";

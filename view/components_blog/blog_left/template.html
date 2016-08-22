@@ -1,0 +1,16 @@
+<div class="ui vertical fluid tabular menu content_menus">
+	<a class="item" v-for="content_menu in content_menus" @click="change_content_menu(content_menu.id)">(% content_menu.blog_title %)
+		<i class="anchor icon" v-if="content_menu.id == content_id" style="color: #555555;"></i>
+		<i class="edit icon" @click="edit_blog(content_menu)" v-if="content_menu.id == content_id && mousein && head_menu_key!='write_blog' && user_account == blogger" style="color: #555555;"></i>
+		<i class="minus icon" @click="del_blog(content_menu)" v-if="content_menu.id == content_id && mousein && user_account == blogger" style="color: #555555;"></i>
+	</a>
+	<a class="item"  v-if="head_menu_key=='write_blog' && (mousein || content_menus.length == 0)">
+	    <div class="ui transparent icon input">
+			<input type="text" placeholder="分类" v-model="new_head_menu.menu_name">
+			<i class="plus link icon" @click="add_head_menu" style="color: #555555;"></i>
+		</div>
+	</a>
+	<a class="item" v-if="head_menu_key!='write_blog' && content_menus.length==0">干净
+    	<i class="anchor icon" style="color: #555555;"></i>
+    </a>
+</div>

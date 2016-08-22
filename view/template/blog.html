@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block css %}
+{% end %}
+{% block body %}
+<body id="blog" v-cloak>
+	<div style="padding:30px 50px 30px 50px">
+	    <div class="ui top attached tabular menu">
+		    <blog_head :blogger.sync="blogger" :user_account.sync="user_account"></blog_head>
+		</div>
+		<div class="ui bottom attached segment">
+    		<div class="ui grid">
+				<div class="four wide column">
+		            <blog_left :blogger.sync="blogger" :user_account.sync="user_account"></blog_left>
+		        </div>
+		        <div class="twelve wide stretched column" v-if="edit_blog">
+		            <write_blog></write_blog>
+		        </div>
+		        <div class="twelve wide stretched column" v-if="!edit_blog">
+		            <show_blog></show_blog>
+		        </div>
+		    </div>
+		</div>
+	</div>
+</body>
+{% end %}
+{% block js %}
+<script src="{{ static_url("build/blog.js") }}"></script>
+{% end %}

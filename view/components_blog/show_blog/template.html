@@ -1,0 +1,17 @@
+<div v-if="blog.hasOwnProperty('blog_title')">
+	<h2 class="ui header" style="text-align:center;font-family: serif;padding-top: 30px;">
+		<div class="content">(% blog.blog_title %)
+			<div class="sub header" style="padding-top: 7px;">(% blog.author %)  (% blog && blog.create_date ? blog.create_date.substring(0,10) : '' %)</div>
+		</div>
+	</h2>
+	<div id="blog_content" style="margin: 0px 20px 20px 20px;padding: 37px;border: 1px solid #d4d4d5;">
+	</div>
+</div>
+<div v-if="!blog.hasOwnProperty('blog_title')">
+	<h3 class="ui header" style="text-align:center;font-family: serif;padding-top: 30px;">
+		<p>呼啦啦似大厦倾</p>
+		<p>  </p>
+		<p>白茫茫大地真干净</p>
+		<p>  </p>
+	</h3>
+</div>

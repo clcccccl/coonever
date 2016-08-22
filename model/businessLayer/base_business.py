@@ -5,7 +5,16 @@
 系统基础业务
 '''
 
+from sys_wraps import CooError
 from dbImpl.user import User, RoleBusiness, Business, UserDetail
+
+
+def check_logged(parm):
+    '''
+    检查用户是否已登录
+    '''
+    user = parm.get('user', {})
+    return {'data': user.account if user else '0'}
 
 
 def get_bar_data(parm):
@@ -46,4 +55,17 @@ def get_user_detail(parm):
     account = parm['user']['account']
     user_detail = UserDetail.get_user_detail_by_account(account)
     user_detail['head_file'] = user_detail['head_file'] if user_detail['head_file'] else 'default.png'
+    return {'data': user_detail}
+
+
+def get_blogger_detail(parm):
+    '''
+    获取博主的详细信息
+    '''
+    account = parm['request_map']['blogger_name']
+    try:
+        user_detail = UserDetail.get_user_detail_by_account(account)
+        user_detail['head_file'] = user_detail['head_file'] if user_detail['head_file'] else 'default.png'
+    except CooError, e:
+        user_detail = {}
     return {'data': user_detail}

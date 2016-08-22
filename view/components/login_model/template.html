@@ -1,0 +1,11 @@
+<div class="ui" id="login-form">
+	<div class="ui form" style="padding: 20px">
+		<div class="field">
+			<input type="text" name="account" placeholder="帐号" v-model="user.account" @keyup.enter="login">
+		</div>
+		<div class="field">
+			<input type="password" name="password" placeholder="密码" v-model="user.password" @keyup.enter="login">
+		</div>
+		<button class="ui button" @click="login">登录</button>
+	</div>
+</div>

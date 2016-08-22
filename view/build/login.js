@@ -46,9 +46,9 @@
 
 	var Vue, v_head;
 
-	Vue = __webpack_require__(33);
+	Vue = __webpack_require__(11);
 
-	__webpack_require__(32);
+	__webpack_require__(10);
 
 	v_head = new Vue({
 	  el: "#login",
@@ -60,10 +60,10 @@
 	    };
 	  },
 	  components: {
-	    'login': __webpack_require__(48),
-	    'register': __webpack_require__(50),
-	    'foot_c': __webpack_require__(46),
-	    'head_c': __webpack_require__(34)
+	    'login': __webpack_require__(62),
+	    'register': __webpack_require__(64),
+	    'foot_c': __webpack_require__(60),
+	    'head_c': __webpack_require__(49)
 	  }
 	});
 
@@ -384,29 +384,7 @@
 /* 7 */,
 /* 8 */,
 /* 9 */,
-/* 10 */,
-/* 11 */,
-/* 12 */,
-/* 13 */,
-/* 14 */,
-/* 15 */,
-/* 16 */,
-/* 17 */,
-/* 18 */,
-/* 19 */,
-/* 20 */,
-/* 21 */,
-/* 22 */,
-/* 23 */,
-/* 24 */,
-/* 25 */,
-/* 26 */,
-/* 27 */,
-/* 28 */,
-/* 29 */,
-/* 30 */,
-/* 31 */,
-/* 32 */
+/* 10 */
 /***/ function(module, exports) {
 
 	window.cl = {
@@ -466,6 +444,17 @@
 	      async: true
 	    });
 	  },
+	  p_load: function(post_parm) {
+	    var parm;
+	    parm = JSON.stringify({
+	      request_type: post_parm.request_type,
+	      request_map: post_parm.request_map
+	    });
+	    return this.post_load({
+	      parm: parm,
+	      del_fun: post_parm.del_fun
+	    });
+	  },
 	  post_load: function(post_parm) {
 	    return $.ajax({
 	      url: '/post_request',
@@ -482,88 +471,152 @@
 	      })(this)
 	    });
 	  },
-	  href_parm: function(fun_map) {
-	    var complete_href, e, error, error1, error2, error3, error4, get_fun_map, href_1, href_2, href_3, i, len, parm_list, parm_map, parm_str;
-	    if (fun_map.type === 'base_href') {
-	      try {
-	        return window.location.href.split("?")[0];
-	      } catch (error) {
-	        e = error;
-	        return window.location.href;
-	      }
+	  href_p: function(key, type, value) {
+	    var fun_map;
+	    if (type == null) {
+	      type = 'value';
 	    }
-	    if (fun_map.type === 'parm') {
-	      try {
-	        return window.location.href.split("?")[1];
-	      } catch (error1) {
-	        e = error1;
-	        return '';
+	    if (value == null) {
+	      value = '';
+	    }
+	    fun_map = {
+	      type: type,
+	      key: key,
+	      value: value
+	    };
+	    return this.href_parm(fun_map);
+	  },
+	  href_parm: function(fun_map) {
+	    var e, error, i, j, len, len1, parm_content, parm_head, parm_list, parm_map, parm_str, url_list;
+	    url_list = window.location.href.split("?");
+	    parm_head = url_list[0];
+	    parm_list = url_list.length > 1 ? url_list[1].split("&") : [];
+	    parm_list = this.del_list_element(parm_list, function(data) {
+	      if (data.search('=') === -1) {
+	        return true;
+	      } else {
+	        return false;
 	      }
+	    });
+	    parm_map = {};
+	    for (i = 0, len = parm_list.length; i < len; i++) {
+	      parm_str = parm_list[i];
+	      parm_map[parm_str.split("=")[0]] = parm_str.split("=")[1];
 	    }
 	    if (fun_map.type === 'value') {
 	      try {
-	        parm_map = {};
-	        parm_list = window.location.href.split("?")[1].split("&");
-	        for (i = 0, len = parm_list.length; i < len; i++) {
-	          parm_str = parm_list[i];
-	          parm_map[parm_str.split("=")[0]] = parm_str.split("=")[1];
-	        }
-	        if (fun_map.key && fun_map.key !== '') {
-	          return parm_map[fun_map.key];
+	        if (this.testBoolean(fun_map.key)) {
+	          if (typeof parm_map[fun_map.key] === "undefined") {
+	            return '';
+	          } else {
+	            return parm_map[fun_map.key];
+	          }
 	        } else {
 	          return parm_map;
 	        }
-	      } catch (error2) {
-	        e = error2;
+	      } catch (error) {
+	        e = error;
 	        return '';
 	      }
 	    }
-	    if (fun_map.type === 'set_value') {
-	      if (fun_map.key && fun_map.key !== '' && fun_map.value && fun_map.value !== '') {
-	        try {
-	          href_1 = window.location.href.split(fun_map.key)[0];
-	          href_2 = window.location.href.split(fun_map.key)[1];
-	          get_fun_map = {
-	            type: 'value',
-	            key: fun_map.key
-	          };
-	          href_3 = href_2.split(this.href_parm(get_fun_map))[1];
-	          complete_href = href_1 + fun_map.key + '=' + fun_map.value + href_3;
-	          return window.history.pushState({}, 0, complete_href);
-	        } catch (error3) {
-	          e = error3;
-	          return window.history.pushState({}, 0, window.location.href + '?' + fun_map.key + '=' + fun_map.value);
-	        }
-	      } else if (fun_map.value && fun_map.value !== '') {
-	        try {
-	          if (window.location.href.split("?")[1]) {
-	            return window.history.pushState({}, 0, window.location.href + '&' + fun_map.value);
+	    if (fun_map.type === 'del_value') {
+	      if (this.testBoolean(fun_map.key) && parm_list.length > 0) {
+	        parm_list = this.del_list_element(parm_list, function(data) {
+	          if (data.split("=")[0] === fun_map.key) {
+	            return true;
 	          } else {
-	            return window.history.pushState({}, 0, window.location.href + '?' + fun_map.value);
+	            return false;
 	          }
-	        } catch (error4) {
-	          e = error4;
-	          return window.history.pushState({}, 0, window.location.href + '?' + fun_map.value);
-	        }
+	        });
+	      } else {
+	        return false;
 	      }
 	    }
+	    if (fun_map.type === 'set_value') {
+	      if (this.testBoolean(fun_map.key) && this.testBoolean(fun_map.value)) {
+	        if (parm_map.hasOwnProperty(fun_map.key)) {
+	          parm_list = this.del_list_element(parm_list, function(data) {
+	            if (data.split("=")[0] === fun_map.key) {
+	              return true;
+	            } else {
+	              return false;
+	            }
+	          });
+	        }
+	        parm_list.push(fun_map.key + '=' + fun_map.value);
+	      } else {
+	        return false;
+	      }
+	    }
+	    parm_content = "?";
+	    for (j = 0, len1 = parm_list.length; j < len1; j++) {
+	      parm_str = parm_list[j];
+	      parm_content = parm_content + parm_str + '&';
+	    }
+	    parm_content = parm_content.length > 0 ? parm_content.slice(0, -1) : '';
+	    window.history.pushState({}, 0, parm_head + parm_content);
+	    return true;
+	  },
+	  del_list_element: function(list_data, judgment_fun) {
+	    var data;
+	    return (function() {
+	      var i, len, results;
+	      results = [];
+	      for (i = 0, len = list_data.length; i < len; i++) {
+	        data = list_data[i];
+	        if (!judgment_fun(data)) {
+	          results.push(data);
+	        }
+	      }
+	      return results;
+	    })();
 	  },
 	  isPositiveNum: function(st) {
 	    var ree;
 	    ree = /^[1-9]*[0-9][0-9]*$/;
 	    return ree.test(st);
 	  },
-	  cl_copy: function(map) {
-	    return jQuery.extend(true, {}, map);
+	  cl_copy: function(obj) {
+	    var data;
+	    if (typeof obj.length === "undefined") {
+	      return jQuery.extend(true, {}, obj);
+	    } else {
+	      return (function() {
+	        var i, len, results;
+	        results = [];
+	        for (i = 0, len = list_obj.length; i < len; i++) {
+	          data = list_obj[i];
+	          results.push(data);
+	        }
+	        return results;
+	      })();
+	    }
 	  },
 	  dateFormat: function(mask) {
 	    return mask.substring(0, 16);
+	  },
+	  testBoolean: function(data, return_data) {
+	    if (return_data == null) {
+	      return_data = true;
+	    }
+	    if (typeof data === "undefined" || (data === null || data === '' || data === 0)) {
+	      return false;
+	    }
+	    if (typeof data === 'object') {
+	      if (data.length > 0) {
+	        return true;
+	      } else {
+	        return false;
+	      }
+	    } else {
+	      return true;
+	    }
 	  }
 	};
 
 
 /***/ },
-/* 33 */
+/* 11 */
 /***/ function(module, exports) {
 
 	Vue.config.debug = true;
@@ -574,15 +627,68 @@
 
 
 /***/ },
-/* 34 */
+/* 12 */,
+/* 13 */,
+/* 14 */,
+/* 15 */,
+/* 16 */,
+/* 17 */,
+/* 18 */
+/***/ function(module, exports) {
+
+	module.exports = {
+	  bind: function() {},
+	  update: function(value, old_value) {
+	    if (value) {
+	      return this.el.src = "/static/static/userfile/image/" + value;
+	    } else {
+	      return this.el.src = "/static/static/userfile/image/default.png";
+	    }
+	  },
+	  unbind: function() {}
+	};
+
+
+/***/ },
+/* 19 */,
+/* 20 */,
+/* 21 */,
+/* 22 */,
+/* 23 */,
+/* 24 */,
+/* 25 */,
+/* 26 */,
+/* 27 */,
+/* 28 */,
+/* 29 */,
+/* 30 */,
+/* 31 */,
+/* 32 */,
+/* 33 */,
+/* 34 */,
+/* 35 */,
+/* 36 */,
+/* 37 */,
+/* 38 */,
+/* 39 */,
+/* 40 */,
+/* 41 */,
+/* 42 */,
+/* 43 */,
+/* 44 */,
+/* 45 */,
+/* 46 */,
+/* 47 */,
+/* 48 */,
+/* 49 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(35);
+	__webpack_require__(50);
 
 	module.exports = Vue.extend({
-	  template: __webpack_require__(37),
+	  template: __webpack_require__(52),
 	  components: {
-	    'user-self-icon': __webpack_require__(38)
+	    'user-self-icon': __webpack_require__(53)
 	  },
 	  props: ['show_left_bar', 'head_type', 'login_view'],
 	  methods: {
@@ -601,13 +707,13 @@
 
 
 /***/ },
-/* 35 */
+/* 50 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(36);
+	var content = __webpack_require__(51);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(4)(content, {});
@@ -627,7 +733,7 @@
 	}
 
 /***/ },
-/* 36 */
+/* 51 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(3)();
@@ -641,22 +747,22 @@
 
 
 /***/ },
-/* 37 */
+/* 52 */
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"ui fixed inverted menu grid four column\" style=\"padding: 0px\" id=\"v-head\">\n\t<div class=\"column\">\n\t\t<div class=\"ui dividing\" v-on:click=\"changer_menu\" style=\"color: #ffffff;padding:10px;padding-right: 20px\" v-if=\"head_type!='login' && head_type!='register'\">\n\t\t\t<label><i class=\"grid layout icon\"></i>菜单</label>\n\t\t</div>\n\t</div>\n\t<div class=\"column\">\n\t</div>\n\t<div class=\"column\">\n\t</div>\n\t<div class=\"column\">\n\t\t<div class=\"ui dividing\" style=\"color: #ffffff;float:right;padding:10px;padding-right: 20px\" v-if=\"head_type=='login'\" v-on:click=\"change_component('register')\">\n\t\t<label><i class=\"add square icon\"></i>注册</label>\n\t\t</div>\n\t\t<div class=\"ui dividing\" style=\"color: #ffffff;float:right;padding:10px;padding-right: 20px\" v-if=\"head_type=='register'\" v-on:click=\"change_component('login')\">\n\t\t\t<label><i class=\"ticket icon\"></i>登陆</label>\n\t\t</div>\n\t\t<div class=\"ui dividing\" style=\"color: #ffffff;float:right;padding:10px;padding-right: 20px\" v-if=\"head_type!='login' && head_type!='register'\">\n        \t<user-self-icon></user-self-icon>\n        </div>\n    </div>\n</div>\n";
 
 /***/ },
-/* 38 */
+/* 53 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = Vue.extend({
-	  template: __webpack_require__(39),
+	  template: __webpack_require__(54),
 	  directives: {
-	    'user-head': __webpack_require__(40)
+	    'user-head': __webpack_require__(18)
 	  },
 	  components: {
-	    'user-info': __webpack_require__(41)
+	    'user-info': __webpack_require__(55)
 	  },
 	  data: function() {
 	    return {
@@ -698,37 +804,20 @@
 
 
 /***/ },
-/* 39 */
+/* 54 */
 /***/ function(module, exports) {
 
 	module.exports = "<a class=\"ui image label user-head\" style=\"height: 30px\" v-on:click=\"change_component('user_detail')\"><img v-user-head=\"user.head_file\" style=\"min-height: 30px;\">(% user.name %)</a>\n<div class=\"ui popup card\" style=\"padding: 0px;margin: 0px\">\n\t<user-info :type.sync=\"info_type\" :user_detail.sync=\"user\"></user-info>\n</div>";
 
 /***/ },
-/* 40 */
-/***/ function(module, exports) {
-
-	module.exports = {
-	  bind: function() {},
-	  update: function(value, old_value) {
-	    if (value) {
-	      return this.el.src = "/static/static/userfile/image/" + value;
-	    } else {
-	      return this.el.src = "/static/static/userfile/image/default.png";
-	    }
-	  },
-	  unbind: function() {}
-	};
-
-
-/***/ },
-/* 41 */
+/* 55 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = Vue.extend({
-	  template: __webpack_require__(42),
+	  template: __webpack_require__(56),
 	  directives: {
-	    'user-head': __webpack_require__(40),
-	    'dateformat': __webpack_require__(43)
+	    'user-head': __webpack_require__(18),
+	    'dateformat': __webpack_require__(57)
 	  },
 	  props: ['type', 'user_detail'],
 	  methods: {
@@ -740,13 +829,13 @@
 
 
 /***/ },
-/* 42 */
+/* 56 */
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"image\" v-if=\"type!='popup'\">\n\t<img v-user-head=\"user_detail.head_file\" style=\"max-height: 200px;\">\n</div>\n<div class=\"content\" style=\"padding-top: 10px\" v-if=\"type!='popup'\">\n\t<h3 class=\"ui header\">(% user_detail.name %)<div class=\"sub header\">(% user_detail.account %)</div>\n\t</h3>\n\t<div class=\"description\">(% user_detail.motto %)</div>\n\t<div class=\"description\" style=\"padding-top: 10px;color:#999999\" >加入时间：\n\t    <span v-dateformat=\"user_detail.create_date\"></span>\n\t</div>\n</div>\n<div class=\"image\" v-if=\"type=='popup'\">\n\t<img  v-user-head=\"user_detail.head_file\" style=\"max-height: 200px\">\n</div>\n<div class=\"content\" v-if=\"type=='popup'\">\n\t<div class=\"header\">(% user_detail.name %)</div>\n\t<div class=\"meta\">\n\t\t<a>(% user_detail.account %)</a>\n\t</div>\n\t<div class=\"description\">(% user_detail.motto %)</div>\n</div>\n<div class=\"extra content\" v-if=\"type=='popup'\">\n\t<span class=\"right floated\" v-on:click=\"logout\"><label><i class=\"power icon\"></i>退出</label></span>\n</div>";
 
 /***/ },
-/* 43 */
+/* 57 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -765,28 +854,28 @@
 
 
 /***/ },
-/* 44 */,
-/* 45 */,
-/* 46 */
+/* 58 */,
+/* 59 */,
+/* 60 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = Vue.extend({
-	  template: __webpack_require__(47)
+	  template: __webpack_require__(61)
 	});
 
 
 /***/ },
-/* 47 */
+/* 61 */
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"ui fixed inverted vertical footer segment\">\n\t<div class=\"ui center aligned container\">\n\t\t<div class=\"ui horizontal inverted small divided link list\">\n\t\t\t<a class=\"item\" href=\"#\">Site Map</a>\n\t\t\t<a class=\"item\" href=\"#\">Contact Us</a>\n\t\t\t<a class=\"item\" href=\"#\">Terms and Conditions</a>\n\t\t\t<a class=\"item\" href=\"#\">Privacy Policy</a>\n\t\t</div>\n\t</div>\n</div>";
 
 /***/ },
-/* 48 */
+/* 62 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = Vue.extend({
-	  template: __webpack_require__(49),
+	  template: __webpack_require__(63),
 	  data: function() {
 	    return {
 	      user: {}
@@ -838,17 +927,17 @@
 
 
 /***/ },
-/* 49 */
+/* 63 */
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"ui main text container\" style=\"min-height: 100%;padding-top: 180px;\" id=\"login-form\">\n\t<h1 class=\"ui header\">用户登录</h1>\n\t<div class=\"ui form\">\n\t\t<div class=\"field\">\n\t\t\t<label>帐号</label>\n\t\t\t<input type=\"text\" name=\"account\" placeholder=\"帐号\" v-model=\"user.account\">\n\t\t</div>\n\t\t<div class=\"field\">\n\t\t\t<label>密码</label>\n\t\t\t<input type=\"password\" name=\"password\" placeholder=\"密码\" v-model=\"user.password\" @keyup.enter=\"login\">\n\t\t</div>\n\t\t<button class=\"ui button\" @click=\"login\">登录</button>\n\t</div>\n</div>\n";
 
 /***/ },
-/* 50 */
+/* 64 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = Vue.extend({
-	  template: __webpack_require__(51),
+	  template: __webpack_require__(65),
 	  data: function() {
 	    return {
 	      new_user: {},
@@ -936,7 +1025,7 @@
 
 
 /***/ },
-/* 51 */
+/* 65 */
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"ui main text container\" style=\"min-height: 100%;padding-top: 150px;\" id=\"register-form\">\n\t<h1 class=\"ui header\">用户注册</h1>\n\t<div class=\"ui form\">\n\t\t<div class=\"field\">\n\t\t\t<label>姓名</label>\n\t\t\t<input type=\"text\" name=\"name\" placeholder=\"姓名\" v-model=\"new_user.name\">\n\t\t</div>\n\t\t<div class=\"field\">\n\t\t\t<label>帐号<span v-if=\"!can_user\" style=\"margin-left: 300px;color: #9f3a38\">该帐号已存在</span></label>\n\t\t\t<input type=\"text\" name=\"account\" placeholder=\"帐号\" v-model=\"new_user.account\" @blur=\"test_account\">\n\t\t</div>\n\t\t<div class=\"field\">\n\t\t\t<label>密码</label>\n\t\t\t<input type=\"password\" name=\"password\" placeholder=\"密码\" v-model=\"new_user.password\">\n\t\t</div>\n\t\t<div class=\"field\">\n\t\t\t<label>重复密码</label>\n\t\t\t<input type=\"password\" name=\"repassword\" placeholder=\"重复密码\" v-model=\"new_user.repassword\">\n\t\t</div>\n\t\t<button class=\"ui positive button\" @click=\"register\">注册</button>\n\t</div>\n</div>";

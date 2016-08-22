@@ -2,6 +2,7 @@ var path = require("path");
 module.exports = {
   entry: {
         home: "./home.coffee",
+        blog: "./blog.coffee",
         login: "./login.coffee",
         welcome: "./components_norm/welcome/index.coffee",
         friend: "./components_norm/friend/index.coffee",

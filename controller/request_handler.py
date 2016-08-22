@@ -93,17 +93,18 @@ def validationSession(method):
     '''
     @functools.wraps(method)
     def wrapper(self, *args, **kwargs):
+        self.getUserFromCookie()
+        self.getUser()
+        self.request_argument['user'] = self.user
         # 判断api是否需要在线验证
         if self.need_validation_session:
-            self.getUserFromCookie()
-            self.getUser()
             if sys_lib.validation_session(self.session):
-                self.request_argument['user'] = self.user
                 method(self, *args, **kwargs)
             else:
                 write_data = json.dumps({"response_data": {}, "error": 3, "error_text": '已离线，需从新登陆'})
                 self.write(write_data)
         else:
+            sys_lib.validation_session(self.session)
             method(self, *args, **kwargs)
     return wrapper
 
@@ -129,6 +130,12 @@ def validationPermission(method):
 class Main(BaseHandler):
     def get(self):
         self.redirect('/home')
+
+
+class Blog(BaseHandler):
+    def get(self):
+        self.set_header("Content-Type", "text/html")
+        self.render('blog.html')
 
 
 class Login(BaseHandler):

@@ -203,6 +203,26 @@ class Message_Send_Record_His(pg_base.BaseTable):
     receive_account = CharField(max_length=30, null=False)  # 接收者账号
 
 
+class Blog_Menu(pg_base.BaseTable):
+    '''
+    博客菜单
+    '''
+    menu_name = TextField(null=False)  # 菜单名
+    blone_account = CharField(max_length=30, null=False)  # 所属用户
+    menu_key = TextField(null=False)  # 菜单关键字
+    restrict = IntegerField(null=False)  # 0所有人可见，1登录用户可见，2好友可见，3指定用户可见，4仅自己可见
+
+
+class Blog(pg_base.BaseTable):
+    '''
+    博客内容
+    '''
+    blog_title = TextField(null=False)  # 博客标题
+    author = CharField(max_length=30, null=False)  # 所属用户
+    blog_type = TextField(null=False)  # 内容类型 对应Blog_Menu的menu_key
+    content = TextField(null=False)  # 内容
+
+
 def forciblyCreateAllTable():
     pg_update.forciblyCreateTable(Role)
     pg_update.forciblyCreateTable(Model)
@@ -272,7 +292,5 @@ if __name__ == "__main__":
     首先在程序中加限制，其次在插入数据时可以捕获异常来处理
     '''
     # initializeDb()
-    pg_update.forciblyCreateTable(Message)
-    pg_update.forciblyCreateTable(Message_Send_Record)
-    pg_update.forciblyCreateTable(Message_Send_Record_His)
+    pg_update.forciblyCreateTable(Blog)
     pass
