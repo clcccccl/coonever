@@ -20,6 +20,7 @@ def check_logged(parm):
 def get_bar_data(parm):
     '''
     获取菜单数据
+    restrict=1
     '''
     roles = parm['user']['roles']
     businesses = RoleBusiness.get_bar_data_by_roles(roles) if len(roles) > 0 else []
@@ -41,6 +42,7 @@ def test_account(parm):
 def get_user_head_file_name(parm):
     '''
     获取用户头像地址
+    restrict=1
     '''
     account = parm['user']['account']
     user_detail = UserDetail.get_user_head_file_name_by_account(account)
@@ -51,6 +53,7 @@ def get_user_head_file_name(parm):
 def get_user_detail(parm):
     '''
     获取用户自己的详细信息
+    restrict=1
     '''
     account = parm['user']['account']
     user_detail = UserDetail.get_user_detail_by_account(account)

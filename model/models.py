@@ -242,11 +242,14 @@ def forciblyCreateAllTable():
     pg_update.forciblyCreateTable(Message_Send_Record_His)
     pg_update.forciblyCreateTable(Blog_Menu)
     pg_update.forciblyCreateTable(Blog)
+    pg_update.forciblyCreateTable(Session)
 
 
 def initializeDb():
     forciblyCreateAllTable()
+    # 新增用户
     data = pg_update.insertOne("user_info", {'name': '陈力', "account": 'chenli', 'password': "cl212037"})
+    # 初始化角色
     data = pg_update.insertOne("role", {'role_code': 'root', "role_name": 'root', 'role_explain': "超级用户，拥有系统中所有的模块和权限",
                                'role_type': 'root', 'seq_code': 'root', 'parent_role_code': 'None'})
     data = pg_update.insertOne("role", {'role_code': 'user_root', "role_name": '超级用户', 'role_explain': "超级用户，拥有系统中所有用户相关的模块和权限",
@@ -256,8 +259,10 @@ def initializeDb():
     data = pg_update.insertOne("role", {'role_code': 'sys_manage', "role_name": '系统管理员', 'role_explain': "管理系统系统业务",
                                'role_type': 'norm', 'seq_code': 'root.sys_root.sys_manage', 'parent_role_code': 'sys_root'})
 
+    # 将chenli初始化为sys_manage
     data = pg_update.insertOne("user_role", {'role_code': 'sys_manage', "account": 'chenli'})
 
+    # 初始化业务
     data = pg_update.insertOne("business", {'business_code': 'top', "business_name": '顶层业务', 'business_explain': "系统顶层业务，其它业务都是其子孙业务",
                                'parent_business_code': 'None', 'is_leaf': 0, 'seq_code': 'top'})
     data = pg_update.insertOne("business", {'business_code': 'sys', "business_name": '系统业务', 'business_explain': "包括所有系统管理的业务",
@@ -273,21 +278,10 @@ def initializeDb():
     data = pg_update.insertOne("business", {'business_code': 'api_management', "business_name": 'API管理', 'business_explain': "API管理",
                                'parent_business_code': 'sys_base_deploy', 'is_leaf': 1, 'component': 'api_management', 'icon': 'users', 'seq_code': 'top.sys.sys_base_deploy.api_management'})
 
+    # 初始化角色对应业务
     data = pg_update.insertOne("role_business", {'role_code': 'root', "business_code": 'top'})
     data = pg_update.insertOne("role_business", {'role_code': 'sys_root', "business_code": 'sys'})
     data = pg_update.insertOne("role_business", {'role_code': 'sys_manage', "business_code": 'sys_base_deploy'})
-
-    data = pg_update.insertOne("business_api", {'api': 'get_businesses_tree', 'business_code': 'business_management'})
-    data = pg_update.insertOne("business_api", {'api': 'save_business', 'business_code': 'business_management'})
-    data = pg_update.insertOne("business_api", {'api': 'get_roles', 'business_code': 'role_management'})
-    data = pg_update.insertOne("business_api", {'api': 'get_roles_tree', 'business_code': 'role_management'})
-    data = pg_update.insertOne("business_api", {'api': 'save_role', 'business_code': 'role_management'})
-    data = pg_update.insertOne("business_api", {'api': 'change_user_role', 'business_code': 'user_management'})
-    data = pg_update.insertOne("business_api", {'api': 'edit_user', 'business_code': 'user_management'})
-    data = pg_update.insertOne("business_api", {'api': 'new_user', 'business_code': 'user_management'})
-    data = pg_update.insertOne("business_api", {'api': 'get_users', 'business_code': 'user_management'})
-    data = pg_update.insertOne("business_api", {'api': 'edit_api', 'business_code': 'user_management'})
-    data = pg_update.insertOne("business_api", {'api': 'get_apis', 'business_code': 'user_management'})
 
 
 if __name__ == "__main__":
@@ -296,6 +290,5 @@ if __name__ == "__main__":
     unique=True，不唯一时直接报错，数据没有存进去
     首先在程序中加限制，其次在插入数据时可以捕获异常来处理
     '''
-    # initializeDb()
-    pg_update.forciblyCreateTable(Session)
+    initializeDb()
     pass

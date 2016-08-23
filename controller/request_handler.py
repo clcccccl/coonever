@@ -129,7 +129,7 @@ def validationPermission(method):
 
 class Main(BaseHandler):
     def get(self):
-        self.redirect('/home')
+        self.redirect('/blog')
 
 
 class Blog(BaseHandler):

@@ -25,6 +25,7 @@ from dbImpl.user import User, UserRole, Role, Business, RoleBusiness, Api, Busin
 def get_users(parm):
     '''
     获取系统内的用户
+    business=user_management
     '''
     limit = 10
     parm = parm.get('request_map')
@@ -52,6 +53,7 @@ def get_users(parm):
 def new_user(parm):
     '''
     新增用户
+    business=user_management
     '''
     request_map = parm.get('request_map')
     user = User(name=request_map.get('name'), account=request_map.get('account'), password=request_map.get('password'))
@@ -61,6 +63,7 @@ def new_user(parm):
 def edit_user(parm):
     '''
     用户信息更新
+    business=user_management
     '''
     request_map = parm.get('request_map')
     user = User(name=request_map.get('name'), account=request_map.get('account'), password=request_map.get('password'))
@@ -70,6 +73,7 @@ def edit_user(parm):
 def change_user_role(parm):
     '''
     更新用户对应角色
+    business=user_management
     '''
     request_map = parm.get('request_map')
     user_account = request_map.get('account')
@@ -83,6 +87,7 @@ def change_user_role(parm):
 def del_user(parm):
     '''
     删除用户
+    business=user_management
     '''
     request_map = parm.get('request_map')
     account = request_map.get('account')
@@ -97,6 +102,7 @@ def del_user(parm):
 def save_role(pam):
     '''
     角色增删改
+    business=role_management
     '''
     request_map = pam.get('request_map')
     if request_map.get('id'):
@@ -110,6 +116,7 @@ def save_role(pam):
 def get_roles_tree(parm):
     '''
     获取角色树
+    business=role_management
     create by chenli at 16/01/07 11:37
     '''
     roles = Role.get_roles()
@@ -122,6 +129,7 @@ def get_roles_tree(parm):
 def get_roles(parm):
     '''
     获取角色列表
+    business=role_management
     create by chenli at 16/01/07 11:37
     '''
     return Role.get_roles()
@@ -135,6 +143,7 @@ def get_roles(parm):
 def get_businesses_tree(parm):
     '''
     获取业务树
+    business=business_management
     '''
     businesses = Business.get_businesses()
     for business in businesses:
@@ -145,6 +154,7 @@ def get_businesses_tree(parm):
 def get_role_businesses_tree(parm):
     '''
     根据角色获取业务树
+    business=business_management
     '''
     role_code = parm.get('request_map').get('role_code')
     businesses = RoleBusiness.get_businesses_by_role(role_code)
@@ -155,22 +165,10 @@ def get_role_businesses_tree(parm):
     return {'datas': tools.listToTree(businesses, 'parent_business_code', 'business_code')}
 
 
-def get_business_by_api(parm):
-    '''
-    根据api获取可拥有api的业务
-    '''
-    api = parm.get('request_map').get('api')
-    businesses = Business.get_component_businesses()
-    business_api = BusinessApi.get_businesses_by_api(api)
-    business_api = [business_code['business_code'] for business_code in business_api]
-    for business in businesses:
-        business['checked'] = True if business['business_code'] in business_api else False
-    return {'datas': businesses}
-
-
 def save_business(parm):
     '''
     业务的增删改
+    business=business_management
     '''
     request_map = parm.get('request_map')
     if request_map.get('id'):
@@ -184,6 +182,7 @@ def save_business(parm):
 def save_role_business(parm):
     '''
     修改角色的业务
+    business=business_management
     '''
     request_map = parm.get('request_map')
     checked = request_map.get('checked')
@@ -201,6 +200,7 @@ API管理－－－－－－－－－－－－－－－－－－－－－－－�
 def get_apis(parm):
     '''
     获取系统内的api
+    business=api_management
     '''
     return Api.get_apis(parm.get('request_map'))
 
@@ -208,6 +208,7 @@ def get_apis(parm):
 def edit_api(parm):
     '''
     编辑api
+    business=api_management
     '''
     request_map = parm.get('request_map')
     api = {'api': request_map['api']}
@@ -218,9 +219,24 @@ def edit_api(parm):
     Api.update_api(api)
 
 
+def get_business_by_api(parm):
+    '''
+    根据api获取可拥有api的业务
+    business=api_management
+    '''
+    api = parm.get('request_map').get('api')
+    businesses = Business.get_component_businesses()
+    business_api = BusinessApi.get_businesses_by_api(api)
+    business_api = [business_code['business_code'] for business_code in business_api]
+    for business in businesses:
+        business['checked'] = True if business['business_code'] in business_api else False
+    return {'datas': businesses}
+
+
 def save_business_api(parm):
     '''
     修改业务api
+    business=api_management
     '''
     request_map = parm.get('request_map')
     checked = request_map.get('checked')

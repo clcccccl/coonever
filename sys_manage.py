@@ -35,14 +35,25 @@ def __addApi():
             # 已存在则跳过
             continue
         print "新增api", fun.__name__
+        business_code = ''
         data_map = {}
         data_map['api'] = fun.__name__
-        data_map['api_explain'] = fun.__doc__.strip('\n').split('\n')[0].strip(' ').strip('\n') if fun.__doc__ else ''
         data_map['path'] = fun.__module__
         data_map['disable'] = 0
         data_map['error'] = 0
         data_map['session'] = 0
-        data_map['restrict'] = (0 if fun.__module__ == 'model.businessLayer.base_business' else 1)
+        data_map['restrict'] = 0
+        if fun.__doc__:
+            docs = fun.__doc__.strip('\n').split('\n')
+            data_map['api_explain'] = docs[0].strip(' ').strip('\n') if fun.__doc__ else ''
+            if len(docs) > 1:
+                if docs[1].find('business=') > 0:
+                    data_map['restrict'] = 1
+                    data_map['session'] = 1
+                    business = docs[1].strip(' ').split('=')[1]
+                    __addBusinessApi(data_map['api'], business_code)
+                if docs[1].find('restrict=1') > 0:
+                    data_map['session'] = 1
         pg_update.insertOne("api", data_map)
 
 
