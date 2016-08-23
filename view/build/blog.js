@@ -1091,7 +1091,7 @@
 	      return location.href = "/blog?h_m_k=write_blog&content_id=" + this.head_menu_key + "&blog_id=" + content_menu.id;
 	    },
 	    del_blog: function(content_menu) {
-	      if (this.head_menu_key = 'write_blog') {
+	      if (this.head_menu_key === 'write_blog') {
 	        this.del_head_menu.menu_key = content_menu.id;
 	        this.save_head_menu(this.del_head_menu);
 	        return;

@@ -68,7 +68,7 @@ module.exports =
       edit_blog:(content_menu)->
         location.href = "/blog?h_m_k=write_blog&content_id=" + @head_menu_key + "&blog_id=" + content_menu.id
       del_blog:(content_menu)->
-        if @head_menu_key = 'write_blog'
+        if @head_menu_key == 'write_blog'
           @del_head_menu.menu_key = content_menu.id
           @save_head_menu(@del_head_menu)
           return

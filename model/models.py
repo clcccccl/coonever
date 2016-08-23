@@ -237,6 +237,11 @@ def forciblyCreateAllTable():
     pg_update.forciblyCreateTable(User_info)
     pg_update.forciblyCreateTable(Role_Business)
     pg_update.forciblyCreateTable(File)
+    pg_update.forciblyCreateTable(Message)
+    pg_update.forciblyCreateTable(Message_Send_Record)
+    pg_update.forciblyCreateTable(Message_Send_Record_His)
+    pg_update.forciblyCreateTable(Blog_Menu)
+    pg_update.forciblyCreateTable(Blog)
 
 
 def initializeDb():
@@ -291,6 +296,6 @@ if __name__ == "__main__":
     unique=True，不唯一时直接报错，数据没有存进去
     首先在程序中加限制，其次在插入数据时可以捕获异常来处理
     '''
-    # initializeDb()
-    pg_update.forciblyCreateTable(Blog)
+    initializeDb()
+    # pg_update.forciblyCreateTable(Blog)
     pass
