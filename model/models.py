@@ -242,6 +242,7 @@ def forciblyCreateAllTable():
     pg_update.forciblyCreateTable(Message_Send_Record_His)
     pg_update.forciblyCreateTable(Blog_Menu)
     pg_update.forciblyCreateTable(Blog)
+    pg_update.forciblyCreateTable(User_detail)
     pg_update.forciblyCreateTable(Session)
 
 
@@ -261,6 +262,7 @@ def initializeDb():
 
     # 将chenli初始化为sys_manage
     data = pg_update.insertOne("user_role", {'role_code': 'sys_manage', "account": 'chenli'})
+    data = pg_update.insertOne("user_detail", {'motto': 'You Know Noting', 'head_file': 'chenli.png', "account": 'chenli'})
 
     # 初始化业务
     data = pg_update.insertOne("business", {'business_code': 'top', "business_name": '顶层业务', 'business_explain': "系统顶层业务，其它业务都是其子孙业务",
