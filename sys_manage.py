@@ -50,7 +50,7 @@ def __addApi():
                 if docs[1].find('business=') > 0:
                     data_map['restrict'] = 1
                     data_map['session'] = 1
-                    business = docs[1].strip(' ').split('=')[1]
+                    business_code = docs[1].strip(' ').split('=')[1]
                     __addBusinessApi(data_map['api'], business_code)
                 if docs[1].find('restrict=1') > 0:
                     data_map['session'] = 1
