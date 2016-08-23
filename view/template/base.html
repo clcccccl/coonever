@@ -20,7 +20,8 @@
         <link href="{{ static_url("static/lib/Semantic-UI-CSS-master/components/dropdown.css") }}" rel="stylesheet" type="text/css">
         <link href="{{ static_url("static/lib/Semantic-UI-CSS-master/components/icon.css") }}" rel="stylesheet" type="text/css">
         <link href="{{ static_url("static/lib/Semantic-UI-CSS-master/components/transition.css") }}" rel="stylesheet" type="text/css">
-        <link href="{{ static_url("static/lib/Semantic-UI-CSS-master/semantic.css") }}" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" type="text/css" class="ui" href="http://www.semantic-ui.cn/dist/semantic.min.css">
+        <!-- <link href="{{ static_url("static/lib/Semantic-UI-CSS-master/semantic.css") }}" rel="stylesheet" type="text/css"> -->
         <link href="{{ static_url("static/lib/simditor/simditor.css") }}" rel="stylesheet" type="text/css">
         <style type="text/css" media="screen">
         [v-cloak] {
@@ -29,11 +30,14 @@
         </style>
         {% block css %}
         {% end %}
-        <script src="{{ static_url("static/lib/vue.js") }}"></script>
+        <!-- <script src="{{ static_url("static/lib/vue.js") }}"></script> -->
+        <script src="http://cn.vuejs.org/js/vue.js"></script>
         <script src="{{ static_url("static/lib/jquery-2.1.1.min.js") }}"></script>
-        <script src="{{ static_url("static/lib/Semantic-UI-CSS-master/semantic.min.js") }}"></script>
+        <script src="http://www.semantic-ui.cn/dist/semantic.min.js"></script>
+        <!-- <script src="{{ static_url("static/lib/Semantic-UI-CSS-master/semantic.min.js") }}"></script> -->
         <script src="{{ static_url("static/lib/Semantic-UI-CSS-master/components/transition.js") }}"></script>
-        <script src="{{ static_url("static/lib/Semantic-UI-CSS-master/components/dropdown.js") }}"></script>
+        <script src="http://www.semantic-ui.cn/javascript/dropdown.js"></script>
+        <!-- <script src="{{ static_url("static/lib/Semantic-UI-CSS-master/components/dropdown.js") }}"></script> -->
         <script src="{{ static_url("static/lib/Semantic-UI-CSS-master/components/visibility.js") }}"></script>
         <script src="{{ static_url("static/lib/jquery.noty.packaged.min.js") }}"></script>
         <!-- simditor -->
