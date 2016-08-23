@@ -3,7 +3,6 @@ config.ini
 peewee.db
 node_modules
 view/static/lib/vue-devtools/node_modules
-view/static/userfile/
 view/npm-debug.log
 *.log
 服务器架构
