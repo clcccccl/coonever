@@ -40,8 +40,9 @@
 /******/ 	return __webpack_require__(0);
 /******/ })
 /************************************************************************/
-/******/ ([
-/* 0 */
+/******/ ({
+
+/***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
 	var Vue;
@@ -128,9 +129,8 @@
 
 
 /***/ },
-/* 1 */,
-/* 2 */,
-/* 3 */
+
+/***/ 3:
 /***/ function(module, exports) {
 
 	/*
@@ -186,7 +186,8 @@
 
 
 /***/ },
-/* 4 */
+
+/***/ 4:
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -438,10 +439,8 @@
 
 
 /***/ },
-/* 5 */,
-/* 6 */,
-/* 7 */,
-/* 8 */
+
+/***/ 8:
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
@@ -467,7 +466,8 @@
 	}
 
 /***/ },
-/* 9 */
+
+/***/ 9:
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(3)();
@@ -481,7 +481,8 @@
 
 
 /***/ },
-/* 10 */
+
+/***/ 10:
 /***/ function(module, exports) {
 
 	window.cl = {
@@ -713,7 +714,8 @@
 
 
 /***/ },
-/* 11 */
+
+/***/ 11:
 /***/ function(module, exports) {
 
 	Vue.config.debug = true;
@@ -724,8 +726,11 @@
 
 
 /***/ },
-/* 12 */
+
+/***/ 12:
 /***/ function(module, exports, __webpack_require__) {
+
+	__webpack_require__(94);
 
 	module.exports = Vue.extend({
 	  template: __webpack_require__(13),
@@ -738,7 +743,8 @@
 	    return {
 	      head_menu_key: '',
 	      head_menus: [],
-	      logged: null
+	      logged: null,
+	      home_icon: ''
 	    };
 	  },
 	  events: {
@@ -754,9 +760,8 @@
 	      return this.$dispatch('change_head_menu', this.head_menu_key);
 	    },
 	    'logged': function() {
-	      if (!this.logged) {
-	        return this.init_popup();
-	      }
+	      this.init_popup();
+	      return this.home_icon = this.logged ? 'logout' : 'login';
 	    }
 	  },
 	  attached: function() {
@@ -839,13 +844,15 @@
 
 
 /***/ },
-/* 13 */
+
+/***/ 13:
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"item\" v-if=\"blogger!=''\">\n\t<div class=\"ui dividing\" style=\"color: #ffffff;float:right;\">\n\t\t<blogger-info :blogger_name.sync=\"blogger\"></blogger-info>\n\t</div>\n</div>\n<div class=\"item\" v-for=\"head_menu in head_menus\" @click=\"change_head_menu(head_menu.menu_key)\">\n\t<span v-if=\"!edit_head\">(% head_menu.menu_name %)</span>\n\t<i class=\"anchor icon\" v-if=\"head_menu.menu_key == head_menu_key\" style=\"padding-left: 10px;color: #555555;\">\n\t</i>\n</div>\n<div class=\"item\" v-if=\"logged && blogger==user_account\"><i class=\"write icon\" :class=\"{ large: head_menu_key == 'write_blog' }\" @click=\"change_head_menu('write_blog')\">____</i></div>\n<div class=\"right menu\">\n\t<!-- <div class=\"item\">\n\t\t<div class=\"ui transparent icon input\">\n\t\t\t<input type=\"text\" placeholder=\"Search Blogs...\">\n\t\t\t<i class=\"search link icon\"></i>\n\t\t</div>\n\t</div> -->\n</div>\n<div class=\"item\">\n\t<i class=\"large home icon home-icon\" @click=\"my_blog\" style=\"color: #555555;\"></i>\n\t<div class=\"ui popup card\" v-if=\"!logged\" style=\"padding: 0px;margin: 0px\">\n\t\t<login-model :logged.sync=\"logged\"></login-model>\n\t</div>\n</div>\n";
+	module.exports = "<div class=\"four wide column cl_item\" v-if=\"blogger!=''\" style=\"margin-top: 0em;\">\n\t<div class=\"ui dividing\" style=\"color: #ffffff;float:right;\">\n\t\t<blogger-info :blogger_name.sync=\"blogger\"></blogger-info>\n\t</div>\n</div>\n<div class=\"four wide column cl_item\" v-for=\"head_menu in head_menus\" @click=\"change_head_menu(head_menu.menu_key)\">\n\t<span v-if=\"!edit_head\">(% head_menu.menu_name %)</span>\n\t<i class=\"anchor icon\" v-if=\"head_menu.menu_key == head_menu_key\" style=\"padding-left: 0.7em;color: #555555;\">\n\t</i>\n</div>\n<div class=\"four wide column cl_item\" v-if=\"logged && blogger==user_account\"><i class=\"write icon\" :class=\"{ large: head_menu_key == 'write_blog' }\" @click=\"change_head_menu('write_blog')\">____</i></div>\n<div class=\"right menu\">\n\t<!-- <div class=\"item\">\n\t\t<div class=\"ui transparent icon input\">\n\t\t\t<input type=\"text\" placeholder=\"Search Blogs...\">\n\t\t\t<i class=\"search link icon\"></i>\n\t\t</div>\n\t</div> -->\n</div>\n<div class=\"four wide column cl_item\">\n\t<i class=\"large home icon home-icon\" @click=\"my_blog\" style=\"color: #555555;\"></i>\n\t<div class=\"ui popup card\" style=\"padding: 0px;margin: 0px\">\n\t\t<div>\n\t\t\t<div class=\"ui top attached tabular menu\">\n\t\t\t\t<a class=\"item\" v-if=\"!logged\" @click=\"home_icon='login'\" :class=\"{ active: home_icon == 'login' }\">登录</a>\n\t\t\t\t<a class=\"active item\" v-if=\"!logged\" @click=\"home_icon='register'\" :class=\"{ active: home_icon == 'register' }\">注册</a>\n\t\t\t\t<a class=\"item\" v-if=\"logged\" @click=\"home_icon='logout'\" :class=\"{ active: home_icon == 'logout' }\">退出</a>\n\t\t\t</div>\n\t\t\t<div class=\"ui bottom attached segment\">\n\t\t\t\t<login-model :logged.sync=\"logged\" v-if=\"!logged&&home_icon=='login'\"></login-model>\n\t\t\t\t<p class=\"ui\" v-if=\"logged&&home_icon=='logout'\">暂未实现</p>\n\t\t\t\t<p class=\"ui\" v-if=\"!logged&&home_icon=='register'\">暂未实现</p>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n</div>\n";
 
 /***/ },
-/* 14 */
+
+/***/ 14:
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = Vue.extend({
@@ -903,13 +910,15 @@
 
 
 /***/ },
-/* 15 */
+
+/***/ 15:
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"ui\" id=\"login-form\">\n\t<div class=\"ui form\" style=\"padding: 20px\">\n\t\t<div class=\"field\">\n\t\t\t<input type=\"text\" name=\"account\" placeholder=\"帐号\" v-model=\"user.account\" @keyup.enter=\"login\">\n\t\t</div>\n\t\t<div class=\"field\">\n\t\t\t<input type=\"password\" name=\"password\" placeholder=\"密码\" v-model=\"user.password\" @keyup.enter=\"login\">\n\t\t</div>\n\t\t<button class=\"ui button\" @click=\"login\">登录</button>\n\t</div>\n</div>";
 
 /***/ },
-/* 16 */
+
+/***/ 16:
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = Vue.extend({
@@ -958,13 +967,15 @@
 
 
 /***/ },
-/* 17 */
+
+/***/ 17:
 /***/ function(module, exports) {
 
 	module.exports = "<div>\n\t<a class=\"ui image label blogger-head\"\"><img v-user-head=\"blogger.head_file\" style=\"min-height: 30px;\">(% blogger.name %)</a>\n\t<div class=\"ui popup card\" style=\"padding: 0px;margin: 0px\">\n\t\t<div class=\"image\"\">\n\t\t\t<img  v-user-head=\"blogger.head_file\" style=\"max-height: 200px\">\n\t\t</div>\n\t\t<div class=\"content\"\">\n\t\t\t<div class=\"header\">(% blogger.name %)</div>\n\t\t\t<div class=\"meta\">\n\t\t\t\t<a>(% blogger.account %)</a>\n\t\t\t</div>\n\t\t\t<div class=\"description\">(% blogger.motto %)</div>\n\t\t</div>\n\t</div>\n</div>\n";
 
 /***/ },
-/* 18 */
+
+/***/ 18:
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -981,7 +992,8 @@
 
 
 /***/ },
-/* 19 */
+
+/***/ 19:
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = Vue.extend({
@@ -1123,13 +1135,15 @@
 
 
 /***/ },
-/* 20 */
+
+/***/ 20:
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"ui vertical fluid tabular menu content_menus\">\n\t<a class=\"item\" v-for=\"content_menu in content_menus\" @click=\"change_content_menu(content_menu.id)\">(% content_menu.blog_title %)\n\t\t<i class=\"anchor icon\" v-if=\"content_menu.id == content_id\" style=\"color: #555555;\"></i>\n\t\t<i class=\"edit icon\" @click=\"edit_blog(content_menu)\" v-if=\"content_menu.id == content_id && mousein && head_menu_key!='write_blog' && user_account == blogger\" style=\"color: #555555;\"></i>\n\t\t<i class=\"minus icon\" @click=\"del_blog(content_menu)\" v-if=\"content_menu.id == content_id && mousein && user_account == blogger\" style=\"color: #555555;\"></i>\n\t</a>\n\t<a class=\"item\"  v-if=\"head_menu_key=='write_blog' && (mousein || content_menus.length == 0)\">\n\t    <div class=\"ui transparent icon input\">\n\t\t\t<input type=\"text\" placeholder=\"分类\" v-model=\"new_head_menu.menu_name\">\n\t\t\t<i class=\"plus link icon\" @click=\"add_head_menu\" style=\"color: #555555;\"></i>\n\t\t</div>\n\t</a>\n\t<a class=\"item\" v-if=\"head_menu_key!='write_blog' && content_menus.length==0\">干净\n    \t<i class=\"anchor icon\" style=\"color: #555555;\"></i>\n    </a>\n</div>";
 
 /***/ },
-/* 21 */
+
+/***/ 21:
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = Vue.extend({
@@ -1209,13 +1223,15 @@
 
 
 /***/ },
-/* 22 */
+
+/***/ 22:
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"ui left action input\" style=\"margin: 20px;\" v-if=\"content_id!=''\">\n\t<button class=\"ui labeled icon button\"><i class=\"header icon\"></i> 标 题 </button>\n\t<input type=\"text\" placeholder=\"来个title\" v-model=\"blog.blog_title\"></input>\n\t<button class=\"ui labeled icon button\" @click=\"save_blog\" style=\"margin-left: 20px\"><i class=\"send icon\"></i> 发 布  </button>\n</div>\n<div style=\"margin: 17px;\" v-if=\"content_id!=''\">\n\t<editor></editor>    \n</div>\n<div v-if=\"content_id==''\">\n\t<h3 class=\"ui header\" style=\"text-align:center;font-family: serif;padding-top: 30px;\">\n\t\t<p></p>\n\t\t<p>先加个分类</p>\n\t\t<p>  </p>\n\t</h3>\n</div>\n";
+	module.exports = "<div class=\"ui left action input\" style=\"margin: 1em;\" v-if=\"content_id!=''\">\n\t<button class=\"ui labeled icon button\"><i class=\"header icon\"></i> 标 题 </button>\n\t<input type=\"text\" placeholder=\"来个title\" v-model=\"blog.blog_title\"></input>\n</div>\n<div style=\"margin: 1em;\">\n\t<editor></editor>    \n</div>\n<button class=\"ui labeled icon button\" @click=\"save_blog\"  v-if=\"content_id!=''\" style=\"margin-left: 1em;\"><i class=\"send icon\"></i> 发 布  </button>\n<div v-if=\"content_id==''\">\n\t<h3 class=\"ui header\" style=\"text-align:center;font-family: serif;padding-top: 30px;\">\n\t\t<p></p>\n\t\t<p>先加个分类</p>\n\t\t<p>  </p>\n\t</h3>\n</div>\n\n";
 
 /***/ },
-/* 23 */
+
+/***/ 23:
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = Vue.extend({
@@ -1281,13 +1297,15 @@
 
 
 /***/ },
-/* 24 */
+
+/***/ 24:
 /***/ function(module, exports) {
 
 	module.exports = "<textarea id=\"editor\" placeholder=\"Just say somthing\" autofocus disabled=\"true\"></textarea>";
 
 /***/ },
-/* 25 */
+
+/***/ 25:
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = Vue.extend({
@@ -1334,10 +1352,54 @@
 
 
 /***/ },
-/* 26 */
+
+/***/ 26:
 /***/ function(module, exports) {
 
-	module.exports = "<div v-if=\"blog.hasOwnProperty('blog_title')\">\n\t<h2 class=\"ui header\" style=\"text-align:center;font-family: serif;padding-top: 30px;\">\n\t\t<div class=\"content\">(% blog.blog_title %)\n\t\t\t<div class=\"sub header\" style=\"padding-top: 7px;\">(% blog.author %)  (% blog && blog.create_date ? blog.create_date.substring(0,10) : '' %)</div>\n\t\t</div>\n\t</h2>\n\t<div id=\"blog_content\" style=\"margin: 0px 20px 20px 20px;padding: 37px;border: 1px solid #d4d4d5;\">\n\t</div>\n</div>\n<div v-if=\"!blog.hasOwnProperty('blog_title')\">\n\t<h3 class=\"ui header\" style=\"text-align:center;font-family: serif;padding-top: 30px;\">\n\t\t<p>呼啦啦似大厦倾</p>\n\t\t<p>  </p>\n\t\t<p>白茫茫大地真干净</p>\n\t\t<p>  </p>\n\t</h3>\n</div>";
+	module.exports = "<div v-if=\"blog.hasOwnProperty('blog_title')\">\n\t<h2 class=\"ui header\" style=\"text-align:center;font-family: serif;padding-top: 30px;\">\n\t\t<div class=\"content\">(% blog.blog_title %)\n\t\t\t<div class=\"sub header\" style=\"padding-top: 7px;\">(% blog.author %)  (% blog && blog.create_date ? blog.create_date.substring(0,10) : '' %)</div>\n\t\t</div>\n\t</h2>\n\t<div id=\"blog_content\" style=\"padding: 2em;border: 0.1em solid #d4d4d5;\">\n\t</div>\n</div>\n<div v-if=\"!blog.hasOwnProperty('blog_title')\">\n\t<h3 class=\"ui header\" style=\"text-align:center;font-family: serif;padding-top: 30px;\">\n\t\t<p>呼啦啦似大厦倾</p>\n\t\t<p>  </p>\n\t\t<p>白茫茫大地真干净</p>\n\t\t<p>  </p>\n\t</h3>\n</div>";
+
+/***/ },
+
+/***/ 94:
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(95);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(4)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/less-loader/index.js!./style.less", function() {
+				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/less-loader/index.js!./style.less");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+
+/***/ 95:
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(3)();
+	// imports
+
+
+	// module
+	exports.push([module.id, ".cl_item {\n  min-height: 2.7em;\n  display: -webkit-box;\n  padding: 0.92857143em 1.42857143em;\n  margin-top: 0.5em;\n}\n", ""]);
+
+	// exports
+
 
 /***/ }
-/******/ ]);
+
+/******/ });

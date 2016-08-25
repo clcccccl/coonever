@@ -3,14 +3,16 @@
 {% end %}
 {% block body %}
 <body id="blog" v-cloak>
-	<div style="padding:30px 50px 30px 50px">
+	<div>
 	    <div class="ui top attached tabular menu">
 		    <blog_head :blogger.sync="blogger" :user_account.sync="user_account"></blog_head>
 		</div>
 		<div class="ui bottom attached segment">
-    		<div class="ui grid">
+    		<div class="ui two column stackable grid">
 				<div class="four wide column">
-		            <blog_left :blogger.sync="blogger" :user_account.sync="user_account"></blog_left>
+				    <div class='ui four column stackable grid'>
+		                <blog_left :blogger.sync="blogger" :user_account.sync="user_account"></blog_left>
+		            </div>
 		        </div>
 		        <div class="twelve wide stretched column" v-if="edit_blog">
 		            <write_blog></write_blog>

@@ -1,11 +1,11 @@
-<div class="ui left action input" style="margin: 20px;" v-if="content_id!=''">
+<div class="ui left action input" style="margin: 1em;" v-if="content_id!=''">
 	<button class="ui labeled icon button"><i class="header icon"></i> 标 题 </button>
 	<input type="text" placeholder="来个title" v-model="blog.blog_title"></input>
-	<button class="ui labeled icon button" @click="save_blog" style="margin-left: 20px"><i class="send icon"></i> 发 布  </button>
 </div>
-<div style="margin: 17px;" v-if="content_id!=''">
+<div style="margin: 1em;">
 	<editor></editor>    
 </div>
+<button class="ui labeled icon button" @click="save_blog"  v-if="content_id!=''" style="margin-left: 1em;"><i class="send icon"></i> 发 布  </button>
 <div v-if="content_id==''">
 	<h3 class="ui header" style="text-align:center;font-family: serif;padding-top: 30px;">
 		<p></p>
@@ -13,3 +13,4 @@
 		<p>  </p>
 	</h3>
 </div>
+

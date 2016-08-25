@@ -1,3 +1,5 @@
+require './style.less'
+
 module.exports =
   Vue.extend
     template: require('./template.html')
@@ -9,6 +11,7 @@ module.exports =
       head_menu_key: ''
       head_menus: []
       logged: null
+      home_icon:''
     events:
       head_menus_changed: ->
         @load_blog_head_menus()
@@ -18,8 +21,8 @@ module.exports =
         cl.href_p('h_m_k', fun_type, @head_menu_key)
         @$dispatch('change_head_menu', @head_menu_key)
       'logged': ->
-        if !@logged
-          @init_popup()
+        @init_popup()        
+        @home_icon = if @logged then 'logout' else 'login'
     attached: ->
       @init()
     methods:

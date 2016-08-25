@@ -1,14 +1,14 @@
-<div class="item" v-if="blogger!=''">
+<div class="four wide column cl_item" v-if="blogger!=''" style="margin-top: 0em;">
 	<div class="ui dividing" style="color: #ffffff;float:right;">
 		<blogger-info :blogger_name.sync="blogger"></blogger-info>
 	</div>
 </div>
-<div class="item" v-for="head_menu in head_menus" @click="change_head_menu(head_menu.menu_key)">
+<div class="four wide column cl_item" v-for="head_menu in head_menus" @click="change_head_menu(head_menu.menu_key)">
 	<span v-if="!edit_head">(% head_menu.menu_name %)</span>
-	<i class="anchor icon" v-if="head_menu.menu_key == head_menu_key" style="padding-left: 10px;color: #555555;">
+	<i class="anchor icon" v-if="head_menu.menu_key == head_menu_key" style="padding-left: 0.7em;color: #555555;">
 	</i>
 </div>
-<div class="item" v-if="logged && blogger==user_account"><i class="write icon" :class="{ large: head_menu_key == 'write_blog' }" @click="change_head_menu('write_blog')">____</i></div>
+<div class="four wide column cl_item" v-if="logged && blogger==user_account"><i class="write icon" :class="{ large: head_menu_key == 'write_blog' }" @click="change_head_menu('write_blog')">____</i></div>
 <div class="right menu">
 	<!-- <div class="item">
 		<div class="ui transparent icon input">
@@ -17,9 +17,20 @@
 		</div>
 	</div> -->
 </div>
-<div class="item">
+<div class="four wide column cl_item">
 	<i class="large home icon home-icon" @click="my_blog" style="color: #555555;"></i>
-	<div class="ui popup card" v-if="!logged" style="padding: 0px;margin: 0px">
-		<login-model :logged.sync="logged"></login-model>
+	<div class="ui popup card" style="padding: 0px;margin: 0px">
+		<div>
+			<div class="ui top attached tabular menu">
+				<a class="item" v-if="!logged" @click="home_icon='login'" :class="{ active: home_icon == 'login' }">登录</a>
+				<a class="active item" v-if="!logged" @click="home_icon='register'" :class="{ active: home_icon == 'register' }">注册</a>
+				<a class="item" v-if="logged" @click="home_icon='logout'" :class="{ active: home_icon == 'logout' }">退出</a>
+			</div>
+			<div class="ui bottom attached segment">
+				<login-model :logged.sync="logged" v-if="!logged&&home_icon=='login'"></login-model>
+				<p class="ui" v-if="logged&&home_icon=='logout'">暂未实现</p>
+				<p class="ui" v-if="!logged&&home_icon=='register'">暂未实现</p>
+			</div>
+		</div>
 	</div>
 </div>
